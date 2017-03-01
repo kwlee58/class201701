@@ -1,0 +1,69 @@
+---
+title: "생활 속의 통계학 최종"
+author: "금융정보통계학과 이기원교수"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(width=180)
+rm(list=ls())
+```
+
+```{r, presets, , message = FALSE, echo = FALSE}
+options(digits=3)
+library(xlsx)
+library(knitr)
+library(pander)
+panderOptions("table.split.table", Inf)
+```
+
+
+<!--### Total Scores-->
+
+```{r, Total Scores, message = FALSE, echo = FALSE}
+total <- read.xlsx(file = "../data/scoreList_v4.xlsx", sheetIndex = 1, rowIndex = 3:98, colIndex = 2:8, colClasses = c(rep("character", 2), rep("numeric", 5)), header = TRUE)
+total <- total[c(2, 1, 7, 5, 4, 6, 3)]
+v.names.total <- c("ID", "Name", "Offline", "Online", "Assignment", "Facebook", "Total")
+names(total) <- v.names.total
+total[total$ID == "20153940", c("Offline", "Total")] <- c(18.0, 90.0)
+total[total$ID == "20115228", c("Offline", "Total")] <- c(16.7, 86.5)
+N <- nrow(total)
+total$Ranks <- N + 1 - rank(total$Total)
+total$Grades <- ifelse(total$Ranks <= floor(N*0.3), "A+", ifelse(total$Ranks <= floor(N*0.6), "B+", "C+"))
+o.names <- order(total$Name)
+v.names.kr <- c("학번", "이름", "교실출석(20)", "온라인출석(10)", "과제(40)", "페이스북댓글(30)", "총점(100)", "순위(95명중)", "학점")
+total.kr <- total
+names(total.kr) <- v.names.kr
+# kable(total.kr)
+kable(total.kr[o.names, ], row.names = FALSE)
+# kable(total)
+```
+
+
+<P style = "page-break-before:always">
+
+```{r, individual scores, echo = FALSE}
+my.grade <- function(name){
+  kable(total.kr[total$Name %in% name, -1], row.names = FALSE)
+}
+# my.grade(c("강민수", "이재훈", "문제철"))
+# my.grade(c("김하은", "박다미", "박다솜", "안용주", "이슬", "이현호", "조현준"))
+# my.grade("신주현")
+# my.grade("박현진")
+# my.grade("박호균")
+# my.grade("최유경")
+# my.grade("조현준")
+my.grade("문수진")
+```
+
+
+<!--### Save Data
+
+```{r Save Data, echo = FALSE}
+save.image(file = "../R/final_data.rda")
+```
+
+-->
+               

@@ -1,0 +1,155 @@
+---
+title: "Red and Black 161024"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+```
+
+### New kid in town
+
+```{r, data}
+class_roll <- read.xlsx("../data/class_roll1024.xlsx", 1, startRow = 2, endRow = 97, colIndex = c(3:7, 9), colClasses=rep("character", 6), stringsAsFactors = FALSE)
+str(class_roll)
+names(class_roll) <- c("dept", "id", "name", "year", "e.mail", "cell.no")
+# load("./red_and_black_161024_data.rda")
+str(class_roll)
+class_roll.2 <- read.xlsx("../data/class_roll0905v2.xlsx", 1, startRow = 2, endRow = 101, colIndex = c(3:7, 9), colClasses=rep("character", 6), stringsAsFactors = FALSE) 
+names(class_roll.2) <- c("dept", "id", "name", "year", "e.mail", "cell.no")
+str(class_roll.2)
+(id2.not.in.1 <- class_roll.2$id %in% class_roll$id)
+class_roll.2$name[!id2.not.in.1]
+(id2.not.in.1 <- setdiff(class_roll.2$id, class_roll$id))
+class_roll.2$name[class_roll.2$"id" == id2.not.in.1]
+(id1.not.in.2 <- class_roll$id %in% class_roll.2$id)
+class_roll$name[!id1.not.in.2]
+(id1.not.in.2 <- setdiff(class_roll$id, class_roll.2$id))
+class_roll$name[class_roll$id == id1.not.in.2]
+```
+
+### Incremental Randomization
+
+```{r, incremental randomization, echo = FALSE}
+class_roll.2$group <- class_roll$group[match(class_roll.2$id, class_roll$id)]
+class_roll.2$name[is.na(class_roll.2$group)]
+# class_roll.2$group[is.na(class_roll.2$group)] <- ifelse(table(class_roll.2$group)[1] < table(class_roll.2$group)[2], "Red", "Black")
+class_roll$group[class_roll$id == id1.not.in.2]
+class_roll.2$group[is.na(class_roll.2$group)] <- class_roll$group[class_roll$id == id1.not.in.2]
+class_roll.2$group[class_roll.2$id == id2.not.in.1]
+```
+
+
+<!--
+```{r, randomization, eval = FALSE}
+set.seed(37)
+N <- nrow(class_roll) 
+red.id <- sample(1:N, size = floor(N/2))
+red.id
+class_roll$group <- factor(ifelse((1:N) %in% red.id, "red", "black"), levels = c("red", "black"))
+black.id<-(1:N)[-red.id]
+```
+-->
+
+### 학번
+
+```{r, id}
+ID.15 <- factor(ifelse(substr(class_roll.2$id, 1, 4) >= 2015, "younger.15", "older.15"), levels = c("younger.15", "older.15"))
+pander(table("15학번 기준" = ID.15, "그룹" = class_roll.2$group))
+ID.14 <- factor(ifelse(substr(class_roll.2$id, 1, 4) >= 2014, "younger.14", "older.14"), levels = c("younger.14", "older.14"))
+pander(table("14학번 기준" = ID.14, "그룹" = class_roll.2$group))
+ID.13 <- factor(ifelse(substr(class_roll.2$id, 1, 4) >= 2013, "younger.13", "older.13"), levels = c("younger.13", "older.13"))
+pander(table("13학번 기준" = ID.13, "그룹" = class_roll.2$group))
+ID.12 <- factor(ifelse(substr(class_roll.2$id, 1, 4) >= 2012, "younger.12", "older.12"), levels = c("younger.12", "older.12"))
+pander(table("12학번 기준" = ID.12, "그룹" = class_roll.2$group))
+```
+
+
+```{r, odd or even}
+odd.even <- as.numeric(class_roll.2$id) %% 2
+pander(table("odd_even" = odd.even, "Group"= class_roll.2$group))
+```
+
+### e-mail
+
+```{r, e_mail}
+e.mail.list <- strsplit(class_roll.2$e.mail, "@", fixed = TRUE)
+mail.com <- mapply("[", e.mail.list, 2)
+pander(table("e-mail" = mail.com, "그룹" = class_roll.2$group))
+```
+
+### 성씨
+
+```{r, name}
+f.name <- substring(class_roll.2$name, first = 1, last = 1)
+pander(table("그룹" = class_roll.2$group, "Family Name" = f.name))
+```
+
+### 많이 나오는 성씨
+
+```{r, frequent names}
+f.name.f <- factor(ifelse(f.name %in% c("김", "이", "박"), f.name, "기타"), levels = c("김", "이", "박", "기타"))
+pander(table("Group" = class_roll$group, "Family Name" = f.name.f))
+```
+
+### 학과
+
+```{r, departments}
+# pander(class_roll)
+table("그룹" = class_roll.2$group, "학과" = class_roll.2$dept)
+```
+
+### 전체 명단
+
+```{r, colleges}
+pander(class_roll.2)
+#table("단과대학" = class_roll$college, "그룹" = class_roll$group)
+```
+
+### 가나다 순 명단
+
+```{r, list for group, echo = FALSE,}
+gr.id.o <- order(class_roll.2$group, class_roll.2$name)
+id.by.gr <- class_roll.2[gr.id.o, c("group", "id", "name")]
+red.names <- id.by.gr[id.by.gr$group == "Red", c("id", "name")]
+# pander(red.names)
+black.names <- id.by.gr[id.by.gr$group == "Black", c("id", "name")]
+# black.names.2 <- black.names
+# black.names.2[black.names.2$name == "장정길", ]
+# class_roll.2[class_roll.2$name == "허소영", c("id", "name")]
+# (black.names.2[black.names.2$name == "장정길", ] <- # class_roll.2[class_roll.2$name == "허소영", c("id", "name")])
+# pander(black.names)
+# class_roll[red.id, "id"]
+# class_roll[black.id, "id"]
+# cbind(class_roll[red.id, "id"], class_roll[black.id, "id"])
+# red.black.df <- data.frame("Red" = red.names, "Black" = black.names, row.names = NULL)
+# red.black.ls <- list("Red" = red.names, "Black" = black.names)
+# names(red.black.df) <- c("Red", "Black")
+# pander(red.black.ls)
+#kable(red.black.df, align = c("c", "c", "c", "c"))
+```
+
+<P style="page-break-before:always">
+
+```{r, red.names, echo = FALSE}
+pander(red.names, caption = "Red")
+```
+
+<P style="page-break-before:always">
+
+```{r, black.names, echo = FALSE}
+pander(black.names, caption = "Black")
+```
+
+<!--
+```{r, save}
+save.image("./red_and_black_161024v2_data.rda")
+```
+-->

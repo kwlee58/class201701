@@ -1,0 +1,110 @@
+---
+title: "Randomization Report (160905)"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+```
+
+<!--### Data Reading-->
+
+```{r, data, echo = FALSE, results = 'hide'}
+load("./red_and_black_160905_data.rda")
+str(class_roll)
+```
+
+### Randomization Effects
+
+```{r, colleges, echo = FALSE}
+#pander(class_roll)
+#table("단과대학" = class_roll$college, "그룹" = class_roll$group)
+```
+
+#### 학번 비교
+
+##### 15학번 기준
+
+```{r, id 2015, echo = FALSE}
+ID.15 <- factor(ifelse(substr(class_roll$id, 1, 4) >= 2015, "younger.15", "older.15"), levels = c("younger.15", "older.15"), labels = c("15학번 이후", "14학번 이전"))
+pander(table("그룹" = class_roll$group, "15학번 기준" = ID.15))
+```
+
+##### 14학번 기준
+
+```{r, id 2014, echo = FALSE}
+ID.14 <- factor(ifelse(substr(class_roll$id, 1, 4) >= 2014, "younger.14", "older.14"), levels = c("younger.14", "older.14"), labels = c("14학번 이후", "13학번 이전"))
+pander(table("그룹" = class_roll$group, "14학번 기준" = ID.14))
+```
+
+##### 13학번 기준
+
+```{r, id 2013, echo = FALSE}
+ID.13 <- factor(ifelse(substr(class_roll$id, 1, 4) >= 2013, "younger.13", "older.13"), levels=c("younger.13", "older.13"), labels = c("13학번 이후", "12학번 이전"))
+pander(table("그룹" = class_roll$group, "13학번 기준" = ID.13))
+```
+
+##### 12학번 기준
+
+```{r, id 2012, echo = FALSE}
+ID.12 <- factor(ifelse(substr(class_roll$id, 1, 4) >= 2012, "younger.12", "older.12"), levels=c("younger.12", "older.12"), labels = c("12학번 이후", "11학번 이전"))
+pander(table("그룹" = class_roll$group, "12학번 기준" = ID.12))
+```
+
+#### 학번 뒷자리 홀짝
+
+```{r, odd or even, echo = FALSE}
+odd.even <- as.numeric(class_roll$id) %% 2
+odd.even.f <- factor(odd.even, levels=c(1, 0), labels = c("홀수", "짝수"))
+pander(table("Group"= class_roll$group, "홀짝" = odd.even.f))
+# kable(table("홀짝" = odd.even.f, "Group"= class_roll$group))
+```
+
+#### 많이 나오는 성씨
+
+```{r, name, echo = FALSE}
+f.name <- substring(class_roll$name, first = 1, last = 1)
+# f.name %in% c("김","이","박")
+f.name.f <- factor(ifelse(f.name %in% c("김", "이", "박"), f.name, "기타"), levels = c("김", "이", "박", "기타"))
+pander(table("Group" = class_roll$group, "Family Name" = f.name.f))
+```
+
+#### 학년 
+
+```{r, year, echo = FALSE}
+year.f <- factor(class_roll$year, labels = c("1학년", "2학년", "3학년", "4학년"))
+pander(table("Group" = class_roll$group, "학년" = year.f))
+```
+
+#### e-mail 서비스
+
+```{r, e_mail, echo = FALSE}
+e.mail.list <- strsplit(class_roll$e.mail, "@", fixed = TRUE)
+mail.com <- mapply("[", e.mail.list, 2)
+mail.com.f <- factor(ifelse(mail.com == "naver.com", "네이버", "기타서비스"), levels = c("네이버", "기타서비스"))
+pander(table("그룹" = class_roll$group, "e-mail" = mail.com.f))
+```
+
+#### 학과 분포
+
+```{r, department, echo = FALSE}
+pander(table("그룹" = class_roll$group, "학과" = class_roll$dept))
+```
+
+<!--
+
+```{r, save, echo=FALSE, message=FALSE, results = 'hide'}
+save.image("../R/red_and_black_160905_data.rda")
+```
+
+-->

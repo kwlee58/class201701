@@ -1,0 +1,61 @@
+---
+title: "Invisible Gorilla Goheung Leaders"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Data
+
+```{r, library and read, echo=FALSE, message=FALSE, results='hide'}
+library(xlsx)
+library(pander)
+library(ggplot2)
+options(digits=3)
+gorilla <- read.xlsx("../data/gorilla_goheung.xlsx", 1, startRow = 2, endRow = 38, header = FALSE, colIndex = 1:15)
+str(gorilla)
+```
+
+
+```{r, data restructuring, echo = FALSE, results='hide'}
+str(gorilla)
+names(gorilla) <- c("Q1.1", "Q1.2", "Q1.3", "Q2.1", "Q2.2", "Q3.1", "Q3.2", "Q3.3", "Q3.4", "Q4", "Q5", "Q6", "Q7")
+str(gorilla)
+gorilla.monkey.banana <- factor(gorilla$Q1.1, levels=c("가", "나", "다"), labels=c("원숭이와 바나나", "원숭이와 팬더", "팬더와 바나나"))
+gorilla.still.happy <- factor(gorilla$Q1.2, levels=c("가", "나"), labels=c("행복해보인다", "행복해보이지 않는다"))
+gorilla.front <- factor(gorilla$Q1.3, levels=c("가", "나", "다"), labels=c("가장작은 비행접시", "중간크기 비행접시", "가장큰 비행접시"))
+gorilla.pass.1 <- as.numeric(gorilla$Q2.1)
+gorilla.gorilla.1 <- factor(gorilla$Q2.2, levels=c("가", "나"), labels=c("보았다", "못 보았다"))
+gorilla.pass.2 <- as.numeric(gorilla$Q3.1)
+gorilla.gorilla.2 <- factor(gorilla$Q3.2, levels=c("가", "나"), labels=c("보았다", "못 보았다"))
+gorilla.player.exit <- factor(gorilla$Q3.3, levels=c("가", "나"), labels=c("보았다", "못 보았다"))
+gorilla.curtain.color <- factor(gorilla$Q3.4, levels=c("가", "나"), labels=c("보았다", "못 보았다"))
+gorilla.door.study <- factor(gorilla$Q4, levels=c("가", "나"), labels=c("네", "아니오"))
+gorilla.chocolate <- as.numeric(gorilla$Q5)
+```
+
+### 응답 결과
+
+```{r, responses}
+pander(table(gorilla.monkey.banana), caption = "두 개를 고른다면?")
+pander(table(gorilla.still.happy), caption = "여전히 행복한가요?")
+pander(table(gorilla.front), caption = "어느 것이 앞쪽에 있나요?")
+pander(summary(gorilla.pass.1), caption = "흰 셔츠 팀의 패스 성공횟수는?")
+pander(table(gorilla.pass.1), caption = "흰 셔츠 팀의 패스 성공횟수는?")
+pander(table(gorilla.gorilla.1), caption = "고릴라 본 사람?")
+pander(summary(gorilla.pass.2), caption = "흰 셔츠 팀의 패스 성공횟수는?")
+pander(table(gorilla.pass.2), caption = "흰 셔츠 팀의 패스 성공횟수는?")
+pander(table(gorilla.gorilla.2), caption = "고릴라 본 사람?")
+pander(table(gorilla.curtain.color), caption = "커튼 색 바뀐 것 본 사람?")
+pander(table(gorilla.player.exit), caption = "선수 나가는 것 본 사람?")
+pander(table(gorilla.door.study), caption = "길 묻는 사람 바뀐 것 눈치챈 사람?")
+pander(summary(gorilla.chocolate), caption = "몇 개나 줄 거예요?")
+pander(table(gorilla.chocolate), caption = "몇 개나 줄 거예요?")
+```
+
+
+### 자료 갈무리
+
+```{r, save.image, echo=FALSE}
+save.image("gorilla_1130.rda")
+```

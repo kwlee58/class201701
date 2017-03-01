@@ -1,0 +1,63 @@
+---
+title: "통계적 수리기초 최종"
+author: "금융정보통계학과 이기원교수"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(width=180)
+rm(list=ls())
+```
+
+```{r, presets, , message = FALSE, echo = FALSE}
+options(digits=3)
+library(xlsx)
+library(knitr)
+library(pander)
+panderOptions("table.split.table", Inf)
+```
+
+
+<!--### Total Scores-->
+
+```{r, Total Scores, message = FALSE, echo = FALSE}
+total <- read.xlsx(file = "../data/MF1602_scoreList.xlsx", sheetIndex = 1, rowIndex = 3:33, colIndex = 2:9, colClasses = c(rep("character", 2), rep("numeric", 5)), header = TRUE)
+total <- total[c(2, 1, 8, 4:7, 3)]
+v.names.total <- c("ID", "Name", "Offline", "Midterm", "Final", "Quiz", "Assignment", "Total")
+names(total) <- v.names.total
+N <- nrow(total)
+total$Ranks <- N + 1 - rank(total$Total)
+total$Grades <- ifelse(total$Ranks <= floor(N*0.4), "A+", ifelse(total$Ranks <= floor(N*0.7), "B+", "C+"))
+o.names <- order(total$Name)
+v.names.kr <- c("학번", "이름", "교실출석(20)", "중간고사(20)", "기말고사(20)", "퀴즈(20)", "과제(20)", "총점(100)", "순위(30명중)", "학점")
+total.kr <- total
+names(total.kr) <- v.names.kr
+kable(total.kr[o.names, ], row.names = FALSE)
+# kable(total)
+```
+
+<!--
+<P style = "page-break-before:always">
+
+```{r, individual scores, echo = FALSE}
+v.names.kr <- c("학번", "이름", "교실출석(20)", "중간고사(20)", "기말고사(20)", "퀴즈(20)", "과제(20)", "총점(100)", "순위(30명중)", "학점")
+total.kr <- total
+names(total.kr) <- v.names.kr
+my.grade <- function(name){
+  kable(total.kr[total$Name %in% name, -1], row.names = FALSE)
+}
+my.grade(c("강민수", "이재훈", "문제철"))
+# my.grade("김성현")
+```
+-->
+
+<!--### Save Data
+
+```{r Save Data, echo = FALSE}
+save.image(file = "../R/final_data.rda")
+```
+
+-->
+               

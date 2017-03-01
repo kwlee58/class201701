@@ -1,0 +1,103 @@
+---
+title: "SE and Coop Quiz 160315"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width=180)
+```
+
+```{r, data, echo = FALSE, results = 'hide'}
+quiz0315 <- read.xlsx("../data/SE_Quiz160315.xlsx", 1, startRow = 2, endRow = 62, colIndex = c(3:7, 9:13), colClasses=c(rep("character", 10)), stringsAsFactors=FALSE)
+str(quiz0315)
+names(quiz0315) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4")
+quiz0315$dept <- factor(quiz0315$dept)
+quiz0315$year <- factor(quiz0315$year)
+quiz0315$Q1 <- factor(quiz0315$Q1, levels = c("가", "나", "다", "라"), labels = c("쉐브론", "맥도날드", "미그로", "버크셔 해서웨이"))
+quiz0315$Q2 <- factor(quiz0315$Q2, levels = c("가", "나", "다", "라"), labels = c("데자르탱", "두트바일러", "월튼", "호세마리아"))
+quiz0315$Q3 <- factor(quiz0315$Q3, levels = c("가", "나", "다", "라"), labels = c("라보뱅크", "데자르댕", "골드만 삭스", "썬키스트"))
+quiz0315$Q4 <- factor(quiz0315$Q4, levels = c("가", "나", "다", "라"), labels = c("고용3위, 매출9위", "고용9위, 매출3위", "고용3위, 매출3위", "고용9위, 매출9위"))
+quiz0315$Q4.2 <- quiz0315$Q4
+str(quiz0315)
+```
+
+```{r, randomization, echo = FALSE, results = 'hide'}
+pander(summary(quiz0315))
+```
+
+### 퀴즈 응답 점검
+
+#### 성격이 다른 기업
+
+##### 주식회사와 협동조합
+
+```{r, Stock company and Cooperative, echo = FALSE}
+Q1.tbl <- table(quiz0315$Q1, exclude = NULL)
+pander(Q1.tbl)
+```
+
+##### 주식회사와 협동조합(%)
+
+```{r, Stock company and cooperative in percentage, echo = FALSE}
+pander(round(prop.table(Q1.tbl)*100, digits=1))
+```
+
+#### 몬드라곤의 설립자
+
+##### 몬드라곤의 설립자
+
+```{r, founder of Mondragon, echo = FALSE}
+Q2.tbl <- table(quiz0315$Q2, exclude = NULL)
+pander(Q2.tbl)
+```
+
+##### 몬드라곤의 설립자(%)
+
+```{r, founder of Mondragon in percentage, echo = FALSE}
+pander(round(prop.table(Q2.tbl)*100, digits=1))
+```
+
+#### 사업 영역이 다른 기업
+
+##### 사업 영역(집계표)
+
+```{r, business area, echo = FALSE}
+Q3.tbl <- table(quiz0315$Q3, exclude = NULL)
+pander(Q3.tbl)
+```
+
+##### 사업 영역(%)
+
+```{r, business area in percentage, echo = FALSE}
+pander(round(prop.table(Q3.tbl)*100, digits=1))
+```
+
+### 몬드라곤의 위상
+
+##### 몬드라곤의 위상(집계표)
+
+```{r, positioning of Mondragon, echo = FALSE}
+Q4.tbl <- table(quiz0315$Q4, exclude = NULL)
+pander(Q4.tbl)
+```
+
+##### 몬드라곤의 위상(%)
+
+```{r, positioning of Mondragon in percentage, echo = FALSE}
+pander(round(prop.table(Q4.tbl)*100, digits=1))
+```
+
+```{r, save, echo = FALSE}
+#save.image("../R/quiz0315.rda")
+```

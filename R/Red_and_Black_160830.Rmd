@@ -1,0 +1,89 @@
+---
+title: "Red_and_Black_160830"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+```
+
+<!--
+```{r, data}
+class_roll <- read.xlsx("../data/class_roll0830.xlsx", 1, startRow = 2, endRow = 68, colIndex = c(3:7, 9), colClasses=rep("character", 6), stringsAsFactors = FALSE)
+str(class_roll)
+names(class_roll) <- c("dept", "id", "name", "year", "e.mail", "cell.no")
+str(class_roll)
+```
+
+```{r, randomization}
+set.seed(109)
+N <- nrow(class_roll) 
+red.id <- sample(1:N, size=floor(N/2))
+red.id
+class_roll$group <- factor(ifelse((1:N) %in% red.id, "red", "black"), levels = c("red", "black"))
+black.id<-(1:N)[-red.id]
+```
+
+```{r, id}
+
+ID.15<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2015, "younger.15", "older.15"), levels=c("younger.15", "older.15"))
+pander(table("15학번 기준" = ID.15, "그룹" = class_roll$group))
+ID.14<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2014, "younger.14", "older.14"), levels=c("younger.14", "older.14"))
+pander(table("14학번 기준" = ID.14, "그룹" = class_roll$group))
+ID.13<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2013, "younger.13", "older.13"), levels=c("younger.13", "older.13"))
+pander(table("13학번 기준" = ID.13, "그룹" = class_roll$group))
+ID.12<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2012, "younger.12", "older.12"), levels=c("younger.12", "older.12"))
+pander(table("12학번 기준" = ID.12, "그룹" = class_roll$group))
+```
+
+```{r, odd or even}
+odd.even <- as.numeric(class_roll$id) %% 2
+pander(table("odd_even" = odd.even, "Group"= class_roll$group))
+```
+
+```{r, e_mail}
+e.mail.list <- strsplit(class_roll$e.mail, "@", fixed = TRUE)
+mail.com <- mapply("[", e.mail.list, 2)
+pander(table("e-mail" = mail.com, "그룹" = class_roll$group))
+```
+
+```{r, name}
+f.name <- substring(class_roll$name, first = 1, last = 1)
+pander(table("Family Name" =f.name, "Group" = class_roll$group))
+```
+
+```{r, colleges}
+pander(class_roll)
+#table("단과대학" = class_roll$college, "그룹" = class_roll$group)
+```
+-->
+
+```{r, list, echo = FALSE}
+gr.id.o <- order(class_roll$group, class_roll$id)
+id.by.gr <- class_roll[gr.id.o, c("group", "id", "name")]
+red.names <- id.by.gr[id.by.gr$group=="red", c("id", "name")]
+# pander(red.names)
+black.names <- id.by.gr[id.by.gr$group=="black", c("id", "name")]
+# pander(black.names)
+# class_roll[red.id, "id"]
+# class_roll[black.id, "id"]
+# cbind(class_roll[red.id, "id"], class_roll[black.id, "id"])
+red.black.df <- data.frame("Red" = red.names, "Black" = black.names, row.names = NULL)
+# names(red.black.df) <- c("Red", "Black")
+pander(red.black.df)
+#kable(red.black.df, align = c("c", "c", "c", "c"))
+```
+
+<!--
+```{r, save}
+save.image("../R/red_and_black_160830_data.rda")
+```
+-->

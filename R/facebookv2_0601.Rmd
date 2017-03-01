@@ -1,0 +1,39 @@
+---
+title: "Facebook Replies 201601"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Data
+
+#### Read In
+
+```{r, library and read, echo = FALSE, message = FALSE}
+library(xlsx)
+library(pander)
+library(ggplot2)
+options(digits=3)
+fb <- read.xlsx("../data/facebookv3.xlsx", 1, startRow = 3, endRow = 66, header = FALSE, colIndex = 3:18, colClasses = c(rep("character", 5), rep("numeric", 11)))
+# load("./gorilla_0601.rda")
+str(fb)
+```
+
+#### Facebook Scores
+
+```{r, data restructuring, echo = FALSE}
+names(fb) <- c("dept", "id", "name", "year", "e.mail", paste("P", 1:11, sep = ""))
+fb$Total <- apply(fb[, -(1:5)], 1, sum, na.rm = TRUE)
+fb$Score <- round(fb$Total*30/11, digits = 1)
+fb.count <- ifelse(is.na(fb[, -c(1:5, 17:18)]), 0, 1)
+colSums(fb.count)
+summary(colSums(fb.count))
+pander(fb[, -c(1, 4, 5)])
+```
+
+
+### 자료 갈무리
+
+```{r, save.image, echo = FALSE}
+# save.image("gorilla_0601.rda")
+```

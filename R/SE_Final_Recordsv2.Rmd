@@ -1,0 +1,104 @@
+---
+title: "사회적경제와 협동조합 최종"
+author: "금융정보통계학과 이기원교수"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(width=180)
+rm(list=ls())
+```
+
+```{r, presets, , message = FALSE, echo = FALSE}
+options(digits=3)
+library(xlsx)
+library(knitr)
+library(pander)
+panderOptions("table.split.table", Inf)
+```
+
+<!--### Facebook Data-->
+
+```{r facebook, eval = FALSE, message = FALSE, echo = FALSE}
+fb <- read.xlsx(file="../data/class_roll_Facebookv2.xlsx", sheetIndex = 1, rowIndex = 3:60, colIndex = c(4:5, 10:21), header = FALSE, colClasses = rep("character", 14))
+v.names.fb <- c("ID", "Name", "Rosling1", "Rosling2", "GDP", "Wilkinson", "Piketty", "Hanauer", "de_Waal", "Rice", "Zimbardo", "Cain", "Ariely", "Ramachandran")
+names(fb) <- v.names.fb
+is.na(fb[, -(1:2)])
+fb.score <- ifelse(is.na(fb[, -(1:2)]), 0, 1)
+n.fb <- ncol(fb.score)
+fb$sum <- rowSums(fb.score)
+fb$Score <- fb$sum*100/n.fb
+kable(fb[c("ID", "Name", "Score")], align=c("c", "c", "r"))
+```
+
+<!--### Online Attendance-->
+
+```{r Online Attendance, eval = FALSE, message = FALSE, echo = FALSE}
+online <- read.xlsx(file="../data/class_roll_online.xlsx", sheetIndex = 1, rowIndex = 3:70, colIndex = c(3:4, 11:12), header = FALSE, colClasses = rep("character", 4))
+v.names.online <- c("ID", "Name", "Salk", "Poll")
+names(online) <- v.names.online
+# online[c("Salk", "Poll")]
+score <- ifelse(online[c("Salk", "Poll")] == "X", 0, ifelse(online[c("Salk", "Poll")] == "O", 50, 25))
+online$Score <- rowSums(score)
+kable(online)
+```
+
+<!--### Team Projects-->
+
+```{r Team Projects, eval = FALSE, message = FALSE, echo = FALSE}
+project <- read.xlsx(file="../data/class_roll_project.xlsx", sheetIndex= 1, rowIndex = 2:70, colIndex = c(4:5, 10:30), colClasses = c(rep("character", 3), rep("numeric", 20)))
+# pander(project)
+team.score <- round(colMeans(project[, -c(1:3, 21:23)], na.rm = TRUE), digits = 2)
+pander(team.score)
+# project$Score <- project$"계"*10
+project$Score <- team.score[match(project$"조이름", names(team.score))]
+kable(project[c(1:3, 24)])
+```
+
+<!--### Integration-->
+
+```{r Integration, eval = FALSE, message = FALSE, echo = FALSE}
+fb.score <- fb[, "Score"]
+online.score <- online[, "Score"]
+project.score <- project[, "Score"]
+scores <- data.frame(fb[c("ID", "Name")], FB = fb.score, Online = online.score, Project = project.score)
+kable(scores)
+```
+
+<!--### Total Scores-->
+
+```{r, Total Scores, message = FALSE, echo = FALSE}
+total <- read.xlsx(file = "../data/SE_scoreList.xlsx", sheetIndex = 1, rowIndex = 3:60, colIndex = 2:9, colClasses = c(rep("character", 2), rep("numeric", 6)), header = TRUE)
+total <- total[c(2, 1, 5:8, 4, 3)]
+v.names.total <- c("ID", "Name", "Midterm", "Term_Project", "Team_Project", "Offline", "Online", "Total")
+names(total) <- v.names.total
+N <- nrow(total)
+total$Ranks <- N + 1 - rank(total$Total)
+total$Grades <- ifelse(total$Ranks <= floor(N*0.3), "A+", ifelse(total$Ranks <= floor(N*0.6), "B+", "C+"))
+kable(total)
+```
+
+<P style = "page-break-before:always">
+
+```{r, individual scores, echo = FALSE}
+v.names.kr <- c("학번", "이름", "중간고사(20)", "기말과제(20)", "팀과제(40)", "오프라인출석(10)", "온라인출석(10)", "총점(100)", "순위(56명중)", "학점")
+total.kr <- total
+names(total.kr) <- v.names.kr
+my.grade <- function(name){
+  kable(total.kr[total$Name %in% name, -1], row.names = FALSE)
+}
+# my.grade(c("홍민기", "이재훈"))
+my.grade("김재호")
+```
+
+
+<!--### Save Data
+
+```{r Save Data, echo = FALSE}
+save.image(file = "../R/final_data.rda")
+```
+
+-->
+               

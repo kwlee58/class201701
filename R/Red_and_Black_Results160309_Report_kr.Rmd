@@ -1,0 +1,84 @@
+---
+title: "Red and Black experiment 160309(in Korean)"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width=180)
+options(digits = 2)
+```
+
+```{r, data, echo = FALSE, results='hide'}
+rnb.df <- read.xlsx("../data/literacy_RnB0308.xlsx", 1, startRow = 2, endRow = 66, colIndex = c(10:19, 45))
+str(rnb.df)
+names(rnb.df) <- c(paste("Q", 1:10, sep=""), "group")
+rnb.df$group <- factor(rnb.df$group, levels = c("Red", "Black"), labels = c("Red(Veja)", "Black(Curitiba)"))
+rnb.df$Q7 <- factor(rnb.df$Q7, levels = c("가", "나"), labels = c("Veja", "Curitiba"))
+rnb.df$Q8 <- factor(rnb.df$Q8, levels = c("가", "나"), labels = c("남", "여"))
+rnb.df$Q9 <- factor(rnb.df$Q9, levels = c("가", "나"), labels = c("예", "아니ㅗ"))
+rnb.df$Q10 <- factor(rnb.df$Q10, levels = c("가", "나", "다", "라"), labels = c("서울", "경기", "강원", "기타지역"))
+pander(rnb.df)
+pander(summary(rnb.df))
+```
+
+### 응답 분포 비교
+
+```{r, tabulation of responses, echo =FALSE}
+pander(table(Group = rnb.df[, 11], Q1 = rnb.df[, 1]), caption = "환경문제 관심?")
+pander(table(Group = rnb.df[, 11], Q1 = rnb.df[, 2]), caption = "기후변화 영향?")
+pander(table(Group = rnb.df[, 11], Q1 = rnb.df[, 3]), caption = "공정무역과 생산자 소비자 관계")
+pander(table(Group = rnb.df[, 11], Q1 = rnb.df[, 4]), caption = "공정무역과 환경보전")
+pander(table(Group = rnb.df[, 11], Q1 = rnb.df[, 5]), caption = "대중교통시스템과 대기오염")
+pander(table(Group = rnb.df[, 11], Q1 = rnb.df[, 6]), caption = "음식물쓰레기 교환 제도")
+```
+
+### 평균 응답 비교
+ 
+```{r, mean responses by group, echo = FALSE}
+# rnb.df.ag <- aggregate(rnb.df[1:6], by = list(Group = rnb.df[, 11]), mean, na.rm=TRUE)
+# aggregate(cbind(Q1, Q2, Q3, Q4, Q5, Q6) ~ group, data = rnb.df, mean, na.rm = TRUE)
+rnb.df.mapply <- mapply(function(x){tapply(x, rnb.df$group, mean, na.rm = TRUE)}, rnb.df[1:6])
+pander(rnb.df.mapply, digits = 2)
+# str(rnb.df.ag)
+# (rnb.df.ag.tbl <- as.matrix(rnb.df.ag[, 2:7], dnn = list(Group = c("Red(Veja)", "Black(Curitiba)"), Q = names(rnb.df[, 1:6]))))
+# row.names(rnb.df.ag.tbl) <- c("Red(Veja)", "Black(Curitiba)")
+# pander(rnb.df.ag.tbl, digits = 2, table.alignment.default = 'left')
+```
+
+### 보충 질문 집계표
+
+```{r, tabulation of extra questons, echo = FALSE}
+pander(table(Group = rnb.df[, 11], Movie = rnb.df[, 7]), "어느 동영상?")
+pander(table(Group = rnb.df[, 11], Gender = rnb.df[, 8]), caption = "성별")
+pander(table(Group = rnb.df[, 11], Glasses = rnb.df[, 9]), caption = "안경 혹은 렌즈 착용?")
+pander(table(Group = rnb.df[, 11], Where.From = rnb.df[, 10]), caption = "출신고교 소재지?")
+```
+
+### T 테스트로는 단 하나의 유의한 결과 검출
+
+```{r, t-test by group, echo = FALSE}
+# pander(apply(rnb.df[1:6], 2, function(x){t.test(x ~ group, data = rnb.df, na.rm = TRUE, var.equal = TRUE)}))
+pander(mapply(function(x){t.test(x ~ group, data = rnb.df, na.rm = TRUE)}, rnb.df[1:6]), caption = "Welch Two Sample t-test")
+```
+
+### 카이제곱 검증으로 랜덤화 효과 확인
+
+```{r, chisquare test, echo = FALSE}
+pander(mapply(function(x){chisq.test(table(x, rnb.df$group), simulate.p.value = TRUE)}, rnb.df[8:10]))
+# pander(chisq.test(table(rnb.df[, 8], rnb.df[, 11])))
+# pander(chisq.test(table(rnb.df[, 9], rnb.df[, 11])))
+# pander(chisq.test(table(rnb.df[, 10], rnb.df[, 11]), simulate.p.value = TRUE))
+```
+
+```{r, save, echo = FALSE}
+save.image("../R/rnb160309.rda")
+```

@@ -1,0 +1,64 @@
+---
+title: "Randomization Effects 160309"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width=180)
+options(digits = 2)
+```
+
+```{r, data}
+rnb.df <- read.xlsx("../data/literacy_RnB0308.xlsx", 1, startRow = 2, endRow = 66, colIndex = c(10:19, 45))
+str(rnb.df)
+names(rnb.df) <- c(paste("Q", 1:10, sep=""), "group")
+rnb.df$group <- factor(rnb.df$group, levels = c("Red", "Black"))
+rnb.df$Q7 <- factor(rnb.df$Q7, levels = c("가", "나"), labels = c("Veja", "Curitiba"))
+rnb.df$Q8 <- factor(rnb.df$Q8, levels = c("가", "나"), labels = c("Male", "Female"))
+rnb.df$Q9 <- factor(rnb.df$Q9, levels = c("가", "나"), labels = c("Yes", "No"))
+rnb.df$Q10 <- factor(rnb.df$Q10, levels = c("가", "나", "다", "라"), labels = c("Seoul", "Gyunggi", "Gangwon", "Others"))
+pander(rnb.df)
+pander(summary(rnb.df))
+```
+
+### Comparion of Mean Responses
+
+```{r, mean responses by group}
+pander(aggregate(rnb.df[1:6], by = list(Group = rnb.df[, 11]), mean, na.rm=TRUE), digits = 2, table.alignment.default = 'right')
+```
+
+### Tabulation of Extra Questions
+
+```{r, tabulation of extra questons}
+pander(table(Movie = rnb.df[, 7], Group = rnb.df[, 11]), "Which Movie?")
+pander(table(Gender = rnb.df[, 8], Group = rnb.df[, 11]), caption = "Gender")
+pander(table(Glasses = rnb.df[, 9], Group = rnb.df[, 11]), caption = "Wearing Glasses?")
+pander(table(Where.From = rnb.df[, 10], Group = rnb.df[, 11]), caption = "High School Location")
+```
+
+### T-tests show one significant results 
+
+```{r, t-test by group}
+pander(apply(rnb.df[1:6], 2, function(x){t.test(x ~ group, data = rnb.df, na.rm = TRUE, var.equal = TRUE)}))
+```
+
+### Chisquare test results are as satisfactory
+
+```{r, chisquare test}
+pander(chisq.test(table(rnb.df[, 8], rnb.df[, 11])))
+pander(chisq.test(table(rnb.df[, 9], rnb.df[, 11])))
+pander(chisq.test(table(rnb.df[, 10], rnb.df[, 11]), simulate.p.value = TRUE))
+```
+
+```{r, save, echo = FALSE}
+save.image("../R/rnb160309.rda")
+```

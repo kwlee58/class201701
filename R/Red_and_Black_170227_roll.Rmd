@@ -1,0 +1,149 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+```
+
+<!--
+### Data
+
+```{r, data, echo = FALSE}
+# class_roll <- read.xlsx("../data/class_roll1024.xlsx", 1, startRow = 2, endRow = 97, colIndex = c(3:7, 9), colClasses = rep("character", 6), stringsAsFactors = FALSE)
+# str(class_roll)
+# names(class_roll) <- c("dept", "id", "name", "year", "e.mail", "cell.no")
+# str(class_roll)
+load("./red_and_black_170227_data.rda")
+```
+
+### Randomization
+
+```{r, randomization}
+set.seed(1)
+N <- nrow(class_roll) 
+red.id <- sample(1:N, size = floor(N/2))
+red.id
+class_roll$group <- factor(ifelse((1:N) %in% red.id, "Red", "Black"), levels = c("Red", "Black"))
+black.id <- (1:N)[-red.id]
+# class_roll$group <- sample(1:N) %% 2 + 1
+# class_roll$group <- factor(class_roll$group, labels = c("Red", "Black"))
+# red.id <- which(class_roll$group == "Red")
+# black.id <- which(class_roll$group == "Black")
+```
+
+### 학번
+
+```{r, id}
+ID.15<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2015, "younger.15", "older.15"), levels=c("younger.15", "older.15"))
+pander(table("15학번 기준" = ID.15, "그룹" = class_roll$group))
+ID.14<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2014, "younger.14", "older.14"), levels=c("younger.14", "older.14"))
+pander(table("14학번 기준" = ID.14, "그룹" = class_roll$group))
+ID.13<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2013, "younger.13", "older.13"), levels=c("younger.13", "older.13"))
+pander(table("13학번 기준" = ID.13, "그룹" = class_roll$group))
+ID.12<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2012, "younger.12", "older.12"), levels=c("younger.12", "older.12"))
+pander(table("12학번 기준" = ID.12, "그룹" = class_roll$group))
+```
+
+### 학번 홀짝
+
+```{r, odd or even}
+odd.even <- as.numeric(class_roll$id) %% 2
+pander(table("odd_even" = odd.even, "Group"= class_roll$group))
+```
+
+### e-mail 서비스업체
+
+```{r, e_mail}
+e.mail.list <- strsplit(class_roll$e.mail, "@", fixed = TRUE)
+mail.com <- mapply("[", e.mail.list, 2)
+pander(table("e-mail" = mail.com, "그룹" = class_roll$group))
+```
+
+### 성씨 분포
+
+```{r, name}
+f.name <- substring(class_roll$name, first = 1, last = 1)
+pander(table("Family Name" =f.name, "Group" = class_roll$group))
+```
+
+### 많이 나오는 성씨
+
+```{r, frequent names}
+f.name.f <- factor(ifelse(f.name %in% c("김", "이", "박"), f.name, "기타"), levels = c("김", "이", "박", "기타"))
+pander(table("Group" = class_roll$group, "Family Name" = f.name.f))
+```
+
+### 전체 출석부
+
+```{r, colleges}
+pander(class_roll)
+#table("단과대학" = class_roll$college, "그룹" = class_roll$group)
+```
+
+```{r, list, echo = FALSE}
+gr.id.o <- order(class_roll$group, class_roll$name)
+id.by.gr <- class_roll[gr.id.o, c("group", "id", "name")]
+red.names <- id.by.gr[id.by.gr$group=="Red", c("id", "name")]
+names(red.names) <- c("학번", "이름")
+# pander(red.names)
+black.names <- id.by.gr[id.by.gr$group=="Black", c("id", "name")]
+names(black.names) <- c("학번", "이름")
+# pander(black.names)
+# class_roll[red.id, "id"]
+# class_roll[black.id, "id"]
+# cbind(class_roll[red.id, "id"], class_roll[black.id, "id"])
+# red.black.df <- data.frame("Red" = red.names, "Black" = black.names, row.names = NULL)
+# red.black.ls <- list("Red" = red.names, "Black" = black.names)
+# names(red.black.df) <- c("Red", "Black")
+# pander(red.black.ls)
+#kable(red.black.df, align = c("c", "c", "c", "c"))
+```
+-->
+
+
+```{r, red.names, echo = FALSE}
+pander(red.names[1:25, ], caption = "Red")
+```
+
+<P style="page-break-before:always">
+
+```{r, red.names.2, echo = FALSE}
+pander(red.names[26:50, ], caption = "Red")
+```
+
+<P style="page-break-before:always">
+
+```{r, red.names.3, echo = FALSE}
+pander(red.names[51:nrow(red.names), ], caption = "Red")
+```
+
+<P style="page-break-before:always">
+
+```{r, black.names, echo = FALSE}
+pander(black.names[1:25, ], caption = "Black")
+```
+
+<P style="page-break-before:always">
+
+```{r, black.names.2, echo = FALSE}
+pander(black.names[26:50, ], caption = "Black", col.names = "")
+```
+
+<P style="page-break-before:always">
+
+```{r, black.names.3, echo = FALSE}
+pander(black.names[51:nrow(black.names), ], caption = "Black", col.names = "")
+```
+
+<!--
+```{r, save}
+save.image("./red_and_black_161024_data.rda")
+```
+-->

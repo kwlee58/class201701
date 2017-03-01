@@ -1,0 +1,47 @@
+---
+title: "Facebook Replies 201601"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Data
+
+#### Read In
+
+```{r, library and read, echo = FALSE, message = FALSE}
+library(xlsx)
+library(pander)
+library(ggplot2)
+options(digits=3)
+fb <- read.xlsx("../data/facebook.xlsx", 1, startRow = 3, endRow = 66, header = FALSE, colIndex = c(3:31), colClasses = rep("character", 29))
+# load("./gorilla_0601.rda")
+str(fb)
+```
+
+#### Management
+
+```{r, data restructuring, echo = FALSE}
+names(fb) <- c("dept", "id", "name", "year", "e.mail", "P1", "P2", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "P3", "P4", "Q8", "P5", "Q9", "Q10", "Q11", "P6", "Q12", "P7", "P8", "Q13", "P9", "P10", "P11")
+fb.count <- data.frame(ifelse(is.na(fb[, -(1:5)]), 0, 1))
+str(fb.count)
+(Primary <- substr(names(fb.count), 1, 1) == "P")
+(Quiz <- substr(names(fb.count), 1, 1) == "Q")
+fb.count.P <- data.frame(fb[, c("id", "name")], fb.count[, Primary])
+fb.count.Q <- data.frame(fb[, c("id", "name")], fb.count[, Quiz])
+str(fb.count.P)
+str(fb.count.Q)
+fb.count.P$Total <- apply(fb.count.P[, -(1:2)], 1, sum)
+fb.count.Q$Total <- apply(fb.count.Q[, -(1:2)], 1, sum)
+fb.count.P
+colSums(fb.count.Q[, -(1:2)])
+colSums(fb.count.P[, -(1:2)])
+data.frame(fb[, c("id", "name")], P.Total = fb.count.P$Total, Q.Total = fb.count.Q$Total)
+```
+
+
+### 자료 갈무리
+
+```{r, save.image, echo = FALSE}
+# save.image("gorilla_0601.rda")
+```

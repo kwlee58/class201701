@@ -1,0 +1,76 @@
+---
+title: "Quiz 161128"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width = 180)
+```
+
+### Data 
+
+```{r, data, echo = FALSE, results = 'markup'}
+quiz1128 <- read.xlsx("../data/quiz1128.xlsx", 1, startRow = 2, endRow = 97, colIndex = c(3:7, 9:20), colClasses = rep("character", 17), header = TRUE, stringsAsFactors = FALSE)
+# str(quiz1128)
+names(quiz1128) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Team", paste("Q", 1:10, sep = ""))
+quiz1128$dept <- factor(quiz1128$dept)
+quiz1128$year <- factor(quiz1128$year)
+Team <- quiz1128$Team
+team.names <- unique(Team)
+na.index <- which(is.na(Team))
+quiz1128.2 <- quiz1128[-na.index, ]
+Team.2 <- quiz1128.2$Team
+team.names.2 <- unique(Team.2)
+records <- quiz1128.2[, 7:17]
+kable(quiz1128.2[, c("id", "name","Team", paste("Q", 1:10, sep = ""))])
+# sample.coll <- sapply(records[Team.2 == "지니", -1], paste, collapse = "")
+score <- function(x) {
+  switch(x,
+         MM = c(-3, -3),
+         MW = c(6, -6),
+         WM = c(-6, 6),
+         WW = c(3, 3))
+}
+# sapply(sample.coll, score)
+records.coll <- NULL
+for(x in team.names.2) {
+records.coll <- rbind(records.coll, sapply(records[Team.2 == x, -1], paste, collapse = ""))
+}
+rownames(records.coll) <- team.names.2
+kable(records.coll)
+score.coll <- NULL
+for(x in team.names.2) {
+score.coll <- rbind(score.coll, sapply(records.coll[rownames(records.coll) == x, ], score))
+}
+# kable(score.coll)
+rownames(score.coll) <- rep(rownames(records.coll), each = 2)
+kable(score.coll)
+id.name <- NULL
+for(x in team.names.2) {
+id.name <- rbind(id.name, quiz1128.2[Team.2 == x, c("id", "name")])
+}
+result.df <- data.frame(id.name, Team = rownames(score.coll), score.coll)
+result.df$sum <- rowSums(result.df[, 4:13])
+names(result.df) <- c("학번", "이름", "팀", paste(1:10, "회차", sep = ""), "총점")
+kable(result.df)
+# str(quiz1128)
+```
+
+<!--
+### Save and Exit
+
+```{r, save, echo = FALSE}
+save.image("./quiz1128.RDada")
+```
+-->

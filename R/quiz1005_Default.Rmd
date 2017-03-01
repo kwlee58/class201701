@@ -1,0 +1,117 @@
+---
+title: "Default"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width=180)
+```
+
+```{r, data, echo = FALSE, results = 'hide'}
+quiz1005 <- read.xlsx("../data/quiz1005.xlsx", 1, startRow = 2, endRow = 102, colIndex = c(3:7, 9:14), colClasses = c(rep("character", 11)), stringsAsFactors = FALSE)
+str(quiz1005)
+names(quiz1005) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
+quiz1005$dept <- factor(quiz1005$dept)
+quiz1005$year <- factor(quiz1005$year)
+quiz1005$group <- factor(quiz1005$group, levels = c("Red", "Black"))
+quiz1005$Q1 <- factor(quiz1005$Q1, levels = c("가", "나", "다", "라", "마"), labels = c("90%", "80%", "70%", "60%", "50%"))
+quiz1005$Q2 <- factor(quiz1005$Q2, levels = c("가", "나", "다", "라"), labels = c("봉급생활자", "자영업자", "중소기업", "대기업"))
+quiz1005$Q3 <- factor(quiz1005$Q3, levels = c("가", "나", "다", "라"), labels = c("우리나라 9.3%", "우리나라 12.8%", "터키 7.4%", "멕시코 9.3%"))
+Q4.na <- is.na(quiz1005$Q4)
+quiz1005$Q4 <- ifelse(is.na(quiz1005$Q4), "결석", quiz1005$Q4)
+quiz1005$Q4.2 <- quiz1005$Q4
+Red <- quiz1005$group == "Red"
+Black <- quiz1005$group == "Black"
+quiz1005$Q4.2[Red & quiz1005$Q4.2 == "No check"] <- "있음"
+quiz1005$Q4.2[Red & quiz1005$Q4.2 == "Check"] <- "없음"
+quiz1005$Q4.2[Black & quiz1005$Q4.2 == "No check"] <- "없음"
+quiz1005$Q4.2[Black & quiz1005$Q4.2 == "Check"] <- "있음"
+quiz1005$Q4.2[quiz1005$Q4.2 == "결석"] <- NA
+quiz1005$Q4.2 <- factor(quiz1005$Q4.2, level = c("있음", "없음"))
+quiz1005$Q4
+```
+
+```{r, randomization, echo = FALSE, results = 'hide'}
+pander(summary(quiz1005))
+```
+
+<!--
+### 퀴즈 응답 비교
+
+#### 총소득 대비 가계처분가능소득
+
+##### PDI/GNI
+
+```{r, PDI, echo = FALSE}
+pander(addmargins(table(quiz1005$group, quiz1005$Q1, exclude = NULL), margin=1))
+```
+
+##### PDI/GNI (%)
+
+```{r, PDI in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz1005$group, quiz1005$Q1, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1))
+```
+
+#### 어느 계층의 어려운 현실?
+
+##### 자영업자의 어려움
+
+```{r, self-employed, echo = FALSE}
+pander(addmargins(table(quiz1005$group, quiz1005$Q2, exclude = NULL), margin=1))
+```
+
+##### 자영업자의 어려움 (%)
+
+```{r, self-employed in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz1005$group, quiz1005$Q2, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="자영업자의 어려움")
+```
+
+#### 우리나라 GDP 대비 공공사회지출 비중은 터키 아래
+
+##### OECD GDP 대비 공공사회지출 비중
+
+```{r, public expenditure, echo = FALSE}
+pander(addmargins(table(quiz1005$group, quiz1005$Q3, exclude = NULL), margin=1))
+```
+
+##### OECD GDP 대비 공공사회지출 비중 (%)
+
+```{r, public expenditure in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz1005$group, quiz1005$Q3, exclude = NULL), margin = 1), margin = 1)[4,]*100, digits = 1), caption = "공공사회지출 비중")
+```
+
+### 디폴트 효과
+-->
+
+#### 표시하지 않으면 ... 으로 간주합니다의 효과
+
+##### 표시하지 않으면 장기 기증의사가 있는 것으로 간주하는 경우(Red)와 표시하면 장기 기증의사가 있는 것으로 간주하는 경우(Black), 표시하지 않으면 기증의사가 있다고 보는 질문지에 기증의사가 더 높게 나온다는 것에 유의. 어디다 디폴트를 두느냐에 따라 조사결과가 달라짐.
+
+```{r, vote attitude, echo = FALSE}
+tbl.D <- table(quiz1005$group, quiz1005$Q4.2, exclude = NULL)[1:2, ]
+rownames(tbl.D) <- c("Red(없으면 표시)", "Black(있으면 표시)")
+pander(tbl.D, caption="장기기증의사")
+```
+
+##### % 비교.  
+
+```{r, vote attitude in percentage, echo = FALSE}
+merge.tbl <- table(quiz1005$group, quiz1005$Q4.2)
+rownames(merge.tbl) <- c("Red(없으면 표시)", "Black(있으면 표시)")
+pander(round(prop.table(merge.tbl, margin = 1)*100, digits = 1))
+```
+
+```{r, save, echo = FALSE}
+#save.image("../R/quiz1005.rda")
+```

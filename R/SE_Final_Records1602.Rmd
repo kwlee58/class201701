@@ -1,0 +1,70 @@
+---
+title: "사회적경제와 협동조합 최종"
+author: "금융정보통계학과 이기원교수"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(width=180)
+rm(list=ls())
+```
+
+```{r, presets, , message = FALSE, echo = FALSE}
+options(digits=3)
+library(xlsx)
+library(knitr)
+library(pander)
+panderOptions("table.split.table", Inf)
+```
+
+
+<!--### Total Scores-->
+
+```{r, Total Scores, message = FALSE, echo = FALSE}
+total <- read.xlsx(file = "../data/SE1602_scoreList_v3.xlsx", sheetIndex = 1, rowIndex = 3:75, colIndex = 2:9, colClasses = c(rep("character", 2), rep("numeric", 6)), header = TRUE)
+total <- total[c(2, 1, 8, 4:7, 3)]
+v.names.total <- c("ID", "Name", "Offline", "Online", "Midterm", "Assignment", "Change_Maker", "Total")
+names(total) <- v.names.total
+# blacklist <- c("권영서", "최준규", "김예지", "김수빈", "유지윤", "고상일", "임준호")
+# total.old <- total
+# total[total$Name %in% blacklist, c("Change_Maker", "Total")] <- total[total$Name %in% blacklist, c("Change_Maker", "Total")] - 2 
+# total[total$Name == "윤상희", c("Assignment", "Total")] <- c(12, 82.6)
+# total[total$Name == "김수빈", c("Midterm", "Total")] <- c(16, 84.5)
+total[total$Name == "김수빈", c("Midterm", "Change_Maker")] <- c(15, 31.5)
+N <- nrow(total)
+total$Ranks <- N + 1 - rank(total$Total)
+total$Grades <- ifelse(total$Ranks <= floor(N*0.3), "A+", ifelse(total$Ranks <= floor(N*0.6), "B+", "C+"))
+o.names <- order(total$Name)
+v.names.kr <- c("학번", "이름", "교실(10)", "온라인(10)", "중간고사(20)", "과제(20)", "체인지메이커(40)", "총점(100)", "순위(72명중)", "학점")
+total.kr <- total
+names(total.kr) <- v.names.kr
+kable(total.kr[o.names, ], row.names = FALSE)
+# kable(total)
+# summary(total$Midterm)
+```
+
+
+
+<P style = "page-break-before:always">
+
+```{r, individual scores, echo = FALSE}
+my.grade <- function(name){
+  kable(total.kr[total$Name %in% name, -1], row.names = FALSE)
+}
+# my.grade(c("강동규", "이채완", "정소영"))
+# my.grade(c("김수빈", "심예원", "이현진"))
+# my.grade("권영서")
+my.grade("최문창")
+```
+
+
+<!--### Save Data
+
+```{r Save Data, echo = FALSE}
+save.image(file = "../R/final_data.rda")
+```
+
+-->
+               

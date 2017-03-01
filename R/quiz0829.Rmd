@@ -1,0 +1,52 @@
+---
+title: "Quiz 160829"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+options(width = 180)
+```
+
+```{r, data, echo = FALSE, results = 'hide'}
+quiz0829 <- read.xlsx("../data/quiz0829.xlsx", 1, startRow = 2, endRow = 71, colIndex = c(3:7, 9:13), colClasses=c(rep("character", 11)), stringsAsFactors = FALSE)
+str(quiz0829)
+names(quiz0829) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4")
+quiz0829$dept <- factor(quiz0829$dept)
+quiz0829$year <- factor(quiz0829$year)
+quiz0829$Q1 <- factor(quiz0829$Q1, levels = c("가", "나", "다", "라", "마"), labels = c("공자", "맹자", "관자", "노자", "장자"))
+quiz0829$Q2 <- factor(quiz0829$Q2, levels = c("가", "나", "다", "라", "마"), labels = c("논어 학이편", "관자 국축편", "관자 경중편", "관자 산국궤", "논어 계씨편"))
+quiz0829$Q3 <- factor(quiz0829$Q3, levels = c("가", "나", "다", "라", "마"), labels = c("절대 중요 않음", "거의 중요 않음", "보통", "상당히 중요", "절대 중요"))
+quiz0829$Q4 <- factor(quiz0829$Q4, levels = c("가", "나", "다", "라"), labels = c("2012", "2016", "2020", "2030"))
+str(quiz0829)
+```
+
+```{r, randomization, echo = FALSE, results = 'hide'}
+pander(summary(quiz0829))
+```
+
+```{r, results, echo = FALSE}
+tbl.q1 <- table(quiz0829$Q1, exclude = NULL)
+names(tbl.q1)[6] <- "결석"
+pander(tbl.q1, caption="춘추시대 국가통계관리")
+tbl.q2 <- table(quiz0829$Q2, exclude = NULL)
+names(tbl.q2)[6] <- "결석"
+pander(tbl.q2, caption="통계관리는 어느 책에?")
+tbl.q3 <- table(quiz0829$Q3, exclude = NULL)
+names(tbl.q3)[6] <- "결석"
+pander(tbl.q3, caption="통계의 역할")
+tbl.q4 <- table(quiz0829$Q4, exclude = NULL)
+names(tbl.q4)[5] <- "결석"
+pander(tbl.q4, caption="생산가능인구 정점?")
+```
+
+```{r, save, echo = FALSE}
+#save.image("../R/quiz0829.rda")
+```

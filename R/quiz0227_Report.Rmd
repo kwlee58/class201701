@@ -1,0 +1,116 @@
+---
+title: "Quiz 170227"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width=180)
+```
+
+```{r, data, echo = FALSE, results='hide'}
+quiz0227 <- read.xlsx("../data/quiz0227.xlsx", 1, startRow = 2, endRow = 157, colIndex = c(3:7, 9:14), colClasses=c(rep("character", 11)), stringsAsFactors=FALSE)
+str(quiz0227)
+names(quiz0227) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
+quiz0227$dept <- factor(quiz0227$dept)
+quiz0227$year <- factor(quiz0227$year)
+quiz0227$group <- factor(quiz0227$group, levels = c("Red", "Black"))
+quiz0227$Q1 <- factor(quiz0227$Q1, levels = c("가", "나", "다", "라"), labels = c("통계학", "통계", "자료", "통계청"))
+quiz0227$Q2 <- factor(quiz0227$Q2, levels = c("가", "나", "다", "라"), labels = c("통계학", "통계", "자료", "통계청"))
+quiz0227$Q3 <- factor(quiz0227$Q3, levels = c("가", "나", "다", "라"), labels = c("통계학", "통계", "자료", "통계청"))
+quiz0227$Q4 <- factor(quiz0227$Q4, levels = c("가", "나", "다", "라", "마"), labels = c("매우 공감", "다소 공감", "다소 비공감", "매우 비공감", "모름/무응답"))
+quiz0227$Q4.2 <- quiz0227$Q4
+levels(quiz0227$Q4.2) <- c(rep("공감", 2), rep("비공감", 2), "모름/무응답")
+str(quiz0227)
+```
+
+```{r, randomization, echo = FALSE, results = 'hide'}
+pander(summary(quiz0227))
+```
+
+### Quiz 응답 비교
+
+#### Dewey as good as elected, statistics convince Roper
+
+##### Roper(Counts) 
+
+```{r, Roper, echo = FALSE}
+# pander(table(quiz0227$group, quiz0227$Q1, exclude = NULL), caption="Roper")
+# pander(addmargins(table(quiz0227$group, quiz0227$Q1, exclude = NULL), margin=1), caption="Roper")
+pander(addmargins(table(quiz0227$group, quiz0227$Q1, exclude = NULL), margin=1))
+```
+
+##### Roper(%)
+
+```{r, Roper in percentage, echo =FALSE}
+pander(round(prop.table(addmargins(table(quiz0227$group, quiz0227$Q1, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="Roper")
+```
+
+#### Statistics is the science of learning from data, ...
+
+##### ASA(Counts) 
+
+```{r, ASA, echo =FALSE}
+# pander(table(quiz0227$group, quiz0227$Q2, exclude = NULL), caption="ASA")
+# pander(addmargins(table(quiz0227$group, quiz0227$Q2, exclude = NULL), margin=1), caption="ASA")
+pander(addmargins(table(quiz0227$group, quiz0227$Q2, exclude = NULL), margin=1))
+```
+
+##### ASA(%)
+
+```{r, ASA in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz0227$group, quiz0227$Q2, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="ASA")
+```
+
+#### How to lie with statistics
+
+##### D.Huff(Counts) 
+
+```{r, D.Huff, echo = FALSE}
+# pander(table(quiz0227$group, quiz0227$Q3, exclude = NULL), caption="D.Huff")
+# pander(addmargins(table(quiz0227$group, quiz0227$Q3, exclude = NULL), margin=1), caption="D.Huff")
+pander(addmargins(table(quiz0227$group, quiz0227$Q3, exclude = NULL), margin=1))
+```
+
+##### D.Huff(%)
+
+```{r, D.Huff in percentage, echo = FALSE}
+pander(round(prop.table(addmargins(table(quiz0227$group, quiz0227$Q3, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="D.Huff")
+```
+
+#### THAAD Question
+
+##### Positive answers are more frequent in "Red" group, which used lengthy explanation in question.
+
+```{r, THAAD(5 possible answers), echo = FALSE}
+pander(table(quiz0227$group, quiz0227$Q4, exclude = NULL), caption="THAAD")
+```
+
+##### {"매우 공감", "다소 공감" => "공감"}, {"다소 비공감", "매우 비공감" => "비공감"}
+
+```{r, THAAD(3 possible answers), echo = FALSE}
+pander(table(quiz0227$group, quiz0227$Q4.2, exclude = NULL), caption="THAAD")
+```
+
+##### THAAD(%)
+
+```{r, THAAD(%), echo = FALSE}
+thaad.tbl <- table(quiz0227$group, quiz0227$Q4)
+thaad.tbl.2 <- table(quiz0227$group, quiz0227$Q4.2)
+pander(round(prop.table(thaad.tbl, margin = 1)*100, digits = 1), caption="THAAD(단위, %)")
+pander(round(prop.table(thaad.tbl.2, margin = 1)*100, digits = 1), caption = "THAAD(단위, %)")
+```
+
+```{r, save, echo = FALSE}
+#save.image("../R/quiz0227.rda")
+```
