@@ -120,42 +120,76 @@ $(document).ready(function () {
 
 
 <!--
+
+
 ### Data
 
 
+```r
+class_roll <- read.xlsx("../data/class_roll0303.xlsx", 1, startRow = 2, endRow = 162, colIndex = c(3:7, 9), colClasses = rep("character", 6), stringsAsFactors = FALSE)
+str(class_roll)
+```
+
+```
+## 'data.frame':    160 obs. of  6 variables:
+##  $ 학과      : chr  "중국학과" "전자공학과" "컴퓨터공학과" "화학과" ...
+##  $ 학.직.번  : chr  "20111501" "20115201" "20175103" "20143603" ...
+##  $ 이름      : chr  "강경민" "강경윤" "강보경" "강소연" ...
+##  $ 학년      : chr  "4" "4" "1" "4" ...
+##  $ E.Mail    : chr  "ssilmido@naver.com" "33169kang@hanmail.net" "kbk9818@naver.com" "crown_girl@hanmail.net" ...
+##  $ 핸드폰번호: chr  "010-9164-5954" "010-8574-8159" "010-6435-5735" "010-2066-8619" ...
+```
+
+```r
+names(class_roll) <- c("dept", "id", "name", "year", "e.mail", "cell.no")
+str(class_roll)
+```
+
+```
+## 'data.frame':    160 obs. of  6 variables:
+##  $ dept   : chr  "중국학과" "전자공학과" "컴퓨터공학과" "화학과" ...
+##  $ id     : chr  "20111501" "20115201" "20175103" "20143603" ...
+##  $ name   : chr  "강경민" "강경윤" "강보경" "강소연" ...
+##  $ year   : chr  "4" "4" "1" "4" ...
+##  $ e.mail : chr  "ssilmido@naver.com" "33169kang@hanmail.net" "kbk9818@naver.com" "crown_girl@hanmail.net" ...
+##  $ cell.no: chr  "010-9164-5954" "010-8574-8159" "010-6435-5735" "010-2066-8619" ...
+```
 
 ### Randomization
 
 
 ```r
-set.seed(1)
+set.seed(107)
 N <- nrow(class_roll) 
-red.id <- sample(1:N, size = floor(N/2))
-red.id
-```
-
-```
-##  [1]  43  60  91 143  32 140 146 102  96  10  31  27 153  57 113  73 104
-## [18] 142  54 110 131  30  90  18  37  53   2  51 115  45  63  78  64  24
-## [35] 105  84  99  14  89  50 124 129  93  65  62 158   3 157  83  77 135
-## [52]  94  48 149   8  11  33 154  68  42  92 139 155 144 130  25  98  72
-## [69] 106  80 150  75 138 120  41  76 145  97 128 119
-```
-
-```r
-class_roll$group <- factor(ifelse((1:N) %in% red.id, "Red", "Black"), levels = c("Red", "Black"))
-black.id <- (1:N)[-red.id]
-# class_roll$group <- sample(1:N) %% 2 + 1
-# class_roll$group <- factor(class_roll$group, labels = c("Red", "Black"))
-# red.id <- which(class_roll$group == "Red")
-# black.id <- which(class_roll$group == "Black")
+# red.id <- sample(1:N, size = floor(N/2))
+# red.id
+# class_roll$group <- factor(ifelse((1:N) %in% red.id, "Red", "Black"), levels = c("Red", "Black"))
+# black.id <- (1:N)[-red.id]
+class_roll$group <- sample(1:N) %% 2 + 1
+class_roll$group <- factor(class_roll$group, labels = c("Red", "Black"))
+red.id <- which(class_roll$group == "Red")
+black.id <- which(class_roll$group == "Black")
 ```
 
 ### 학번
 
 
 ```r
-ID.15<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2015, "younger.15", "older.15"), levels=c("younger.15", "older.15"))
+ID.16 <- factor(ifelse(substr(class_roll$id, 1, 4) >= 2016, "younger.16", "older.16"), levels = c("younger.16", "older.16"))
+pander(table("16학번 기준" = ID.16, "그룹" = class_roll$group))
+```
+
+
+------------------------------
+     &nbsp;       Red   Black 
+---------------- ----- -------
+ **younger.16**   42     45   
+
+  **older.16**    38     35   
+------------------------------
+
+```r
+ID.15 <- factor(ifelse(substr(class_roll$id, 1, 4) >= 2015, "younger.15", "older.15"), levels = c("younger.15", "older.15"))
 pander(table("15학번 기준" = ID.15, "그룹" = class_roll$group))
 ```
 
@@ -163,13 +197,13 @@ pander(table("15학번 기준" = ID.15, "그룹" = class_roll$group))
 ------------------------------
      &nbsp;       Red   Black 
 ---------------- ----- -------
- **younger.15**   57     43   
+ **younger.15**   51     49   
 
-  **older.15**    23     37   
+  **older.15**    29     31   
 ------------------------------
 
 ```r
-ID.14<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2014, "younger.14", "older.14"), levels=c("younger.14", "older.14"))
+ID.14 <- factor(ifelse(substr(class_roll$id, 1, 4) >= 2014, "younger.14", "older.14"), levels = c("younger.14", "older.14"))
 pander(table("14학번 기준" = ID.14, "그룹" = class_roll$group))
 ```
 
@@ -177,13 +211,13 @@ pander(table("14학번 기준" = ID.14, "그룹" = class_roll$group))
 ------------------------------
      &nbsp;       Red   Black 
 ---------------- ----- -------
- **younger.14**   63     57   
+ **younger.14**   59     61   
 
-  **older.14**    17     23   
+  **older.14**    21     19   
 ------------------------------
 
 ```r
-ID.13<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2013, "younger.13", "older.13"), levels=c("younger.13", "older.13"))
+ID.13 <- factor(ifelse(substr(class_roll$id, 1, 4) >= 2013, "younger.13", "older.13"), levels = c("younger.13", "older.13"))
 pander(table("13학번 기준" = ID.13, "그룹" = class_roll$group))
 ```
 
@@ -191,23 +225,9 @@ pander(table("13학번 기준" = ID.13, "그룹" = class_roll$group))
 ------------------------------
      &nbsp;       Red   Black 
 ---------------- ----- -------
- **younger.13**   72     74   
+ **younger.13**   73     73   
 
-  **older.13**     8      6   
-------------------------------
-
-```r
-ID.12<-factor(ifelse(substr(class_roll$id, 1, 4) >= 2012, "younger.12", "older.12"), levels=c("younger.12", "older.12"))
-pander(table("12학번 기준" = ID.12, "그룹" = class_roll$group))
-```
-
-
-------------------------------
-     &nbsp;       Red   Black 
----------------- ----- -------
- **younger.12**   77     76   
-
-  **older.12**     3      4   
+  **older.13**     7      7   
 ------------------------------
 
 ### 학번 홀짝
@@ -240,15 +260,15 @@ pander(table("e-mail" = mail.com, "그룹" = class_roll$group))
 -------------------------------
      &nbsp;        Red   Black 
 ----------------- ----- -------
-  **daum.net**      0      2   
+  **daum.net**      1      1   
 
-  **gmail.com**     1      5   
+  **gmail.com**     3      3   
 
  **hanmail.net**    5      4   
 
-  **nate.com**      5      2   
+  **nate.com**      3      4   
 
-  **naver.com**    69     66   
+  **naver.com**    67     68   
 -------------------------------
 
 ### 성씨 분포
@@ -263,7 +283,7 @@ pander(table("Family Name" =f.name, "Group" = class_roll$group))
 ----------------------
  &nbsp;   Red   Black 
 -------- ----- -------
- **강**    2      4   
+ **강**    4      2   
 
  **고**    0      1   
 
@@ -271,65 +291,65 @@ pander(table("Family Name" =f.name, "Group" = class_roll$group))
 
  **권**    2      2   
 
- **김**   15     21   
+ **김**   19     17   
 
- **나**    0      1   
+ **나**    1      0   
 
- **명**    1      0   
+ **명**    0      1   
 
  **문**    1      0   
 
- **박**    7      6   
+ **박**    9      4   
 
- **반**    1      0   
+ **반**    0      1   
 
  **방**    0      1   
 
- **배**    1      1   
+ **배**    0      2   
 
  **서**    1      3   
 
- **성**    1      0   
+ **성**    0      1   
 
  **손**    1      1   
 
- **송**    3      0   
+ **송**    1      2   
 
- **신**    1      2   
+ **신**    2      1   
 
- **심**    0      1   
+ **심**    1      0   
 
  **안**    2      3   
 
  **양**    0      1   
 
- **우**    1      0   
+ **우**    0      1   
 
- **유**    5      0   
+ **유**    0      5   
 
- **윤**    4      1   
+ **윤**    3      2   
 
- **이**    9     12   
+ **이**   12      9   
 
- **임**    0      3   
+ **임**    1      2   
 
  **장**    1      2   
 
- **전**    1      1   
+ **전**    0      2   
 
- **정**    4      4   
+ **정**    3      5   
 
- **조**    5      2   
+ **조**    6      1   
 
- **차**    2      0   
+ **차**    0      2   
 
- **최**    5      4   
+ **최**    7      2   
 
- **하**    1      0   
+ **하**    0      1   
 
- **한**    1      1   
+ **한**    2      0   
 
- **황**    1      2   
+ **황**    0      3   
 ----------------------
 
 ### 많이 나오는 성씨
@@ -344,501 +364,1496 @@ pander(table("Group" = class_roll$group, "Family Name" = f.name.f))
 ---------------------------------
   &nbsp;     김   이   박   기타 
 ----------- ---- ---- ---- ------
-  **Red**    15   9    7     49  
+  **Red**    19   12   9     40  
 
- **Black**   21   12   6     41  
+ **Black**   17   9    4     50  
 ---------------------------------
 
-### 전체 출석부
+### 학과
 
 
 ```r
-pander(class_roll)
+# pander(class_roll)
+pander(table("그룹" = class_roll$group, "학과" = class_roll$dept))
 ```
 
 
------------------------------------------------------------------------------------------------
-         dept             id     name   year            e.mail               cell.no     group 
----------------------- -------- ------ ------ --------------------------- ------------- -------
-       중국학과        20111501 강경민   4        ssilmido@naver.com      010-9164-5954  Black 
-
-      전자공학과       20115201 강경윤   4       33169kang@hanmail.net    010-8574-8159   Red  
-
-     컴퓨터공학과      20175103 강보경   1         kbk9818@naver.com      010-6435-5735   Red  
-
-        화학과         20143603 강소연   4      crown_girl@hanmail.net    010-2066-8619  Black 
-
-       경영학과        20162801 강예은   2        yeeun423@naver.com      010-8820-6892  Black 
-
-       경제학과        20123102 강정우   3       jeongugang@gmail.com     010-7499-8710  Black 
-
-      전자공학과       20145206 고은별   4         eb6381@naver.com       010-9284-0092  Black 
-
-       경영학과        20162805 구다슬   2       rnektmf0104@naver.com    010-8228-1375   Red  
-
-     컴퓨터공학과      20175107 권예진   1         gomto07@naver.com      010-4222-7950  Black 
-
-   바이오메디컬학과    20123804 권종훈   3       rnjs1313131@naver.com    010-4769-0588   Red  
-
-     재무금융학과      20173142 권지연   1       jinnyk1842@naver.com     010-4207-1843   Red  
-
-       경영학과        20142806 권혁준   2        agewy3555@naver.com     010-7208-3026  Black 
-
-   융합신소재공학과    20175402 김관호   1        asdf36597@naver.com     010-2386-9226  Black 
-
-        화학과         20113604 김기훈   3         kkh1837@naver.com      010-8009-0261   Red  
-
-       경영학과        20162814 김다은   2        daeuniya@naver.com      010-9264-8090  Black 
-
-     컴퓨터공학과      20135109 김문성   2        syjk6572@naver.com      010-2795-3324  Black 
-
-       경제학과        20143107 김민섭   2                NA              010-9032-6927  Black 
-
-    언어병리학전공     20154205 김민주   3       kmj8254121@naver.com     010-3694-4121   Red  
-
-       경영학과        20172812 김민호   1         kmh7883@naver.com      010-4173-6257  Black 
-
-  융합소프트웨어학과   20175304 김범수   1        hi00light@naver.com     010-2716-0955  Black 
-
-       경영학과        20162822 김서현   2        seo971209@naver.com     010-6382-1209  Black 
-
-    응용광물리학과     20133503 김성호   2      rlatjdgh0519@naver.com    010-7221-1283  Black 
-
-       심리학과        20162105 김소연   2      rlathdus9907@naver.com    010-8248-7402  Black 
-
-     재무금융학과      20173103 김승희   1        hdhd9851@naver.com      010-9318-9851   Red  
-
-   융합신소재공학과    20175406 김영준   1       dudwns8033@naver.com     010-8810-5497   Red  
-
-     재무금융학과      20173106 김용근   1       jiyunykk915@naver.com    010-6755-1413  Black 
-
-     정치행정학과      20122405 김용환   4       kyongh903@hanmail.net    010-8505-6231   Red  
-
-       경영학과        20172818 김우진   1        xx_xx6359@naver.com     010-9356-6359  Black 
-
-    국어국문학전공     20141112 김은비   3         sj02059@daum.net       010-4039-3398  Black 
-
-       경영학과        20172822 김인영   1         kiy8854@naver.com      010-8854-1856   Red  
-
-      전자공학과       20115210 김장훈   4         khun0909@nate.com      010-2297-3128   Red  
-
-     정치행정학과      20122719 김재현   4        stop65132@naver.com     010-2712-3198   Red  
-
-      사회복지학       20147228 김정은   4         kje9064@gmail.com      010-7209-9064   Red  
-
-       경영학과        20162831 김정은   2       wjddms3847@naver.com     010-7322-4370  Black 
-
-       심리학과        20162106 김주연   2        kimjuyun2@naver.com     010-5003-6717  Black 
-
-       심리학과        20112107 김주한   4        kjh199201@naver.com     010-8799-7389  Black 
-
-   융합신소재공학과    20175408 김지석   1        qqwweebbb@naver.com     010-4516-4683   Red  
-
-        법학과         20162768 김지윤   2       jessie1016@naver.com     010-5457-9230  Black 
-
-        법학과         20132718 김지현   4        imme94@hanmail.net      010-3880-8994  Black 
-
-       경제학과        20173010 김지현   1       kim67997302@gmail.com    010-6799-7302  Black 
-
-       경제학과        20173011 김진현   1        kjh200522@naver.com     010-5480-7128   Red  
-
-       경영학과        20132836 김진희   4        wlsldywjd@nate.com      010-5191-7979   Red  
-
-       사학전공        20151408 김한빈   3         kgk0487@naver.com      010-4886-4482   Red  
-
-       경제학과        20133120 김현우   3         khwdog@naver.com       010-2778-2498  Black 
-
-       사회학과        20172207 김현진   1         realy02@naver.com      010-6878-3074   Red  
-
-       경영학과        20142838 김형진   2        zkdhtmqud@naver.com     010-9073-7426  Black 
-
-       사학전공        20151410 김혜수   3      kimhyesu1012@naver.com    010-5848-9710  Black 
-
-    언어병리학전공     20154214 김혜지   3      9696sharon@hanmail.net    010-6778-1632   Red  
-
-       경영학과        20172829 나수연   1          n2912@naver.com       010-2912-7857  Black 
-
-       경영학과        20172833 명기웅   1        rldndandy@naver.com     010-6646-7884   Red  
-
-        간호학         20176239 문지원   1         jw8106@naver.com       010-6767-7656   Red  
-
-       경제학과        20133124 박관영   2      sksmsrhksdud@naver.com    010-6296-1876  Black 
-
-       경제학과        20123130 박근형   4          qrg123@nate.com       010-9978-3967   Red  
-
-      생명과학과       20163510 박명철   2        park33241@naver.com     010-6866-0679   Red  
-
-  융합소프트웨어학과   20175312 박상범   1      alteravenues@naver.com    010-7138-6217  Black 
-
-    응용광물리학과     20163314 박세리   2        seri0529@naver.com      010-5697-5155  Black 
-
-       경영학과        20172837 박세원   1       tpdnjs6323@naver.com     010-5311-4599   Red  
-
-    언어병리학전공     20144222 박솔미   4         wneodz@naver.com       010-7515-3954  Black 
-
-       경영학과        20162848 박준엽   2        junyp1997@naver.com     010-7728-6580  Black 
-
-        간호학         20176250 박지민   1      parkjeemin@hanmail.net    010-4274-3121   Red  
-
-      사회복지학       20142324 박지연   4        laura613@naver.com      010-9395-1991  Black 
-
-      전자공학과       20135221 박진욱   3         pjgn99@naver.com       010-4929-1838   Red  
-
-       경제학과        20173019 박현준   1        guswns0568@nate.com     010-6219-0568   Red  
-
-      러시아학과       20151712 박혜리   3        juddy1234@naver.com     010-5023-3918   Red  
-
-        간호학         20176253 반예림   1        kil98lli@naver.com      010-9890-3994   Red  
-
-     사회복지학부      20112324 방상우   3         m000002@naver.com      010-8975-2655  Black 
-
-       심리학과        20172117 배승현   1        0818asdf@naver.com      010-3779-3819  Black 
-
-       심리학과        20172118 배예림   1        flarhdrl@naver.com      010-8259-3302   Red  
-
-   바이오메디컬학과    20123827 서경욱   3        ruddnrehtk@nate.com     010-6416-6952  Black 
-
-        간호학         20176255 서민지   1        ksi04393@naver.com      010-2934-8882  Black 
-
-      전자공학과       20145228 서찬규   2         yes6170@naver.com      010-4099-6170  Black 
-
-       경영학과        20162855 서희주   2        hiju7783@naver.com      010-7300-7311   Red  
-
-     사회복지학부      20172320 성수민   1         wsc2749@naver.com      010-4932-2578   Red  
-
-       경영학과        20172849 손다희   1       sssss310@hanmail.net     010-9450-2957  Black 
-
-       경영학과        20172850 손병훈   1        qudgnsths@nate.com      010-9390-5956   Red  
-
-    환경생명공학과     20173721 송민주   1        blue_3798@naver.com     010-8914-9395   Red  
-
-     컴퓨터공학과      20155133 송아현   3         sah604@naver.com       010-7711-8024   Red  
-
-       경제학과        20133132 송준수   2       jihyang819@naver.com     010-9528-5579   Red  
-
-   융합신소재공학과    20175416 신중근   1       tlswndrms99@naver.com    010-3109-1308  Black 
-
-       철학전공        20151317 신해원   2       xlsxka2309@naver.com     010-6311-9151   Red  
-
-    환경생명공학과     20133913 신현아   4         imj1423@naver.com      010-9990-0450  Black 
-
-       경영학과        20172860 심형빈   1        gudqls1004@nate.com     010-7379-7987  Black 
-
-       심리학과        20162115 안나정   2        skwjd5039@naver.com     010-3210-1225   Red  
-
-       경영학과        20142876 안바울   2       paul5186@hanmail.net     010-4661-5186   Red  
-
-     컴퓨터공학과      20135139 안상현   3         ansh941@naver.com      010-5030-9127  Black 
-
-       경제학과        20163023 안효빈   2        violethb@naver.com      010-9310-2774  Black 
-
-       경영학과        20172862 안희준   1         wns5100@naver.com      010-4874-4778  Black 
-
-        간호학         20176261 양아영   1         yay2003@naver.com      010-2430-0830  Black 
-
-     식품영양학과      20144128 우승혜   4        weovk060@naver.com      010-5193-0488   Red  
-
-      전자공학과       20135230 유건희   3       rjsgml4353@naver.com     010-9984-5529   Red  
-
-     컴퓨터공학과      20175150 유민수   1        miffy0297@naver.com     010-2186-8685   Red  
-
-     컴퓨터공학과      20175152 유재혁   1         dhddl93@naver.com      010-3654-3450   Red  
-
-       경제학과        20173031 유찬혁   1        asasas309@naver.com     010-7738-9802   Red  
-
-   바이오메디컬학과    20133831 유환민   3       hwanmin222@naver.com     010-3821-8448   Red  
-
-        의예과         20176144 윤동준   1        june2880@naver.com      010-9250-3095  Black 
-
-      전자공학과       20145236 윤선규   2       hhhoooo123@naver.com     010-3304-8798   Red  
-
-     컴퓨터공학과      20175153 윤수정   1        ysj20076@naver.com      010-9623-1945   Red  
-
-       경영학과        20162870 윤예슬   2         sek7872@naver.com      010-5150-1839   Red  
-
-     식품영양학과      20163836 윤향흠   2        ggdd0428@naver.com      010-8648-7155   Red  
-
-        간호학         20176269 이다원   1         jooaon@naver.com       010-6351-7667  Black 
-
-    응용광물리학과     20163322 이다환   2        dh972626@naver.com      010-4964-3392  Black 
-
-       심리학과        20172126 이두영   1        ldy980910@naver.com     010-2622-9091   Red  
-
-    언어병리학전공     20154240 이미나   3       minalee1996@naver.com    010-8868-9477  Black 
-
-        의예과         20176149 이병옥   1       lemuriames@naver.com     010-6291-0241   Red  
-
-     식품영양학과      20163838 이소연   2         big5lee@naver.com      010-5058-8339   Red  
-
-       경영학과        20162881 이수빈   2       dltnqls0825@naver.com    010-7523-5884   Red  
-
-        의예과         20176153 이승환   1        q1w2e397@naver.com      010-5376-8446  Black 
-
-       경영학과        20172882 이예나   1     leeyeana907302@gmail.com   010-9632-3852  Black 
-
-     사회복지학부      20172339 이은우   1       lew1588010@naver.com     010-7663-2951  Black 
-
-      전자공학과       20175243 이재기   1        lee403102@naver.com     010-6602-4875   Red  
-
-      청각학전공       20144247 이재혁   2        wogur0659@naver.com     010-5250-3007  Black 
-
-  융합소프트웨어학과   20135339 이정훈   3         ssomicc@daum.net       010-2910-6741  Black 
-
-        의예과         20176157 이주현   1        dnjrkfmd@naver.com      010-5113-1734   Red  
-
-     식품영양학과      20144140 이지연   4         ljy9473@naver.com      010-2356-9473  Black 
-
-       인문학부        20171077 이지호   1        zenzen703@naver.com     010-4843-9954   Red  
-
-      전자공학과       20115252 이창률   4        lule0814@naver.com      010-4552-2200  Black 
-
-       경영학과        20162892 이창호   2       tjsvndrl97@naver.com     010-4650-9878  Black 
-
-   바이오메디컬학과    20173639 이채연   1         shena20@naver.com      010-4813-7095  Black 
-
-        법학과         20162748 이한솔   2         cis1912@naver.com      010-4032-8166   Red  
-
-     재무금융학과      20173126 이혜선   1        gptjs023@naver.com      010-5773-9654   Red  
-
-   바이오메디컬학과    20153840 임성윤   3        dfes02048@gmail.com     010-6413-5501  Black 
-
-        의예과         20176162 임찬솔   1        also1523@naver.com      010-7231-3243  Black 
-
-       경제학과        20173039 임형빈   1        kokoh456@naver.com      010-4049-0696  Black 
-
-  융합소프트웨어학과   20135342 장대혁   3       sktellecom@naver.com     010-5057-2541   Red  
-
-       인문학부        20171082 장민호   1        minostar_@naver.com     010-8276-3579  Black 
-
-  융합소프트웨어학과   20135343 장보균   3        bogo1994@naver.com      010-9173-0656  Black 
-
-     재무금융학과      20133432 전강수   3       kangsoo147@naver.com     010-3329-3976  Black 
-
-        의예과         20176166 전유나   1         vbn601@naver.com       010-9432-6340   Red  
-
-       중국학과        20151534 정가영   3        family113@naver.com     010-8738-5024   Red  
-
-      전자공학과       20125258  정결    4         jg2092@naver.com       010-9411-0392   Red  
-
-   바이오메디컬학과    20133845 정경조   3         o10132@naver.com       010-6368-1883   Red  
-
-      전자공학과       20145252 정광훈   3        vmfk2330@naver.com      010-4054-2506  Black 
-
-  융합소프트웨어학과   20135347 정성윤   3       tjddbs5007@naver.com     010-6343-3931  Black 
-
-      전자공학과       20155250 정연주   3      wjdduswn6603@naver.com    010-7184-6804  Black 
-
-        의예과         20176167 정유진   1       jyoujin829@naver.com     010-7144-6957   Red  
-
-     식품영양학과      20134147 정주영   2    jeongjuyoung123@hanmail.net 010-7231-0460  Black 
-
-      전자공학과       20135255 조동건   3         cdg7620@naver.com      010-5559-7620  Black 
-
-    환경생명공학과     20163734 조문영   2         pbs1211@naver.com      010-8611-6524   Red  
-
-       경영학과        20162908 조민혜   2       whalsgp1129@naver.com    010-9222-3700   Red  
-
-    언어병리학전공     20163958 조유정   2       dbwjdtndus0@naver.com    010-2425-9237   Red  
-
-     재무금융학과      20173130 조은화   1          10_37@naver.com       010-3467-5101  Black 
-
-       경제학과        20133165 조형우   3         jhw3386@naver.com      010-4879-5502   Red  
-
-    언어병리학전공     20154262 조희수   3        gmltn320@naver.com      010-3528-5413   Red  
-
-  융합소프트웨어학과   20135350 차영웅   3       ckduddnddl@naver.com     010-6375-5259   Red  
-
-미디어커뮤니케이션학부 20172573 차정수   1        sue71610@naver.com      010-8616-9252   Red  
-
-       경제학과        20173046 최성훈   1         csh4269@naver.com      010-6387-7985   Red  
-
-      전자공학과       20135263 최승민   3      tmdals098765@naver.com    010-9079-6575  Black 
-
-      전자공학과       20135264 최용훈   3        dydgns757@naver.com     010-9525-4686  Black 
-
-     사회복지학부      20172357 최우창   1        dnckd0326@naver.com     010-9107-6768   Red  
-
-    국어국문학전공     20161108 최유진   2        dbwlseks@naver.com      010-6379-2740   Red  
-
-       일본학과        20141635 최은진   3        cej941215@gmail.com     010-9529-0413  Black 
-
-      전자공학과       20145263 최진영   4        anfdmlqlc@naver.com     010-4259-4777  Black 
-
-    응용광물리학과     20143532 최진일   2       wlsdlf0909@naver.com     010-9964-7377   Red  
-
-      전자공학과       20145264 최형진   2        chor0109@naver.com      010-7637-6467   Red  
-
-       인문학부        20171105 하정민   1       jungmzzang@naver.com     010-6291-6912   Red  
-
-   바이오메디컬학과    20133857 한종석   2         flv1023@naver.com      010-4923-2555  Black 
-
-     영어영문학과      20171237 한주승   1        wntmd414@naver.com      010-7687-6286   Red  
-
-      전자공학과       20155266 황수진   3        jin11247@naver.com      010-5656-2457   Red  
-
-    언어병리학전공     20163968 황지연   2        kyg681204@naver.com     010-9229-0547  Black 
-
-      러시아학과       20131735 황태남   2         htn7524@naver.com      010-9011-7665  Black 
------------------------------------------------------------------------------------------------
-
-```r
-#table("단과대학" = class_roll$college, "그룹" = class_roll$group)
-```
-
-
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  &nbsp;     간호학   경영학과   경제학과   국어국문학전공   러시아학과   미디어커뮤니케이션학부   바이오메디컬학과   법학과   사학전공   사회복지학   사회복지학부   사회학과   생명과학과   식품영양학과   심리학과   언어병리학전공   영어영문학과   융합소프트웨어학과   융합신소재공학과   응용광물리학과   의예과   인문학부   일본학과   재무금융학과   전자공학과   정치행정학과   중국학과   철학전공   청각학전공   컴퓨터공학과   화학과   환경생명공학과 
+----------- -------- ---------- ---------- ---------------- ------------ ------------------------ ------------------ -------- ---------- ------------ -------------- ---------- ------------ -------------- ---------- ---------------- -------------- -------------------- ------------------ ---------------- -------- ---------- ---------- -------------- ------------ -------------- ---------- ---------- ------------ -------------- -------- ----------------
+  **Red**      3         13         8             1              1                  0                     2             2         2           1             2            0           1             1            4             6               1                 3                   2                 2            5         1          0            1             8             1            1          1           1             4           1            1        
+
+ **Black**     3         13         6             1              1                  1                     5             1         0           1             2            1           0             4            3             1               0                 4                   2                 2            2         2          1            5             10            1            1          0           0             4           1            2        
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -->
-<table style="width:33%;">
-<caption>Red</caption>
+<div id="-" class="section level3">
+<h3>전체 출석부</h3>
+<pre class="r"><code>pander(class_roll)</code></pre>
+<table>
 <colgroup>
-<col width="12%"></col>
-<col width="12%"></col>
-<col width="8%"></col>
+<col width="24%"></col>
+<col width="9%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="29%"></col>
+<col width="14%"></col>
+<col width="7%"></col>
 </colgroup>
 <thead>
 <tr class="header">
-<th align="center"> </th>
-<th align="center">학번</th>
-<th align="center">이름</th>
+<th align="center">dept</th>
+<th align="center">id</th>
+<th align="center">name</th>
+<th align="center">year</th>
+<th align="center">e.mail</th>
+<th align="center">cell.no</th>
+<th align="center">group</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center"><strong>2</strong></td>
+<td align="center">중국학과</td>
+<td align="center">20111501</td>
+<td align="center">강경민</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:ssilmido@naver.com">ssilmido@naver.com</a></td>
+<td align="center">010-9164-5954</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
 <td align="center">20115201</td>
 <td align="center">강경윤</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:33169kang@hanmail.net">33169kang@hanmail.net</a></td>
+<td align="center">010-8574-8159</td>
+<td align="center">Black</td>
 </tr>
-<tr class="even">
-<td align="center"><strong>3</strong></td>
+<tr class="odd">
+<td align="center">컴퓨터공학과</td>
 <td align="center">20175103</td>
 <td align="center">강보경</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:kbk9818@naver.com">kbk9818@naver.com</a></td>
+<td align="center">010-6435-5735</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">화학과</td>
+<td align="center">20143603</td>
+<td align="center">강소연</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:crown_girl@hanmail.net">crown_girl@hanmail.net</a></td>
+<td align="center">010-2066-8619</td>
+<td align="center">Black</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>8</strong></td>
+<td align="center">경영학과</td>
+<td align="center">20162801</td>
+<td align="center">강예은</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:yeeun423@naver.com">yeeun423@naver.com</a></td>
+<td align="center">010-8820-6892</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">경제학과</td>
+<td align="center">20123102</td>
+<td align="center">강정우</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:jeongugang@gmail.com">jeongugang@gmail.com</a></td>
+<td align="center">010-7499-8710</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">전자공학과</td>
+<td align="center">20145206</td>
+<td align="center">고은별</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:eb6381@naver.com">eb6381@naver.com</a></td>
+<td align="center">010-9284-0092</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
 <td align="center">20162805</td>
 <td align="center">구다슬</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:rnektmf0104@naver.com">rnektmf0104@naver.com</a></td>
+<td align="center">010-8228-1375</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">컴퓨터공학과</td>
+<td align="center">20175107</td>
+<td align="center">권예진</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:gomto07@naver.com">gomto07@naver.com</a></td>
+<td align="center">010-4222-7950</td>
+<td align="center">Black</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>10</strong></td>
+<td align="center">바이오메디컬학과</td>
 <td align="center">20123804</td>
 <td align="center">권종훈</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:rnjs1313131@naver.com">rnjs1313131@naver.com</a></td>
+<td align="center">010-4769-0588</td>
+<td align="center">Black</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>11</strong></td>
+<td align="center">재무금융학과</td>
 <td align="center">20173142</td>
 <td align="center">권지연</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:jinnyk1842@naver.com">jinnyk1842@naver.com</a></td>
+<td align="center">010-4207-1843</td>
+<td align="center">Red</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>14</strong></td>
+<td align="center">경영학과</td>
+<td align="center">20142806</td>
+<td align="center">권혁준</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:agewy3555@naver.com">agewy3555@naver.com</a></td>
+<td align="center">010-7208-3026</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">융합신소재공학과</td>
+<td align="center">20175402</td>
+<td align="center">김관호</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:asdf36597@naver.com">asdf36597@naver.com</a></td>
+<td align="center">010-2386-9226</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">화학과</td>
 <td align="center">20113604</td>
 <td align="center">김기훈</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:kkh1837@naver.com">kkh1837@naver.com</a></td>
+<td align="center">010-8009-0261</td>
+<td align="center">Red</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>18</strong></td>
+<td align="center">경영학과</td>
+<td align="center">20162814</td>
+<td align="center">김다은</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:daeuniya@naver.com">daeuniya@naver.com</a></td>
+<td align="center">010-9264-8090</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">컴퓨터공학과</td>
+<td align="center">20135109</td>
+<td align="center">김문성</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:syjk6572@naver.com">syjk6572@naver.com</a></td>
+<td align="center">010-2795-3324</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경제학과</td>
+<td align="center">20143107</td>
+<td align="center">김민섭</td>
+<td align="center">2</td>
+<td align="center">NA</td>
+<td align="center">010-9032-6927</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">언어병리학전공</td>
 <td align="center">20154205</td>
 <td align="center">김민주</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:kmj8254121@naver.com">kmj8254121@naver.com</a></td>
+<td align="center">010-3694-4121</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20172812</td>
+<td align="center">김민호</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:kmh7883@naver.com">kmh7883@naver.com</a></td>
+<td align="center">010-4173-6257</td>
+<td align="center">Black</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>24</strong></td>
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20175304</td>
+<td align="center">김범수</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:hi00light@naver.com">hi00light@naver.com</a></td>
+<td align="center">010-2716-0955</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20162822</td>
+<td align="center">김서현</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:seo971209@naver.com">seo971209@naver.com</a></td>
+<td align="center">010-6382-1209</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">응용광물리학과</td>
+<td align="center">20133503</td>
+<td align="center">김성호</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:rlatjdgh0519@naver.com">rlatjdgh0519@naver.com</a></td>
+<td align="center">010-7221-1283</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">심리학과</td>
+<td align="center">20162105</td>
+<td align="center">김소연</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:rlathdus9907@naver.com">rlathdus9907@naver.com</a></td>
+<td align="center">010-8248-7402</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">재무금융학과</td>
 <td align="center">20173103</td>
 <td align="center">김승희</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:hdhd9851@naver.com">hdhd9851@naver.com</a></td>
+<td align="center">010-9318-9851</td>
+<td align="center">Black</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>25</strong></td>
+<td align="center">융합신소재공학과</td>
 <td align="center">20175406</td>
 <td align="center">김영준</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:dudwns8033@naver.com">dudwns8033@naver.com</a></td>
+<td align="center">010-8810-5497</td>
+<td align="center">Black</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>27</strong></td>
+<td align="center">재무금융학과</td>
+<td align="center">20173106</td>
+<td align="center">김용근</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:jiyunykk915@naver.com">jiyunykk915@naver.com</a></td>
+<td align="center">010-6755-1413</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">정치행정학과</td>
 <td align="center">20122405</td>
 <td align="center">김용환</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:kyongh903@hanmail.net">kyongh903@hanmail.net</a></td>
+<td align="center">010-8505-6231</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
+<td align="center">20172818</td>
+<td align="center">김우진</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:xx_xx6359@naver.com">xx_xx6359@naver.com</a></td>
+<td align="center">010-9356-6359</td>
+<td align="center">Black</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>30</strong></td>
+<td align="center">국어국문학전공</td>
+<td align="center">20141112</td>
+<td align="center">김은비</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:sj02059@daum.net">sj02059@daum.net</a></td>
+<td align="center">010-4039-3398</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
 <td align="center">20172822</td>
 <td align="center">김인영</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:kiy8854@naver.com">kiy8854@naver.com</a></td>
+<td align="center">010-8854-1856</td>
+<td align="center">Red</td>
 </tr>
-<tr class="even">
-<td align="center"><strong>31</strong></td>
+<tr class="odd">
+<td align="center">전자공학과</td>
 <td align="center">20115210</td>
 <td align="center">김장훈</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:khun0909@nate.com">khun0909@nate.com</a></td>
+<td align="center">010-2297-3128</td>
+<td align="center">Black</td>
 </tr>
-<tr class="odd">
-<td align="center"><strong>32</strong></td>
+<tr class="even">
+<td align="center">정치행정학과</td>
 <td align="center">20122719</td>
 <td align="center">김재현</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:stop65132@naver.com">stop65132@naver.com</a></td>
+<td align="center">010-2712-3198</td>
+<td align="center">Red</td>
 </tr>
-<tr class="even">
-<td align="center"><strong>33</strong></td>
+<tr class="odd">
+<td align="center">사회복지학</td>
 <td align="center">20147228</td>
 <td align="center">김정은</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:kje9064@gmail.com">kje9064@gmail.com</a></td>
+<td align="center">010-7209-9064</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
+<td align="center">20162831</td>
+<td align="center">김정은</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:wjddms3847@naver.com">wjddms3847@naver.com</a></td>
+<td align="center">010-7322-4370</td>
+<td align="center">Black</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>37</strong></td>
+<td align="center">심리학과</td>
+<td align="center">20162106</td>
+<td align="center">김주연</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:kimjuyun2@naver.com">kimjuyun2@naver.com</a></td>
+<td align="center">010-5003-6717</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">심리학과</td>
+<td align="center">20112107</td>
+<td align="center">김주한</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:kjh199201@naver.com">kjh199201@naver.com</a></td>
+<td align="center">010-8799-7389</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">융합신소재공학과</td>
 <td align="center">20175408</td>
 <td align="center">김지석</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:qqwweebbb@naver.com">qqwweebbb@naver.com</a></td>
+<td align="center">010-4516-4683</td>
+<td align="center">Black</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>41</strong></td>
+<td align="center">법학과</td>
+<td align="center">20162768</td>
+<td align="center">김지윤</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:jessie1016@naver.com">jessie1016@naver.com</a></td>
+<td align="center">010-5457-9230</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">법학과</td>
+<td align="center">20132718</td>
+<td align="center">김지현</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:imme94@hanmail.net">imme94@hanmail.net</a></td>
+<td align="center">010-3880-8994</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">경제학과</td>
+<td align="center">20173010</td>
+<td align="center">김지현</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:kim67997302@gmail.com">kim67997302@gmail.com</a></td>
+<td align="center">010-6799-7302</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경제학과</td>
 <td align="center">20173011</td>
 <td align="center">김진현</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:kjh200522@naver.com">kjh200522@naver.com</a></td>
+<td align="center">010-5480-7128</td>
+<td align="center">Red</td>
 </tr>
-<tr class="odd">
-<td align="center"><strong>42</strong></td>
+<tr class="even">
+<td align="center">경영학과</td>
 <td align="center">20132836</td>
 <td align="center">김진희</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:wlsldywjd@nate.com">wlsldywjd@nate.com</a></td>
+<td align="center">010-5191-7979</td>
+<td align="center">Red</td>
 </tr>
-<tr class="even">
-<td align="center"><strong>43</strong></td>
+<tr class="odd">
+<td align="center">사학전공</td>
 <td align="center">20151408</td>
 <td align="center">김한빈</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:kgk0487@naver.com">kgk0487@naver.com</a></td>
+<td align="center">010-4886-4482</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">경제학과</td>
+<td align="center">20133120</td>
+<td align="center">김현우</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:khwdog@naver.com">khwdog@naver.com</a></td>
+<td align="center">010-2778-2498</td>
+<td align="center">Black</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>45</strong></td>
+<td align="center">사회학과</td>
 <td align="center">20172207</td>
 <td align="center">김현진</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:realy02@naver.com">realy02@naver.com</a></td>
+<td align="center">010-6878-3074</td>
+<td align="center">Black</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>48</strong></td>
+<td align="center">경영학과</td>
+<td align="center">20142838</td>
+<td align="center">김형진</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:zkdhtmqud@naver.com">zkdhtmqud@naver.com</a></td>
+<td align="center">010-9073-7426</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">사학전공</td>
+<td align="center">20151410</td>
+<td align="center">김혜수</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:kimhyesu1012@naver.com">kimhyesu1012@naver.com</a></td>
+<td align="center">010-5848-9710</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">언어병리학전공</td>
 <td align="center">20154214</td>
 <td align="center">김혜지</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:9696sharon@hanmail.net">9696sharon@hanmail.net</a></td>
+<td align="center">010-6778-1632</td>
+<td align="center">Red</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>50</strong></td>
+<td align="center">경영학과</td>
+<td align="center">20172829</td>
+<td align="center">나수연</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:n2912@naver.com">n2912@naver.com</a></td>
+<td align="center">010-2912-7857</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
 <td align="center">20172833</td>
 <td align="center">명기웅</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:rldndandy@naver.com">rldndandy@naver.com</a></td>
+<td align="center">010-6646-7884</td>
+<td align="center">Black</td>
 </tr>
-<tr class="even">
-<td align="center"><strong>51</strong></td>
+<tr class="odd">
+<td align="center">간호학</td>
 <td align="center">20176239</td>
 <td align="center">문지원</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:jw8106@naver.com">jw8106@naver.com</a></td>
+<td align="center">010-6767-7656</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">경제학과</td>
+<td align="center">20133124</td>
+<td align="center">박관영</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:sksmsrhksdud@naver.com">sksmsrhksdud@naver.com</a></td>
+<td align="center">010-6296-1876</td>
+<td align="center">Red</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>53</strong></td>
+<td align="center">경제학과</td>
 <td align="center">20123130</td>
 <td align="center">박근형</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:qrg123@nate.com">qrg123@nate.com</a></td>
+<td align="center">010-9978-3967</td>
+<td align="center">Red</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>54</strong></td>
+<td align="center">생명과학과</td>
 <td align="center">20163510</td>
 <td align="center">박명철</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:park33241@naver.com">park33241@naver.com</a></td>
+<td align="center">010-6866-0679</td>
+<td align="center">Red</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>57</strong></td>
-<td align="center">20172837</td>
-<td align="center">박세원</td>
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20175312</td>
+<td align="center">박상범</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:alteravenues@naver.com">alteravenues@naver.com</a></td>
+<td align="center">010-7138-6217</td>
+<td align="center">Black</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>60</strong></td>
-<td align="center">20176250</td>
-<td align="center">박지민</td>
+<td align="center">응용광물리학과</td>
+<td align="center">20163314</td>
+<td align="center">박세리</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:seri0529@naver.com">seri0529@naver.com</a></td>
+<td align="center">010-5697-5155</td>
+<td align="center">Black</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>62</strong></td>
+<td align="center">경영학과</td>
+<td align="center">20172837</td>
+<td align="center">박세원</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:tpdnjs6323@naver.com">tpdnjs6323@naver.com</a></td>
+<td align="center">010-5311-4599</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">언어병리학전공</td>
+<td align="center">20144222</td>
+<td align="center">박솔미</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:wneodz@naver.com">wneodz@naver.com</a></td>
+<td align="center">010-7515-3954</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20162848</td>
+<td align="center">박준엽</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:junyp1997@naver.com">junyp1997@naver.com</a></td>
+<td align="center">010-7728-6580</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">간호학</td>
+<td align="center">20176250</td>
+<td align="center">박지민</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:parkjeemin@hanmail.net">parkjeemin@hanmail.net</a></td>
+<td align="center">010-4274-3121</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">사회복지학</td>
+<td align="center">20142324</td>
+<td align="center">박지연</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:laura613@naver.com">laura613@naver.com</a></td>
+<td align="center">010-9395-1991</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
 <td align="center">20135221</td>
 <td align="center">박진욱</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:pjgn99@naver.com">pjgn99@naver.com</a></td>
+<td align="center">010-4929-1838</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경제학과</td>
+<td align="center">20173019</td>
+<td align="center">박현준</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:guswns0568@nate.com">guswns0568@nate.com</a></td>
+<td align="center">010-6219-0568</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">러시아학과</td>
+<td align="center">20151712</td>
+<td align="center">박혜리</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:juddy1234@naver.com">juddy1234@naver.com</a></td>
+<td align="center">010-5023-3918</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">간호학</td>
+<td align="center">20176253</td>
+<td align="center">반예림</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:kil98lli@naver.com">kil98lli@naver.com</a></td>
+<td align="center">010-9890-3994</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">사회복지학부</td>
+<td align="center">20112324</td>
+<td align="center">방상우</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:m000002@naver.com">m000002@naver.com</a></td>
+<td align="center">010-8975-2655</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">심리학과</td>
+<td align="center">20172117</td>
+<td align="center">배승현</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:0818asdf@naver.com">0818asdf@naver.com</a></td>
+<td align="center">010-3779-3819</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">심리학과</td>
+<td align="center">20172118</td>
+<td align="center">배예림</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:flarhdrl@naver.com">flarhdrl@naver.com</a></td>
+<td align="center">010-8259-3302</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">바이오메디컬학과</td>
+<td align="center">20123827</td>
+<td align="center">서경욱</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:ruddnrehtk@nate.com">ruddnrehtk@nate.com</a></td>
+<td align="center">010-6416-6952</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">간호학</td>
+<td align="center">20176255</td>
+<td align="center">서민지</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:ksi04393@naver.com">ksi04393@naver.com</a></td>
+<td align="center">010-2934-8882</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">전자공학과</td>
+<td align="center">20145228</td>
+<td align="center">서찬규</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:yes6170@naver.com">yes6170@naver.com</a></td>
+<td align="center">010-4099-6170</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
+<td align="center">20162855</td>
+<td align="center">서희주</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:hiju7783@naver.com">hiju7783@naver.com</a></td>
+<td align="center">010-7300-7311</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">사회복지학부</td>
+<td align="center">20172320</td>
+<td align="center">성수민</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:wsc2749@naver.com">wsc2749@naver.com</a></td>
+<td align="center">010-4932-2578</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
+<td align="center">20172849</td>
+<td align="center">손다희</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:sssss310@hanmail.net">sssss310@hanmail.net</a></td>
+<td align="center">010-9450-2957</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20172850</td>
+<td align="center">손병훈</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:qudgnsths@nate.com">qudgnsths@nate.com</a></td>
+<td align="center">010-9390-5956</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">환경생명공학과</td>
+<td align="center">20173721</td>
+<td align="center">송민주</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:blue_3798@naver.com">blue_3798@naver.com</a></td>
+<td align="center">010-8914-9395</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">컴퓨터공학과</td>
+<td align="center">20155133</td>
+<td align="center">송아현</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:sah604@naver.com">sah604@naver.com</a></td>
+<td align="center">010-7711-8024</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">경제학과</td>
+<td align="center">20133132</td>
+<td align="center">송준수</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:jihyang819@naver.com">jihyang819@naver.com</a></td>
+<td align="center">010-9528-5579</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">융합신소재공학과</td>
+<td align="center">20175416</td>
+<td align="center">신중근</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:tlswndrms99@naver.com">tlswndrms99@naver.com</a></td>
+<td align="center">010-3109-1308</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">철학전공</td>
+<td align="center">20151317</td>
+<td align="center">신해원</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:xlsxka2309@naver.com">xlsxka2309@naver.com</a></td>
+<td align="center">010-6311-9151</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">환경생명공학과</td>
+<td align="center">20133913</td>
+<td align="center">신현아</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:imj1423@naver.com">imj1423@naver.com</a></td>
+<td align="center">010-9990-0450</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
+<td align="center">20172860</td>
+<td align="center">심형빈</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:gudqls1004@nate.com">gudqls1004@nate.com</a></td>
+<td align="center">010-7379-7987</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">심리학과</td>
+<td align="center">20162115</td>
+<td align="center">안나정</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:skwjd5039@naver.com">skwjd5039@naver.com</a></td>
+<td align="center">010-3210-1225</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
+<td align="center">20142876</td>
+<td align="center">안바울</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:paul5186@hanmail.net">paul5186@hanmail.net</a></td>
+<td align="center">010-4661-5186</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">컴퓨터공학과</td>
+<td align="center">20135139</td>
+<td align="center">안상현</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:ansh941@naver.com">ansh941@naver.com</a></td>
+<td align="center">010-5030-9127</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">경제학과</td>
+<td align="center">20163023</td>
+<td align="center">안효빈</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:violethb@naver.com">violethb@naver.com</a></td>
+<td align="center">010-9310-2774</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20172862</td>
+<td align="center">안희준</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:wns5100@naver.com">wns5100@naver.com</a></td>
+<td align="center">010-4874-4778</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">간호학</td>
+<td align="center">20176261</td>
+<td align="center">양아영</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:yay2003@naver.com">yay2003@naver.com</a></td>
+<td align="center">010-2430-0830</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">식품영양학과</td>
+<td align="center">20144128</td>
+<td align="center">우승혜</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:weovk060@naver.com">weovk060@naver.com</a></td>
+<td align="center">010-5193-0488</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20135230</td>
+<td align="center">유건희</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:rjsgml4353@naver.com">rjsgml4353@naver.com</a></td>
+<td align="center">010-9984-5529</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">컴퓨터공학과</td>
+<td align="center">20175150</td>
+<td align="center">유민수</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:miffy0297@naver.com">miffy0297@naver.com</a></td>
+<td align="center">010-2186-8685</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">컴퓨터공학과</td>
+<td align="center">20175152</td>
+<td align="center">유재혁</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:dhddl93@naver.com">dhddl93@naver.com</a></td>
+<td align="center">010-3654-3450</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">경제학과</td>
+<td align="center">20173031</td>
+<td align="center">유찬혁</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:asasas309@naver.com">asasas309@naver.com</a></td>
+<td align="center">010-7738-9802</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">바이오메디컬학과</td>
+<td align="center">20133831</td>
+<td align="center">유환민</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:hwanmin222@naver.com">hwanmin222@naver.com</a></td>
+<td align="center">010-3821-8448</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">의예과</td>
+<td align="center">20176144</td>
+<td align="center">윤동준</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:june2880@naver.com">june2880@naver.com</a></td>
+<td align="center">010-9250-3095</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20145236</td>
+<td align="center">윤선규</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:hhhoooo123@naver.com">hhhoooo123@naver.com</a></td>
+<td align="center">010-3304-8798</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">컴퓨터공학과</td>
+<td align="center">20175153</td>
+<td align="center">윤수정</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:ysj20076@naver.com">ysj20076@naver.com</a></td>
+<td align="center">010-9623-1945</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
+<td align="center">20162870</td>
+<td align="center">윤예슬</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:sek7872@naver.com">sek7872@naver.com</a></td>
+<td align="center">010-5150-1839</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">식품영양학과</td>
+<td align="center">20163836</td>
+<td align="center">윤향흠</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:ggdd0428@naver.com">ggdd0428@naver.com</a></td>
+<td align="center">010-8648-7155</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">간호학</td>
+<td align="center">20176269</td>
+<td align="center">이다원</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:jooaon@naver.com">jooaon@naver.com</a></td>
+<td align="center">010-6351-7667</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">응용광물리학과</td>
+<td align="center">20163322</td>
+<td align="center">이다환</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:dh972626@naver.com">dh972626@naver.com</a></td>
+<td align="center">010-4964-3392</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">심리학과</td>
+<td align="center">20172126</td>
+<td align="center">이두영</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:ldy980910@naver.com">ldy980910@naver.com</a></td>
+<td align="center">010-2622-9091</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">언어병리학전공</td>
+<td align="center">20154240</td>
+<td align="center">이미나</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:minalee1996@naver.com">minalee1996@naver.com</a></td>
+<td align="center">010-8868-9477</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">의예과</td>
+<td align="center">20176149</td>
+<td align="center">이병옥</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:lemuriames@naver.com">lemuriames@naver.com</a></td>
+<td align="center">010-6291-0241</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">식품영양학과</td>
+<td align="center">20163838</td>
+<td align="center">이소연</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:big5lee@naver.com">big5lee@naver.com</a></td>
+<td align="center">010-5058-8339</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
+<td align="center">20162881</td>
+<td align="center">이수빈</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:dltnqls0825@naver.com">dltnqls0825@naver.com</a></td>
+<td align="center">010-7523-5884</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">의예과</td>
+<td align="center">20176153</td>
+<td align="center">이승환</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:q1w2e397@naver.com">q1w2e397@naver.com</a></td>
+<td align="center">010-5376-8446</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">경영학과</td>
+<td align="center">20172882</td>
+<td align="center">이예나</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:leeyeana907302@gmail.com">leeyeana907302@gmail.com</a></td>
+<td align="center">010-9632-3852</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">사회복지학부</td>
+<td align="center">20172339</td>
+<td align="center">이은우</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:lew1588010@naver.com">lew1588010@naver.com</a></td>
+<td align="center">010-7663-2951</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20175243</td>
+<td align="center">이재기</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:lee403102@naver.com">lee403102@naver.com</a></td>
+<td align="center">010-6602-4875</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">청각학전공</td>
+<td align="center">20144247</td>
+<td align="center">이재혁</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:wogur0659@naver.com">wogur0659@naver.com</a></td>
+<td align="center">010-5250-3007</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20135339</td>
+<td align="center">이정훈</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:ssomicc@daum.net">ssomicc@daum.net</a></td>
+<td align="center">010-2910-6741</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">의예과</td>
+<td align="center">20176157</td>
+<td align="center">이주현</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:dnjrkfmd@naver.com">dnjrkfmd@naver.com</a></td>
+<td align="center">010-5113-1734</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">식품영양학과</td>
+<td align="center">20144140</td>
+<td align="center">이지연</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:ljy9473@naver.com">ljy9473@naver.com</a></td>
+<td align="center">010-2356-9473</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">인문학부</td>
+<td align="center">20171077</td>
+<td align="center">이지호</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:zenzen703@naver.com">zenzen703@naver.com</a></td>
+<td align="center">010-4843-9954</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20115252</td>
+<td align="center">이창률</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:lule0814@naver.com">lule0814@naver.com</a></td>
+<td align="center">010-4552-2200</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20162892</td>
+<td align="center">이창호</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:tjsvndrl97@naver.com">tjsvndrl97@naver.com</a></td>
+<td align="center">010-4650-9878</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">바이오메디컬학과</td>
+<td align="center">20173639</td>
+<td align="center">이채연</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:shena20@naver.com">shena20@naver.com</a></td>
+<td align="center">010-4813-7095</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">법학과</td>
+<td align="center">20162748</td>
+<td align="center">이한솔</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:cis1912@naver.com">cis1912@naver.com</a></td>
+<td align="center">010-4032-8166</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">재무금융학과</td>
+<td align="center">20173126</td>
+<td align="center">이혜선</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:gptjs023@naver.com">gptjs023@naver.com</a></td>
+<td align="center">010-5773-9654</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">바이오메디컬학과</td>
+<td align="center">20153840</td>
+<td align="center">임성윤</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:dfes02048@gmail.com">dfes02048@gmail.com</a></td>
+<td align="center">010-6413-5501</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">의예과</td>
+<td align="center">20176162</td>
+<td align="center">임찬솔</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:also1523@naver.com">also1523@naver.com</a></td>
+<td align="center">010-7231-3243</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경제학과</td>
+<td align="center">20173039</td>
+<td align="center">임형빈</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:kokoh456@naver.com">kokoh456@naver.com</a></td>
+<td align="center">010-4049-0696</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20135342</td>
+<td align="center">장대혁</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:sktellecom@naver.com">sktellecom@naver.com</a></td>
+<td align="center">010-5057-2541</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">인문학부</td>
+<td align="center">20171082</td>
+<td align="center">장민호</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:minostar_@naver.com">minostar_@naver.com</a></td>
+<td align="center">010-8276-3579</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20135343</td>
+<td align="center">장보균</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:bogo1994@naver.com">bogo1994@naver.com</a></td>
+<td align="center">010-9173-0656</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">재무금융학과</td>
+<td align="center">20133432</td>
+<td align="center">전강수</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:kangsoo147@naver.com">kangsoo147@naver.com</a></td>
+<td align="center">010-3329-3976</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">의예과</td>
+<td align="center">20176166</td>
+<td align="center">전유나</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:vbn601@naver.com">vbn601@naver.com</a></td>
+<td align="center">010-9432-6340</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">중국학과</td>
+<td align="center">20151534</td>
+<td align="center">정가영</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:family113@naver.com">family113@naver.com</a></td>
+<td align="center">010-8738-5024</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20125258</td>
+<td align="center">정결</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:jg2092@naver.com">jg2092@naver.com</a></td>
+<td align="center">010-9411-0392</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">바이오메디컬학과</td>
+<td align="center">20133845</td>
+<td align="center">정경조</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:o10132@naver.com">o10132@naver.com</a></td>
+<td align="center">010-6368-1883</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20145252</td>
+<td align="center">정광훈</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:vmfk2330@naver.com">vmfk2330@naver.com</a></td>
+<td align="center">010-4054-2506</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20135347</td>
+<td align="center">정성윤</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:tjddbs5007@naver.com">tjddbs5007@naver.com</a></td>
+<td align="center">010-6343-3931</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20155250</td>
+<td align="center">정연주</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:wjdduswn6603@naver.com">wjdduswn6603@naver.com</a></td>
+<td align="center">010-7184-6804</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">의예과</td>
+<td align="center">20176167</td>
+<td align="center">정유진</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:jyoujin829@naver.com">jyoujin829@naver.com</a></td>
+<td align="center">010-7144-6957</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">식품영양학과</td>
+<td align="center">20134147</td>
+<td align="center">정주영</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:jeongjuyoung123@hanmail.net">jeongjuyoung123@hanmail.net</a></td>
+<td align="center">010-7231-0460</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">전자공학과</td>
+<td align="center">20135255</td>
+<td align="center">조동건</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:cdg7620@naver.com">cdg7620@naver.com</a></td>
+<td align="center">010-5559-7620</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">환경생명공학과</td>
+<td align="center">20163734</td>
+<td align="center">조문영</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:pbs1211@naver.com">pbs1211@naver.com</a></td>
+<td align="center">010-8611-6524</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">경영학과</td>
+<td align="center">20162908</td>
+<td align="center">조민혜</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:whalsgp1129@naver.com">whalsgp1129@naver.com</a></td>
+<td align="center">010-9222-3700</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">언어병리학전공</td>
+<td align="center">20163958</td>
+<td align="center">조유정</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:dbwjdtndus0@naver.com">dbwjdtndus0@naver.com</a></td>
+<td align="center">010-2425-9237</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">재무금융학과</td>
+<td align="center">20173130</td>
+<td align="center">조은화</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:10_37@naver.com">10_37@naver.com</a></td>
+<td align="center">010-3467-5101</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경제학과</td>
+<td align="center">20133165</td>
+<td align="center">조형우</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:jhw3386@naver.com">jhw3386@naver.com</a></td>
+<td align="center">010-4879-5502</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">언어병리학전공</td>
+<td align="center">20154262</td>
+<td align="center">조희수</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:gmltn320@naver.com">gmltn320@naver.com</a></td>
+<td align="center">010-3528-5413</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">융합소프트웨어학과</td>
+<td align="center">20135350</td>
+<td align="center">차영웅</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:ckduddnddl@naver.com">ckduddnddl@naver.com</a></td>
+<td align="center">010-6375-5259</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">미디어커뮤니케이션학부</td>
+<td align="center">20172573</td>
+<td align="center">차정수</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:sue71610@naver.com">sue71610@naver.com</a></td>
+<td align="center">010-8616-9252</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">경제학과</td>
+<td align="center">20173046</td>
+<td align="center">최성훈</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:csh4269@naver.com">csh4269@naver.com</a></td>
+<td align="center">010-6387-7985</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">전자공학과</td>
+<td align="center">20135263</td>
+<td align="center">최승민</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:tmdals098765@naver.com">tmdals098765@naver.com</a></td>
+<td align="center">010-9079-6575</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20135264</td>
+<td align="center">최용훈</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:dydgns757@naver.com">dydgns757@naver.com</a></td>
+<td align="center">010-9525-4686</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">사회복지학부</td>
+<td align="center">20172357</td>
+<td align="center">최우창</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:dnckd0326@naver.com">dnckd0326@naver.com</a></td>
+<td align="center">010-9107-6768</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">국어국문학전공</td>
+<td align="center">20161108</td>
+<td align="center">최유진</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:dbwlseks@naver.com">dbwlseks@naver.com</a></td>
+<td align="center">010-6379-2740</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">일본학과</td>
+<td align="center">20141635</td>
+<td align="center">최은진</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:cej941215@gmail.com">cej941215@gmail.com</a></td>
+<td align="center">010-9529-0413</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20145263</td>
+<td align="center">최진영</td>
+<td align="center">4</td>
+<td align="center"><a href="mailto:anfdmlqlc@naver.com">anfdmlqlc@naver.com</a></td>
+<td align="center">010-4259-4777</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">응용광물리학과</td>
+<td align="center">20143532</td>
+<td align="center">최진일</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:wlsdlf0909@naver.com">wlsdlf0909@naver.com</a></td>
+<td align="center">010-9964-7377</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20145264</td>
+<td align="center">최형진</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:chor0109@naver.com">chor0109@naver.com</a></td>
+<td align="center">010-7637-6467</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">인문학부</td>
+<td align="center">20171105</td>
+<td align="center">하정민</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:jungmzzang@naver.com">jungmzzang@naver.com</a></td>
+<td align="center">010-6291-6912</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">바이오메디컬학과</td>
+<td align="center">20133857</td>
+<td align="center">한종석</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:flv1023@naver.com">flv1023@naver.com</a></td>
+<td align="center">010-4923-2555</td>
+<td align="center">Red</td>
+</tr>
+<tr class="odd">
+<td align="center">영어영문학과</td>
+<td align="center">20171237</td>
+<td align="center">한주승</td>
+<td align="center">1</td>
+<td align="center"><a href="mailto:wntmd414@naver.com">wntmd414@naver.com</a></td>
+<td align="center">010-7687-6286</td>
+<td align="center">Red</td>
+</tr>
+<tr class="even">
+<td align="center">전자공학과</td>
+<td align="center">20155266</td>
+<td align="center">황수진</td>
+<td align="center">3</td>
+<td align="center"><a href="mailto:jin11247@naver.com">jin11247@naver.com</a></td>
+<td align="center">010-5656-2457</td>
+<td align="center">Black</td>
+</tr>
+<tr class="odd">
+<td align="center">언어병리학전공</td>
+<td align="center">20163968</td>
+<td align="center">황지연</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:kyg681204@naver.com">kyg681204@naver.com</a></td>
+<td align="center">010-9229-0547</td>
+<td align="center">Black</td>
+</tr>
+<tr class="even">
+<td align="center">러시아학과</td>
+<td align="center">20131735</td>
+<td align="center">황태남</td>
+<td align="center">2</td>
+<td align="center"><a href="mailto:htn7524@naver.com">htn7524@naver.com</a></td>
+<td align="center">010-9011-7665</td>
+<td align="center">Black</td>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>#table(&quot;단과대학&quot; = class_roll$college, &quot;그룹&quot; = class_roll$group)</code></pre>
 <P style="page-break-before:always">
 <table style="width:35%;">
 <caption>Red</caption>
@@ -856,59 +1871,219 @@ pander(class_roll)
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center"><strong>63</strong></td>
-<td align="center">20173019</td>
-<td align="center">박현준</td>
+<td align="center"><strong>1</strong></td>
+<td align="center">20111501</td>
+<td align="center">강경민</td>
 </tr>
 <tr class="even">
+<td align="center"><strong>3</strong></td>
+<td align="center">20175103</td>
+<td align="center">강보경</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>5</strong></td>
+<td align="center">20162801</td>
+<td align="center">강예은</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>6</strong></td>
+<td align="center">20123102</td>
+<td align="center">강정우</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>8</strong></td>
+<td align="center">20162805</td>
+<td align="center">구다슬</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>11</strong></td>
+<td align="center">20173142</td>
+<td align="center">권지연</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>12</strong></td>
+<td align="center">20142806</td>
+<td align="center">권혁준</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>13</strong></td>
+<td align="center">20175402</td>
+<td align="center">김관호</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>14</strong></td>
+<td align="center">20113604</td>
+<td align="center">김기훈</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>16</strong></td>
+<td align="center">20135109</td>
+<td align="center">김문성</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>17</strong></td>
+<td align="center">20143107</td>
+<td align="center">김민섭</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>18</strong></td>
+<td align="center">20154205</td>
+<td align="center">김민주</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>20</strong></td>
+<td align="center">20175304</td>
+<td align="center">김범수</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>21</strong></td>
+<td align="center">20162822</td>
+<td align="center">김서현</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>23</strong></td>
+<td align="center">20162105</td>
+<td align="center">김소연</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>30</strong></td>
+<td align="center">20172822</td>
+<td align="center">김인영</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>32</strong></td>
+<td align="center">20122719</td>
+<td align="center">김재현</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>33</strong></td>
+<td align="center">20147228</td>
+<td align="center">김정은</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>35</strong></td>
+<td align="center">20162106</td>
+<td align="center">김주연</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>39</strong></td>
+<td align="center">20132718</td>
+<td align="center">김지현</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>40</strong></td>
+<td align="center">20173010</td>
+<td align="center">김지현</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>41</strong></td>
+<td align="center">20173011</td>
+<td align="center">김진현</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>42</strong></td>
+<td align="center">20132836</td>
+<td align="center">김진희</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>43</strong></td>
+<td align="center">20151408</td>
+<td align="center">김한빈</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>47</strong></td>
+<td align="center">20151410</td>
+<td align="center">김혜수</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>48</strong></td>
+<td align="center">20154214</td>
+<td align="center">김혜지</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>49</strong></td>
+<td align="center">20172829</td>
+<td align="center">나수연</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>51</strong></td>
+<td align="center">20176239</td>
+<td align="center">문지원</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>52</strong></td>
+<td align="center">20133124</td>
+<td align="center">박관영</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>53</strong></td>
+<td align="center">20123130</td>
+<td align="center">박근형</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>54</strong></td>
+<td align="center">20163510</td>
+<td align="center">박명철</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>57</strong></td>
+<td align="center">20172837</td>
+<td align="center">박세원</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>58</strong></td>
+<td align="center">20144222</td>
+<td align="center">박솔미</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>59</strong></td>
+<td align="center">20162848</td>
+<td align="center">박준엽</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>60</strong></td>
+<td align="center">20176250</td>
+<td align="center">박지민</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>62</strong></td>
+<td align="center">20135221</td>
+<td align="center">박진욱</td>
+</tr>
+<tr class="odd">
 <td align="center"><strong>64</strong></td>
 <td align="center">20151712</td>
 <td align="center">박혜리</td>
 </tr>
+<tr class="even">
+<td align="center"><strong>70</strong></td>
+<td align="center">20176255</td>
+<td align="center">서민지</td>
+</tr>
 <tr class="odd">
-<td align="center"><strong>65</strong></td>
-<td align="center">20176253</td>
-<td align="center">반예림</td>
+<td align="center"><strong>74</strong></td>
+<td align="center">20172849</td>
+<td align="center">손다희</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>68</strong></td>
-<td align="center">20172118</td>
-<td align="center">배예림</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>72</strong></td>
-<td align="center">20162855</td>
-<td align="center">서희주</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>73</strong></td>
-<td align="center">20172320</td>
-<td align="center">성수민</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>75</strong></td>
-<td align="center">20172850</td>
-<td align="center">손병훈</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>76</strong></td>
-<td align="center">20173721</td>
-<td align="center">송민주</td>
-</tr>
-<tr class="odd">
 <td align="center"><strong>77</strong></td>
 <td align="center">20155133</td>
 <td align="center">송아현</td>
 </tr>
-<tr class="even">
-<td align="center"><strong>78</strong></td>
-<td align="center">20133132</td>
-<td align="center">송준수</td>
-</tr>
 <tr class="odd">
+<td align="center"><strong>79</strong></td>
+<td align="center">20175416</td>
+<td align="center">신중근</td>
+</tr>
+<tr class="even">
 <td align="center"><strong>80</strong></td>
 <td align="center">20151317</td>
 <td align="center">신해원</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>82</strong></td>
+<td align="center">20172860</td>
+<td align="center">심형빈</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>83</strong></td>
@@ -916,9 +2091,417 @@ pander(class_roll)
 <td align="center">안나정</td>
 </tr>
 <tr class="odd">
+<td align="center"><strong>85</strong></td>
+<td align="center">20135139</td>
+<td align="center">안상현</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>95</strong></td>
+<td align="center">20176144</td>
+<td align="center">윤동준</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>96</strong></td>
+<td align="center">20145236</td>
+<td align="center">윤선규</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>98</strong></td>
+<td align="center">20162870</td>
+<td align="center">윤예슬</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>101</strong></td>
+<td align="center">20163322</td>
+<td align="center">이다환</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>102</strong></td>
+<td align="center">20172126</td>
+<td align="center">이두영</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>103</strong></td>
+<td align="center">20154240</td>
+<td align="center">이미나</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>104</strong></td>
+<td align="center">20176149</td>
+<td align="center">이병옥</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>107</strong></td>
+<td align="center">20176153</td>
+<td align="center">이승환</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>109</strong></td>
+<td align="center">20172339</td>
+<td align="center">이은우</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>111</strong></td>
+<td align="center">20144247</td>
+<td align="center">이재혁</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>112</strong></td>
+<td align="center">20135339</td>
+<td align="center">이정훈</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>115</strong></td>
+<td align="center">20171077</td>
+<td align="center">이지호</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>116</strong></td>
+<td align="center">20115252</td>
+<td align="center">이창률</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>118</strong></td>
+<td align="center">20173639</td>
+<td align="center">이채연</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>119</strong></td>
+<td align="center">20162748</td>
+<td align="center">이한솔</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>122</strong></td>
+<td align="center">20176162</td>
+<td align="center">임찬솔</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>124</strong></td>
+<td align="center">20135342</td>
+<td align="center">장대혁</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>130</strong></td>
+<td align="center">20125258</td>
+<td align="center">정결</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>135</strong></td>
+<td align="center">20176167</td>
+<td align="center">정유진</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>136</strong></td>
+<td align="center">20134147</td>
+<td align="center">정주영</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>137</strong></td>
+<td align="center">20135255</td>
+<td align="center">조동건</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>138</strong></td>
+<td align="center">20163734</td>
+<td align="center">조문영</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>139</strong></td>
+<td align="center">20162908</td>
+<td align="center">조민혜</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>140</strong></td>
+<td align="center">20163958</td>
+<td align="center">조유정</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>142</strong></td>
+<td align="center">20133165</td>
+<td align="center">조형우</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>143</strong></td>
+<td align="center">20154262</td>
+<td align="center">조희수</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>146</strong></td>
+<td align="center">20173046</td>
+<td align="center">최성훈</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>147</strong></td>
+<td align="center">20135263</td>
+<td align="center">최승민</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>148</strong></td>
+<td align="center">20135264</td>
+<td align="center">최용훈</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>149</strong></td>
+<td align="center">20172357</td>
+<td align="center">최우창</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>150</strong></td>
+<td align="center">20161108</td>
+<td align="center">최유진</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>153</strong></td>
+<td align="center">20143532</td>
+<td align="center">최진일</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>154</strong></td>
+<td align="center">20145264</td>
+<td align="center">최형진</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>156</strong></td>
+<td align="center">20133857</td>
+<td align="center">한종석</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>157</strong></td>
+<td align="center">20171237</td>
+<td align="center">한주승</td>
+</tr>
+</tbody>
+</table>
+<P style="page-break-before:always">
+<table style="width:35%;">
+<caption>Black</caption>
+<colgroup>
+<col width="13%"></col>
+<col width="12%"></col>
+<col width="8%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">학번</th>
+<th align="center">이름</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>2</strong></td>
+<td align="center">20115201</td>
+<td align="center">강경윤</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>4</strong></td>
+<td align="center">20143603</td>
+<td align="center">강소연</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>7</strong></td>
+<td align="center">20145206</td>
+<td align="center">고은별</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>9</strong></td>
+<td align="center">20175107</td>
+<td align="center">권예진</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>10</strong></td>
+<td align="center">20123804</td>
+<td align="center">권종훈</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>15</strong></td>
+<td align="center">20162814</td>
+<td align="center">김다은</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>19</strong></td>
+<td align="center">20172812</td>
+<td align="center">김민호</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>22</strong></td>
+<td align="center">20133503</td>
+<td align="center">김성호</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>24</strong></td>
+<td align="center">20173103</td>
+<td align="center">김승희</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>25</strong></td>
+<td align="center">20175406</td>
+<td align="center">김영준</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>26</strong></td>
+<td align="center">20173106</td>
+<td align="center">김용근</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>27</strong></td>
+<td align="center">20122405</td>
+<td align="center">김용환</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>28</strong></td>
+<td align="center">20172818</td>
+<td align="center">김우진</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>29</strong></td>
+<td align="center">20141112</td>
+<td align="center">김은비</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>31</strong></td>
+<td align="center">20115210</td>
+<td align="center">김장훈</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>34</strong></td>
+<td align="center">20162831</td>
+<td align="center">김정은</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>36</strong></td>
+<td align="center">20112107</td>
+<td align="center">김주한</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>37</strong></td>
+<td align="center">20175408</td>
+<td align="center">김지석</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>38</strong></td>
+<td align="center">20162768</td>
+<td align="center">김지윤</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>44</strong></td>
+<td align="center">20133120</td>
+<td align="center">김현우</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>45</strong></td>
+<td align="center">20172207</td>
+<td align="center">김현진</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>46</strong></td>
+<td align="center">20142838</td>
+<td align="center">김형진</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>50</strong></td>
+<td align="center">20172833</td>
+<td align="center">명기웅</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>55</strong></td>
+<td align="center">20175312</td>
+<td align="center">박상범</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>56</strong></td>
+<td align="center">20163314</td>
+<td align="center">박세리</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>61</strong></td>
+<td align="center">20142324</td>
+<td align="center">박지연</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>63</strong></td>
+<td align="center">20173019</td>
+<td align="center">박현준</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>65</strong></td>
+<td align="center">20176253</td>
+<td align="center">반예림</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>66</strong></td>
+<td align="center">20112324</td>
+<td align="center">방상우</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>67</strong></td>
+<td align="center">20172117</td>
+<td align="center">배승현</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>68</strong></td>
+<td align="center">20172118</td>
+<td align="center">배예림</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>69</strong></td>
+<td align="center">20123827</td>
+<td align="center">서경욱</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>71</strong></td>
+<td align="center">20145228</td>
+<td align="center">서찬규</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>72</strong></td>
+<td align="center">20162855</td>
+<td align="center">서희주</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>73</strong></td>
+<td align="center">20172320</td>
+<td align="center">성수민</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>75</strong></td>
+<td align="center">20172850</td>
+<td align="center">손병훈</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>76</strong></td>
+<td align="center">20173721</td>
+<td align="center">송민주</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>78</strong></td>
+<td align="center">20133132</td>
+<td align="center">송준수</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>81</strong></td>
+<td align="center">20133913</td>
+<td align="center">신현아</td>
+</tr>
+<tr class="even">
 <td align="center"><strong>84</strong></td>
 <td align="center">20142876</td>
 <td align="center">안바울</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>86</strong></td>
+<td align="center">20163023</td>
+<td align="center">안효빈</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>87</strong></td>
+<td align="center">20172862</td>
+<td align="center">안희준</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>88</strong></td>
+<td align="center">20176261</td>
+<td align="center">양아영</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>89</strong></td>
@@ -951,19 +2534,9 @@ pander(class_roll)
 <td align="center">유환민</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>96</strong></td>
-<td align="center">20145236</td>
-<td align="center">윤선규</td>
-</tr>
-<tr class="odd">
 <td align="center"><strong>97</strong></td>
 <td align="center">20175153</td>
 <td align="center">윤수정</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>98</strong></td>
-<td align="center">20162870</td>
-<td align="center">윤예슬</td>
 </tr>
 <tr class="odd">
 <td align="center"><strong>99</strong></td>
@@ -971,511 +2544,34 @@ pander(class_roll)
 <td align="center">윤향흠</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>102</strong></td>
-<td align="center">20172126</td>
-<td align="center">이두영</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>104</strong></td>
-<td align="center">20176149</td>
-<td align="center">이병옥</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>105</strong></td>
-<td align="center">20163838</td>
-<td align="center">이소연</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>106</strong></td>
-<td align="center">20162881</td>
-<td align="center">이수빈</td>
-</tr>
-</tbody>
-</table>
-<P style="page-break-before:always">
-<table style="width:35%;">
-<caption>Red</caption>
-<colgroup>
-<col width="13%"></col>
-<col width="12%"></col>
-<col width="8%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center"> </th>
-<th align="center">학번</th>
-<th align="center">이름</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center"><strong>110</strong></td>
-<td align="center">20175243</td>
-<td align="center">이재기</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>113</strong></td>
-<td align="center">20176157</td>
-<td align="center">이주현</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>115</strong></td>
-<td align="center">20171077</td>
-<td align="center">이지호</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>119</strong></td>
-<td align="center">20162748</td>
-<td align="center">이한솔</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>120</strong></td>
-<td align="center">20173126</td>
-<td align="center">이혜선</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>124</strong></td>
-<td align="center">20135342</td>
-<td align="center">장대혁</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>128</strong></td>
-<td align="center">20176166</td>
-<td align="center">전유나</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>129</strong></td>
-<td align="center">20151534</td>
-<td align="center">정가영</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>130</strong></td>
-<td align="center">20125258</td>
-<td align="center">정결</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>131</strong></td>
-<td align="center">20133845</td>
-<td align="center">정경조</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>135</strong></td>
-<td align="center">20176167</td>
-<td align="center">정유진</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>138</strong></td>
-<td align="center">20163734</td>
-<td align="center">조문영</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>139</strong></td>
-<td align="center">20162908</td>
-<td align="center">조민혜</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>140</strong></td>
-<td align="center">20163958</td>
-<td align="center">조유정</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>142</strong></td>
-<td align="center">20133165</td>
-<td align="center">조형우</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>143</strong></td>
-<td align="center">20154262</td>
-<td align="center">조희수</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>144</strong></td>
-<td align="center">20135350</td>
-<td align="center">차영웅</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>145</strong></td>
-<td align="center">20172573</td>
-<td align="center">차정수</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>146</strong></td>
-<td align="center">20173046</td>
-<td align="center">최성훈</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>149</strong></td>
-<td align="center">20172357</td>
-<td align="center">최우창</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>150</strong></td>
-<td align="center">20161108</td>
-<td align="center">최유진</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>153</strong></td>
-<td align="center">20143532</td>
-<td align="center">최진일</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>154</strong></td>
-<td align="center">20145264</td>
-<td align="center">최형진</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>155</strong></td>
-<td align="center">20171105</td>
-<td align="center">하정민</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>157</strong></td>
-<td align="center">20171237</td>
-<td align="center">한주승</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>158</strong></td>
-<td align="center">20155266</td>
-<td align="center">황수진</td>
-</tr>
-</tbody>
-</table>
-<P style="page-break-before:always">
-<table style="width:33%;">
-<caption>Black</caption>
-<colgroup>
-<col width="12%"></col>
-<col width="12%"></col>
-<col width="8%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center"> </th>
-<th align="center">학번</th>
-<th align="center">이름</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center"><strong>1</strong></td>
-<td align="center">20111501</td>
-<td align="center">강경민</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>4</strong></td>
-<td align="center">20143603</td>
-<td align="center">강소연</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>5</strong></td>
-<td align="center">20162801</td>
-<td align="center">강예은</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>6</strong></td>
-<td align="center">20123102</td>
-<td align="center">강정우</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>7</strong></td>
-<td align="center">20145206</td>
-<td align="center">고은별</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>9</strong></td>
-<td align="center">20175107</td>
-<td align="center">권예진</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>12</strong></td>
-<td align="center">20142806</td>
-<td align="center">권혁준</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>13</strong></td>
-<td align="center">20175402</td>
-<td align="center">김관호</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>15</strong></td>
-<td align="center">20162814</td>
-<td align="center">김다은</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>16</strong></td>
-<td align="center">20135109</td>
-<td align="center">김문성</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>17</strong></td>
-<td align="center">20143107</td>
-<td align="center">김민섭</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>19</strong></td>
-<td align="center">20172812</td>
-<td align="center">김민호</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>20</strong></td>
-<td align="center">20175304</td>
-<td align="center">김범수</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>21</strong></td>
-<td align="center">20162822</td>
-<td align="center">김서현</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>22</strong></td>
-<td align="center">20133503</td>
-<td align="center">김성호</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>23</strong></td>
-<td align="center">20162105</td>
-<td align="center">김소연</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>26</strong></td>
-<td align="center">20173106</td>
-<td align="center">김용근</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>28</strong></td>
-<td align="center">20172818</td>
-<td align="center">김우진</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>29</strong></td>
-<td align="center">20141112</td>
-<td align="center">김은비</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>34</strong></td>
-<td align="center">20162831</td>
-<td align="center">김정은</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>35</strong></td>
-<td align="center">20162106</td>
-<td align="center">김주연</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>36</strong></td>
-<td align="center">20112107</td>
-<td align="center">김주한</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>38</strong></td>
-<td align="center">20162768</td>
-<td align="center">김지윤</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>39</strong></td>
-<td align="center">20132718</td>
-<td align="center">김지현</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>40</strong></td>
-<td align="center">20173010</td>
-<td align="center">김지현</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>44</strong></td>
-<td align="center">20133120</td>
-<td align="center">김현우</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>46</strong></td>
-<td align="center">20142838</td>
-<td align="center">김형진</td>
-</tr>
-</tbody>
-</table>
-<P style="page-break-before:always">
-<table style="width:35%;">
-<caption>Black</caption>
-<colgroup>
-<col width="13%"></col>
-<col width="12%"></col>
-<col width="8%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center"> </th>
-<th align="center">학번</th>
-<th align="center">이름</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center"><strong>47</strong></td>
-<td align="center">20151410</td>
-<td align="center">김혜수</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>49</strong></td>
-<td align="center">20172829</td>
-<td align="center">나수연</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>52</strong></td>
-<td align="center">20133124</td>
-<td align="center">박관영</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>55</strong></td>
-<td align="center">20175312</td>
-<td align="center">박상범</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>56</strong></td>
-<td align="center">20163314</td>
-<td align="center">박세리</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>58</strong></td>
-<td align="center">20144222</td>
-<td align="center">박솔미</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>59</strong></td>
-<td align="center">20162848</td>
-<td align="center">박준엽</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>61</strong></td>
-<td align="center">20142324</td>
-<td align="center">박지연</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>66</strong></td>
-<td align="center">20112324</td>
-<td align="center">방상우</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>67</strong></td>
-<td align="center">20172117</td>
-<td align="center">배승현</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>69</strong></td>
-<td align="center">20123827</td>
-<td align="center">서경욱</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>70</strong></td>
-<td align="center">20176255</td>
-<td align="center">서민지</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>71</strong></td>
-<td align="center">20145228</td>
-<td align="center">서찬규</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>74</strong></td>
-<td align="center">20172849</td>
-<td align="center">손다희</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>79</strong></td>
-<td align="center">20175416</td>
-<td align="center">신중근</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>81</strong></td>
-<td align="center">20133913</td>
-<td align="center">신현아</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>82</strong></td>
-<td align="center">20172860</td>
-<td align="center">심형빈</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>85</strong></td>
-<td align="center">20135139</td>
-<td align="center">안상현</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>86</strong></td>
-<td align="center">20163023</td>
-<td align="center">안효빈</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>87</strong></td>
-<td align="center">20172862</td>
-<td align="center">안희준</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>88</strong></td>
-<td align="center">20176261</td>
-<td align="center">양아영</td>
-</tr>
-<tr class="even">
-<td align="center"><strong>95</strong></td>
-<td align="center">20176144</td>
-<td align="center">윤동준</td>
-</tr>
-<tr class="odd">
 <td align="center"><strong>100</strong></td>
 <td align="center">20176269</td>
 <td align="center">이다원</td>
 </tr>
-<tr class="even">
-<td align="center"><strong>101</strong></td>
-<td align="center">20163322</td>
-<td align="center">이다환</td>
-</tr>
 <tr class="odd">
-<td align="center"><strong>103</strong></td>
-<td align="center">20154240</td>
-<td align="center">이미나</td>
+<td align="center"><strong>105</strong></td>
+<td align="center">20163838</td>
+<td align="center">이소연</td>
 </tr>
 <tr class="even">
-<td align="center"><strong>107</strong></td>
-<td align="center">20176153</td>
-<td align="center">이승환</td>
+<td align="center"><strong>106</strong></td>
+<td align="center">20162881</td>
+<td align="center">이수빈</td>
 </tr>
 <tr class="odd">
 <td align="center"><strong>108</strong></td>
 <td align="center">20172882</td>
 <td align="center">이예나</td>
 </tr>
-</tbody>
-</table>
-<P style="page-break-before:always">
-<table style="width:35%;">
-<caption>Black</caption>
-<colgroup>
-<col width="13%"></col>
-<col width="12%"></col>
-<col width="8%"></col>
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center"> </th>
-<th align="center">학번</th>
-<th align="center">이름</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center"><strong>109</strong></td>
-<td align="center">20172339</td>
-<td align="center">이은우</td>
-</tr>
 <tr class="even">
-<td align="center"><strong>111</strong></td>
-<td align="center">20144247</td>
-<td align="center">이재혁</td>
+<td align="center"><strong>110</strong></td>
+<td align="center">20175243</td>
+<td align="center">이재기</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>112</strong></td>
-<td align="center">20135339</td>
-<td align="center">이정훈</td>
+<td align="center"><strong>113</strong></td>
+<td align="center">20176157</td>
+<td align="center">이주현</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>114</strong></td>
@@ -1483,29 +2579,19 @@ pander(class_roll)
 <td align="center">이지연</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>116</strong></td>
-<td align="center">20115252</td>
-<td align="center">이창률</td>
-</tr>
-<tr class="even">
 <td align="center"><strong>117</strong></td>
 <td align="center">20162892</td>
 <td align="center">이창호</td>
 </tr>
-<tr class="odd">
-<td align="center"><strong>118</strong></td>
-<td align="center">20173639</td>
-<td align="center">이채연</td>
-</tr>
 <tr class="even">
+<td align="center"><strong>120</strong></td>
+<td align="center">20173126</td>
+<td align="center">이혜선</td>
+</tr>
+<tr class="odd">
 <td align="center"><strong>121</strong></td>
 <td align="center">20153840</td>
 <td align="center">임성윤</td>
-</tr>
-<tr class="odd">
-<td align="center"><strong>122</strong></td>
-<td align="center">20176162</td>
-<td align="center">임찬솔</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>123</strong></td>
@@ -1528,59 +2614,69 @@ pander(class_roll)
 <td align="center">전강수</td>
 </tr>
 <tr class="even">
+<td align="center"><strong>128</strong></td>
+<td align="center">20176166</td>
+<td align="center">전유나</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>129</strong></td>
+<td align="center">20151534</td>
+<td align="center">정가영</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>131</strong></td>
+<td align="center">20133845</td>
+<td align="center">정경조</td>
+</tr>
+<tr class="odd">
 <td align="center"><strong>132</strong></td>
 <td align="center">20145252</td>
 <td align="center">정광훈</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="center"><strong>133</strong></td>
 <td align="center">20135347</td>
 <td align="center">정성윤</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="center"><strong>134</strong></td>
 <td align="center">20155250</td>
 <td align="center">정연주</td>
 </tr>
-<tr class="odd">
-<td align="center"><strong>136</strong></td>
-<td align="center">20134147</td>
-<td align="center">정주영</td>
-</tr>
 <tr class="even">
-<td align="center"><strong>137</strong></td>
-<td align="center">20135255</td>
-<td align="center">조동건</td>
-</tr>
-<tr class="odd">
 <td align="center"><strong>141</strong></td>
 <td align="center">20173130</td>
 <td align="center">조은화</td>
 </tr>
+<tr class="odd">
+<td align="center"><strong>144</strong></td>
+<td align="center">20135350</td>
+<td align="center">차영웅</td>
+</tr>
 <tr class="even">
-<td align="center"><strong>147</strong></td>
-<td align="center">20135263</td>
-<td align="center">최승민</td>
+<td align="center"><strong>145</strong></td>
+<td align="center">20172573</td>
+<td align="center">차정수</td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>148</strong></td>
-<td align="center">20135264</td>
-<td align="center">최용훈</td>
-</tr>
-<tr class="even">
 <td align="center"><strong>151</strong></td>
 <td align="center">20141635</td>
 <td align="center">최은진</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="center"><strong>152</strong></td>
 <td align="center">20145263</td>
 <td align="center">최진영</td>
 </tr>
+<tr class="odd">
+<td align="center"><strong>155</strong></td>
+<td align="center">20171105</td>
+<td align="center">하정민</td>
+</tr>
 <tr class="even">
-<td align="center"><strong>156</strong></td>
-<td align="center">20133857</td>
-<td align="center">한종석</td>
+<td align="center"><strong>158</strong></td>
+<td align="center">20155266</td>
+<td align="center">황수진</td>
 </tr>
 <tr class="odd">
 <td align="center"><strong>159</strong></td>
@@ -1597,9 +2693,10 @@ pander(class_roll)
 <!--
 
 ```r
-save.image("./red_and_black_170303_data.RData")
+save.image("../R/red_and_black_170303_data.RData")
 ```
 -->
+</div>
 
 
 
