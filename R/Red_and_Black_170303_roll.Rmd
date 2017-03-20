@@ -144,6 +144,7 @@ pander(black.names[55:nrow(black.names), ], caption = "Black", col.names = "")
 
 <!--
 ```{r, save}
-save.image("./red_and_black_170303_data.RData")
+save("class_roll", file = "./class_roll170303.RData")
+# save.image("./red_and_black_170303_data.RData")
 ```
 -->

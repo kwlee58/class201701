@@ -1,0 +1,355 @@
+﻿@charset "utf-8";
+/* CSS Document */
+html, body {
+	margin:0;
+	padding:0;
+	font-family:"굴림", "돋움", Seoul, "한강체";
+	font-size:12px;
+	overflow: hidden;
+}
+#thumbnail_list {
+	position:absolute;
+	top:0px;
+	width:100%;
+	height:100%;
+	background-color:#FFFFFF;
+	overflow-y:auto;
+	overflow-x: hidden;
+	right:0px;
+}
+#left_line {
+	float:right;
+	width:6px;
+	height:100%;	
+}
+
+.left_thum_layout{
+	margin-bottom: 20px;
+	width:100%;
+}
+
+.left_thum {
+	cursor: pointer;
+	padding: 3px;
+}
+
+
+.over {
+	border:3px solid #3665b9;
+}
+
+.blanc {
+	width:10px;
+	height:21px;
+	float:left;
+}
+
+.blanc5 {
+	width:5px;
+	height:21px;
+	float:left;
+}
+
+.blanc7 {
+	width:7px;
+	height:21px;
+	float:left;
+}
+
+.blanc9 {
+	width:9px;
+	height:21px;
+	float:left;
+}
+
+#paper-page-number {
+	float:left;
+	padding:6px 0px 6px 0px;
+	font-size:11px;
+	color:#999999;
+	height:11px;
+}
+
+.line {
+	background-image:url(viewer_pdf_btn_v2.gif);
+	background-repeat:no-repeat;
+	background-position:0 -124px;
+	width:2px;
+	height:21px;
+	float:left;
+}
+
+
+#zoom-out-btn div {
+	float:left;
+	height:21px;
+	width:29px;
+	background-image:url(viewer_pdf_btn_v2.gif);
+	background-repeat:no-repeat;
+	background-position:-67px 0;	
+}
+#zoom-out-btn div:hover {
+	background-position:-67px -31px;
+}
+#zoom-out-btn div:active, #nav div.selected {
+	background-position:-67px -31px;
+}
+#zoom-in-btn div {
+	float:left;
+	height:21px;
+	width:29px;
+	background-image:url(viewer_pdf_btn_v2.gif);
+	background-repeat:no-repeat;
+	background-position:-96px 0;
+}
+#zoom-in-btn div:hover {
+	background-position:-96px -31px;
+}
+#zoom-in-btn div:active, #nav div.selected {
+	background-position:-96px -31px;
+}
+
+
+#page-fit-btn div {
+	float:left;
+	height:21px;
+	width:29px;
+	background-image:url(viewer_pdf_btn_v2.gif);
+	background-repeat:no-repeat;
+	background-position:-134px -31px;
+}
+#page-fit-btn div:hover {
+	background-position:-134px -31px;
+}
+/*
+#page-fit-btn a:active, #nav a.selected {
+	background-position:-134px -62px;
+}
+*/
+#page-thumb-btn div {
+	float:left;
+	height:21px;
+	width:29px;
+	background-image:url(viewer_pdf_btn_v2.gif);
+	background-repeat:no-repeat;
+	background-position:-163px 0;
+}
+#page-thumb-btn div:hover {
+	background-position:-163px -31px;
+}
+/*
+#page-thumb-btn a:active, #nav a.selected {
+	background-position:-163px -62px;
+}
+*/
+#pre_word div {
+	float:left;
+	height:21px;
+	width:29px;
+	background-image:url(viewer_pdf_btn_v2.gif);
+	background-repeat:no-repeat;
+	background-position:-234px 0;
+}
+#pre_word div:hover {
+	background-position:-234px -31px;
+}
+#pre_word div:active, #nav div.selected {
+	background-position:-234px -31px;
+}
+#next_word div {
+	float:left;
+	height:21px;
+	width:29px;
+	background-image:url(viewer_pdf_btn_v2.gif);
+	background-repeat:no-repeat;
+	background-position:-263px 0;
+}
+#next_word div:hover {
+	background-position:-263px -31px;
+}
+#next_word div:active, #nav div.selected {
+	background-position:-263px -31px;
+}
+
+#search_text {
+	float:left;
+	padding:6px 0px 6px 0px;
+	font-size:11px;
+	color:#999999;
+	height:11px;
+}
+
+#search_result {
+	float:left;
+	padding:6px 0px 6px 0px;
+	font-size:11px;
+	color:#536fe5;
+	height:11px;
+	font-weight:bold;
+}
+.margin {
+	margin:auto;
+}
+
+#page-number {
+	font-weight:bold;
+}
+
+.page-num {
+	margin-top: 8px;	
+	font-weight: bold;
+	position: absolute;
+	clear: both;	
+	width: 23px;
+	text-align: right;
+}
+
+div {
+	display: block;
+}
+
+.rubberband {
+	border: 1px dashed green;
+	width: 0;
+	height: 0;
+	position: absolute;
+	z-index: 5;
+}
+
+.hidden {
+	display: none;
+}
+
+.highlight {
+	border-style: none;
+	cursor: text;
+	font-size: 0px;
+	line-height: 0;
+	position: absolute;
+}
+
+.selection-highlight {
+	background-color: #28F;
+	opacity: 0.2; /* css standard */
+	filter:alpha(opacity=20); /* for IE */ 
+	
+	border-style: none;
+	cursor: text;
+	font-size: 0px;
+	line-height: 0;
+	position: absolute;
+}
+
+.search-highlight {
+	background-color: #FFFF66;
+	opacity: 0.5; /* css standard */
+	filter:alpha(opacity=50); /* for IE */
+	
+	border-style: none;
+	cursor: text;
+	font-size: 0px;
+	line-height: 0;
+	position: absolute;
+}
+
+.selected-highlight {
+	background-color: #FF9632;
+}
+
+.highlight_pane {
+	position: relative;
+}
+
+.content_area {
+	display: inline-block;
+	border: 1px solid #666666;
+}
+
+
+.pageImage{
+	cursor:text;
+	margin-left: 10px;
+	margin-top:10px;
+}
+
+#content-pane {
+  	border: 0;
+  	background-color: #FFFFFF;
+  	outline: none;
+  	overflow-y: auto;
+  	position: absolute;
+	width:100%;
+	text-align:left;
+	overflow-x: auto;
+	/*padding-top:16px;*/
+}
+
+.goog-inline-block {
+	display: inline-block;
+	/* FOR IE6 */
+	zoom:1; *display:inline;
+}
+
+.view {
+	width: 100%;
+	height: 100%;
+}
+
+html {
+	height:100%;
+	margin:0;
+	padding:0;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	width:100%;
+	height: 100%;
+	overflow:hidden;
+	position:relative;
+}
+
+.thumb-pane {
+	background-color:#F3F3F3;
+	border: 2px solid #000000;
+	color:#666666;
+	position:absolute;
+}
+
+.page-back, .page-forward{
+	width:40px; 
+	height:20px; 
+	border:1px solid #000000; 
+	margin-left:10px;
+	margin-top:10px;
+	text-align:center;
+}
+
+
+.thumb-image-emphasized {
+	border: 3px solid #95A9FF;
+	padding: 1px;
+}
+
+img {
+	-moz-user-select:none;
+}
+
+
+.page-element {
+	margin: 0px 0px 10px 5px;	
+}
+
+#search_group {
+	display: none;
+}
+
+#loading {
+	background-image: url('loading_17.gif');
+	background-repeat: no-repeat;
+	width:17px;
+	height:17px;
+	margin:auto;
+	display:block;
+}

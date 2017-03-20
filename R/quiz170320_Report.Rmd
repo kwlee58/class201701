@@ -1,0 +1,127 @@
+---
+title: "Quiz 170320"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width=180)
+```
+
+```{r, data, echo = FALSE, results = 'hide'}
+quiz0320 <- read.xlsx("../data/quiz0320.xlsx", 1, startRow = 2, endRow = 161, colIndex = c(3:7, 9:14), colClasses=c(rep("character", 11)), stringsAsFactors = FALSE)
+str(quiz0320)
+names(quiz0320) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
+quiz0320$dept <- factor(quiz0320$dept)
+quiz0320$year <- factor(quiz0320$year)
+quiz0320$group <- factor(quiz0320$group, levels = c("Red", "Black"))
+quiz0320$Q1 <- factor(quiz0320$Q1, levels = c("가", "나"), labels = c("민주 문자", "엘리트 문자"))
+quiz0320$Q2 <- factor(quiz0320$Q2, levels = c("가", "나"), labels = c("한자", "한글"))
+quiz0320$Q3 <- factor(quiz0320$Q3, levels = c("가", "나", "다", "라", "마"), labels = c("없다", "1개", "2개", "3개", "4개"))
+str(quiz0320)
+```
+
+
+```{r, Q4 reassignment, echo = FALSE, results = 'hide'}
+quiz0320$Q4 <- factor(quiz0320$Q4, levels = 1:8, labels = c("가", "나", "다", "라", "마", "바", "사", "아"))
+quiz0320$Q4.2 <- quiz0320$Q4
+quiz0320[c("Q4.2", "group")]
+levels(quiz0320$Q4.2[quiz0320$group == "Black"])
+levels(quiz0320$Q4.2[quiz0320$group == "Black"]) <- c("마", "라", "다", "나", "가", "바", "사", "아")
+quiz0320[c("Q4", "Q4.2", "group")]
+levels(quiz0320$Q4.2) <- c("더불어민주당", "자유한국당", "국민의당", "바른정당", "정의당", "기타정당", "없다", "잘모르겠다")
+str(quiz0320)
+```
+
+### 퀴즈 응답 비교
+
+#### 민주 문자와 엘리트 문자
+
+##### 한글은?
+
+```{r, democratic and elite, echo = FALSE}
+Q1.tbl.am <- addmargins(table(quiz0320$group, quiz0320$Q1, exclude = NULL), margin = 1)
+colnames(Q1.tbl.am)[3] <- "결석"
+rownames(Q1.tbl.am)[4] <- "계"
+pander(Q1.tbl.am[-3, ])
+# pander(addmargins(table(quiz0320$group, quiz0320$Q1, exclude = NULL), margin=1))
+```
+
+##### 한글은?(%)
+
+```{r, democratic and elite in percentage, echo = FALSE}
+pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 2))
+# pander(round(prop.table(addmargins(table(quiz0320$group, quiz0320$Q1, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1))
+```
+
+#### 정보혁명에 유리한 문자체계
+
+##### 한자와 한글(집계표)
+
+```{r, chinese and hangeul, echo = FALSE}
+Q2.tbl.am <- addmargins(table(quiz0320$group, quiz0320$Q2, exclude = NULL), margin = 1)
+colnames(Q2.tbl.am)[3] <- "결석"
+rownames(Q2.tbl.am)[4] <- "계"
+pander(Q2.tbl.am[-3, ])
+# pander(addmargins(table(quiz0320$group, quiz0320$Q2, exclude = NULL), margin=1))
+```
+
+##### 한자와 한글(%)
+
+```{r, chinese and hangeul in percentage, echo = FALSE}
+pander(round(prop.table(Q2.tbl.am, margin = 1)[4, ]*100, digits = 2))
+# pander(round(prop.table(addmargins(table(quiz0320$group, quiz0320$Q2, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="공법도입과 대신들")
+```
+
+#### 어려운 용어
+
+##### 몽리, 결궤, 저치, 장리(집계표)
+
+```{r, hard ones, echo = FALSE}
+Q3.tbl.am <- addmargins(table(quiz0320$group, quiz0320$Q3, exclude = NULL), margin = 1)
+colnames(Q3.tbl.am)[6] <- "결석"
+rownames(Q3.tbl.am)[4] <- "계"
+pander(Q3.tbl.am[-3, ])
+# pander(addmargins(table(quiz0320$group, quiz0320$Q3, exclude = NULL), margin=1))
+```
+
+##### 몽리, 결궤, 저치, 장리(%)
+
+```{r, hard ones in percentage, echo = FALSE}
+pander(round(prop.table(Q3.tbl.am, margin = 1)[4, ]*100, digits = 2))
+# pander(round(prop.table(addmargins(table(quiz0320$group, quiz0320$Q3, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="품관촌민들의 찬반")
+```
+
+### 정당지지도
+
+#### 질문지 답 문항 순서의 영향
+
+##### 정당의석수 순(Red)으로 묻거나, 역순(Black)으로 묻는 데 따라 응답이 달라질 것으로 기대하였으나 ...
+
+```{r, party, echo = FALSE}
+tbl.e <- table(quiz0320$group, quiz0320$Q4.2, exclude = NULL)
+colnames(tbl.e)[9] <- "결석"
+pander(tbl.e[-3, ], caption ="정당 지지도")
+# pander(table(quiz0320$group, quiz0320$Q4.2, exclude = NULL), caption="야권통합논란")
+```
+
+##### % 비교.  
+
+```{r, iparty in percentage, echo = FALSE}
+tbl <- table(quiz0320$group, quiz0320$Q4.2)
+pander(round(prop.table(tbl, margin = 1)*100, digits = 1))
+```
+
+```{r, save, echo = FALSE}
+#save.image("../R/quiz0320.RData")
+```
