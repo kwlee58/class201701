@@ -1,0 +1,138 @@
+---
+title: "Quiz 170322"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width=180)
+```
+
+```{r, data, echo = FALSE, results = 'hide'}
+quiz0322 <- read.xlsx("../data/quiz0322.xlsx", 1, startRow = 2, endRow = 161, colIndex = c(3:7, 9:13, 15), colClasses=c(rep("character", 11)), stringsAsFactors = FALSE)
+str(quiz0322)
+names(quiz0322) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
+quiz0322$dept <- factor(quiz0322$dept)
+quiz0322$year <- factor(quiz0322$year)
+quiz0322$group <- factor(quiz0322$group, levels = c("Red", "Black"))
+quiz0322$Q1 <- factor(quiz0322$Q1, levels = c("가", "나", "다", "라", "마"), labels = c("90%", "80%", "50%", "20%", "10%"))
+quiz0322$Q2 <- factor(quiz0322$Q2, levels = c("가", "나", "다", "라"), labels = c("대한민국", "영국", "이탈리아", "미국"))
+quiz0322$Q3 <- factor(quiz0322$Q3, levels = c("가", "나", "다", "라", "마"), labels = c("중위임금60%낮음", "실직가능성2배", "좋지않은건강", "활동참여미흡", "타인신뢰부족"))
+quiz0322$Q4 <- factor(quiz0322$Q4, levels = c("1", "2", "3", "4", "5", "9", "10"))
+quiz0322$Q4.2 <- quiz0322$Q4
+levels(quiz0322$Q4.2[quiz0322$group == "Black"]) <- c("5", "4", "3", "2", "1", "9", "10")
+levels(quiz0322$Q4.2) <- c("문재인", "안철수", "안희정", "이재명", "홍준표", "없다", "모름/무응답")
+str(quiz0322)
+```
+
+```{r, randomization, echo = FALSE, results = 'hide'}
+pander(summary(quiz0322))
+```
+
+### 퀴즈 응답 비교
+
+#### 해방직후 비문해율
+
+##### 비문해율
+
+```{r, illiteracy rate, echo = FALSE}
+Q1.tbl.am <- addmargins(table(quiz0322$group, quiz0322$Q1, exclude = NULL), margin = 1)
+colnames(Q1.tbl.am)[6] <- "결석"
+rownames(Q1.tbl.am)[4] <- "계"
+pander(Q1.tbl.am[-3, ], caption = "우리나라 해방직후 비문해율?")
+```
+
+##### 비문해율(%)
+
+```{r, illiteracy rate in percentage, echo = FALSE}
+pander(round(prop.table(Q1.tbl.am, margin=1)[4,]*100, digits=1))
+```
+
+#### OECD 20대와 50대 문해력 격차
+
+##### 문해력 격차
+
+```{r, literacy rates difference, echo = FALSE}
+Q2.tbl.am <- addmargins(table(quiz0322$group, quiz0322$Q2, exclude = NULL), margin = 1)
+colnames(Q2.tbl.am)[5] <- "결석"
+rownames(Q2.tbl.am)[4] <- "계"
+pander(Q2.tbl.am[-3, ])
+```
+
+##### 문해력 격차(%)
+
+```{r, literacy rates difference in percentage, echo = FALSE}
+pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1), caption = "문해력격차가 큰 나라?")
+```
+
+#### 문해력이 낮은 집단은 높은 집단 보다  
+
+##### 문해력이 낮으면?(집계표)
+
+```{r, tax law and laymen, echo = FALSE}
+Q3.tbl.am <- addmargins(table(quiz0322$group, quiz0322$Q3, exclude = NULL), margin = 1)
+colnames(Q3.tbl.am)[6] <- "결석"
+rownames(Q3.tbl.am)[4] <- "계"
+pander(Q3.tbl.am[-3, ])
+```
+
+##### 문해력이 낮으면?(%)
+
+```{r, tax law and laymen in percentage, echo = FALSE}
+pander(round(prop.table(Q3.tbl.am, margin=1)[4,]*100, digits = 1), caption = "문해력이 낮으면?")
+```
+
+### 정당 지지도
+
+#### 질문지 답 문항 순서의 영향
+
+##### 가나다 순으로 이름을 늘어놓는지(Red), 가나다 역순으로 이름을 늘어놓는지(Black)에 따라 응답이 달라질 것으로 기대. Red 와 Black의 응답이 예상대로 달라 보이기는 하나 통계적으로 유의한 수준은 아님.
+
+```{r, outs merge, echo = FALSE}
+poll.tbl.e <- addmargins(table(quiz0322$group, quiz0322$Q4.2, exclude = NULL), margin = 1)
+colnames(poll.tbl.e)[8] <- "결석"
+rownames(poll.tbl.e)[4] <- "계"
+pander(poll.tbl.e[-3, ], caption = "지지 정당?")
+# chisq.test(table(quiz0322$group, quiz0322$Q4.2))
+```
+
+##### % 비교.  
+
+```{r, outs merge in percentage, echo = FALSE}
+merge.tbl <- table(quiz0322$group, quiz0322$Q4.2)
+merge.tbl.am <- addmargins(table(quiz0322$group, quiz0322$Q4.2), margin = 1)
+pander(round(prop.table(merge.tbl, margin = 1)*100, digits = 1))
+```
+
+##### 합산
+
+```{r, percentage in sum, echo = FALSE}
+pander(round(prop.table(merge.tbl.am[3, ])*100, digits = 1))
+```
+
+<!--
+##### 17학번
+
+```{r, ID_17, echo = FALSE}
+ID.17 <- factor(ifelse(substr(quiz0322$id, 1, 4) >= 2017, "17학번", "16학번이전"), levels = c("17학번", "16학번이전"))
+No_Vote <- factor(ifelse(quiz0322$Q4.2 %in% c("없다", "모름/무응답"), "No Vote", "Vote"), levels = c("Vote", "No Vote"))
+# pander(table(ID.17, quiz0322$Q4.2))
+pander(table(ID.17, No_Vote))
+chisq.test(table(ID.17, No_Vote))
+```
+
+
+```{r, save, echo = FALSE}
+save.image("../R/quiz0322.RData")
+```
+-->
