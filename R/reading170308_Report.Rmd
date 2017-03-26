@@ -1,0 +1,250 @@
+---
+title: "Reading Survey 170308"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width = 180, digits = 2)
+```
+
+<!--### Data-->
+
+```{r, data, echo = FALSE, results = 'hide'}
+reading <- read.xlsx("../data/reading_1701.xlsx", 1, startRow = 4, endRow = 165, colIndex = c(3:7, 9:47), colClasses = c(rep("character", 6), "numeric", rep("character", 2), rep("numeric", 8), rep("character", 7), rep("numeric", 2), rep("character", 18)), header = TRUE, stringsAsFactors = FALSE)
+str(reading)
+head(reading)
+# na.all <- which(apply(is.na(reading[, -(1:6)]), 1, all))
+# reading[is.na(reading)] <- NA
+# reading[na.all, -(1:6)] <- "결석"
+# load("./red_and_black_160907_data.rda")
+# reading$group <- levels(class_roll0907$group)
+load("./class_roll170303.RData")
+str(class_roll$group)
+reading$group <- factor(c(class_roll$group, "1"), labels = c("Red", "Black"))
+str(reading$group)
+reading$SQ2 <- factor(reading$SQ2, levels = 1:2, labels = c("남", "여"))
+reading$SQ3 <- factor(reading$SQ3, levels = 1:17, labels = c("서울", "부산", "대구", "인천", "광주", "대전", "울산", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주", "세종"))
+reading$SQ3 <- droplevels(reading$SQ3)
+leasure.hours.wd <- round((reading$Q1.1.h*60 + reading$Q1.1.m)/60, digits = 2)
+leasure.hours.hd <- round((reading$Q1.2.h*60 + reading$Q1.2.m)/60, digits = 2)
+reading.hours.wd <- round((reading$Q2.1.h*60 + reading$Q2.1.m)/60, digits = 2)
+reading.hours.hd <- round((reading$Q2.2.h*60 + reading$Q2.2.m)/60, digits = 2)
+where.1 <- factor(reading$Q3.1, levels = 1:6, labels = c("집", "직장(학교)", "출퇴근(통학)중", "도서관", "장소불문", "기타"))
+where.2 <- factor(reading$Q3.2, levels = 1:6, labels = c("집", "직장(학교)", "출퇴근(통학)중", "도서관", "장소불문", "기타"))
+reason.1 <- factor(reading$Q4.1, levels = 1:10, labels = c("업무", "학업, 취업", "교양, 인격", "지식, 정보", "즐거운 습관", "대화", "시간보내기", "위로와 평안", "실생활도움", "기타"))
+reason.2 <- factor(reading$Q4.2, levels = 1:10, labels = c("업무", "학업, 취업", "교양, 인격", "지식, 정보", "즐거운 습관", "대화", "시간보내기", "위로와 평안", "실생활도움", "기타"))
+helpful <- factor(reading$Q5, levels = 1:5, labels = c("매우 도움", "다소 도움", "보통", "별 도움 안됨", "매우 도움 안됨"))
+obstacles <- factor(reading$Q6.1, levels = 1:12, labels = c("일(공부) 때문", "싫고 습관화 안됨", "다른 여가활동", "몸 불편", "책 고르기 난감", "읽을 만한 책 없음", "장소 없음", "경제적 여유 없음", "독해 난감", "필요성 못 느낌", "마음의 여유 없음", "기타"))
+obstacles.1 <- factor(obstacles)
+obstacles.2 <- droplevels(obstacles)
+volumes.p <- ifelse(reading$Q7.P <= 4, reading$Q7.P, "5권 이상")
+volumes.p.f <- factor(volumes.p)
+levels(volumes.p.f)
+volumes.e <- ifelse(reading$Q7.E <= 4, reading$Q7.E, "5권 이상")
+volumes.e.f <- factor(volumes.e)
+levels(volumes.e.f)
+levels(volumes.e.f) <- list("0" = "0", "1" = "1", "2" = "2", "3" = "3", "4" = "4", "5권 이상" = "5권 이상")
+levels(volumes.e.f)
+reader.p <- ifelse(reading$Q7.P >= 1, "Yes", "No")
+reader.p.f <- factor(reader.p, levels = c("Yes", "No"), labels = c("1권 이상 읽는다", "1권도 읽지 않는다"))
+reader.e <- ifelse(reading$Q7.E >= 1, "Yes", "No")
+reader.e.f <- factor(reader.e, levels = c("Yes", "No"), labels = c("1권 이상 읽는다", "1권도 읽지 않는다"))
+enough.f <- factor(reading$Q8, labels = c("매우 충분", "충분", "보통", "부족", "매우 부족"))
+area.labels <- c("문학", "장르소설", "철학, 사상, 종교", "정치, 사회, 시사", "경제, 경영", "역사, 지리", "예술, 문화", "과학, 기술", "가정, 육아, 요리", "어학, 컴퓨터", "취미, 오락, 여행, 건강", "재테크, 부동산", "자기계발서", "기타")
+area.p.1.f <- factor(reading$Q9.P.1, levels = 1:14, labels = area.labels)
+area.p.2.f <- factor(reading$Q9.P.2, levels = 1:14, labels = area.labels)
+area.p.3.f <- factor(reading$Q9.P.3, levels = 1:14, labels = area.labels)
+area.e.1.f <- factor(reading$Q9.E.1, levels = 1:14, labels = area.labels)
+area.e.2.f <- factor(reading$Q9.E.2, levels = 1:14, labels = area.labels)
+area.e.3.f <- factor(reading$Q9.E.3, levels = 1:14, labels = area.labels)
+info.labels <- c("서점, 도서관 직접", "신문, 잡지 소개나 광고", "TV, 라디오 소개나 광고", "인터넷 소개나 광고", "가족, 친구 추천", "유명인, 전문가 추천", "각종 기관 추천도서", "베스트셀러 목록", "드라마, 영화 원작", "블로그, SNS 추천", "기타")
+info.1.f <- factor(reading$Q10.1, levels = 1:11, labels = info.labels)
+info.2.f <- factor(reading$Q10.2, levels = 1:11, labels = info.labels)
+get.labels <- c("직접 구입", "도서관 대출", "주위사람 빌려", "선물로", "도서대여점", "직장 비치", "은행, 관공서 등 비치", "기타")
+get.1.f <- factor(reading$Q11.1, levels = 1:8, labels = get.labels)
+get.2.f <- factor(reading$Q11.2, levels = 1:8, labels = get.labels)
+buy.p.labels <- c("시내 대형서점", "직장 근처 서점", "동네 소형서점", "전문서점", "대형 할인마트", "인터넷서점, 쇼핑몰", "전철역 간이서점", "중고책 서점", "기타")
+buy.p.1.f <- factor(reading$Q12.P.1, levels = 1:9, labels = buy.p.labels)
+buy.p.2.f <- factor(reading$Q12.P.2, levels = 1:9, labels = buy.p.labels)
+buy.e.labels <- c("포털사이트", "인터넷서점 사이트", "전자첵 전문사이트", "로맨스소설 전문사이트", "앱스토어", "기타")
+buy.e.1.f <- factor(reading$Q12.E.1, levels = 1:6, labels = buy.e.labels)
+buy.e.2.f <- factor(reading$Q12.E.2, levels = 1:6, labels = buy.e.labels)
+talk.labels <- c("매우", "자주", "보통", "별로", "전혀")
+talk.f <- factor(reading$Q13, levels = 1:5, labels = talk.labels)
+advice.labels <- c("적극", "대체로", "보통", "별로", "전혀")
+advice.f <- factor(reading$Q14, levels = 1:5, labels = advice.labels)
+```
+
+### 응답자 배경
+
+```{r, age-gender-locality, echo = FALSE}
+pander(table(reading$group, reading$SQ1, exclude = NULL)[-3, ], caption = "나이")
+pander(table(reading$group, reading$SQ2, exclude = NULL)[-3, ], caption = "성별")
+pander(table(reading$group, reading$SQ3, exclude = NULL)[-3, ], caption = "지역")
+```
+
+### Leasure Hours per Day
+
+#### Work Days
+
+```{r, leasure hrs work days, echo = FALSE}
+pander(tapply(leasure.hours.wd, reading$group, summary), digits = 2)
+pander(summary(leasure.hours.wd), digits = 2, caption = "Overall")
+```
+
+#### Holidays
+
+```{r, leasure hrs holidays, echo = FALSE}
+pander(tapply(leasure.hours.hd, reading$group, summary), digits = 2)
+pander(summary(leasure.hours.hd), digits = 2, caption = "Overall")
+```
+
+### Reading Hours per Day
+
+#### Work Days
+
+```{r, reading hrs work days, echo = FALSE}
+pander(tapply(reading.hours.wd, reading$group, summary), digits = 2)
+pander(summary(reading.hours.wd), digits = 2, caption = "Overall")
+```
+
+#### Holidays
+
+```{r, reading hrs holidays, echo = FALSE}
+pander(tapply(reading.hours.hd, reading$group, summary), digits = 2)
+pander(summary(reading.hours.hd), digits = 2, caption = "Overall")
+```
+
+### 독서 장소
+
+```{r, reading location, echo = FALSE}
+pander(table(reading$group, where.1), caption = "1순위")
+pander(table(reading$group, where.2), caption = "2순위")
+```
+
+### 독서 이유
+
+```{r, reason to read, echo = FALSE}
+pander(table(reading$group, reason.1), caption = "1순위")
+pander(table(reading$group, reason.2), caption = "2순위")
+```
+
+### 도움이 되었는가
+
+```{r, how helpful, echo = FALSE}
+pander(table(reading$group, helpful))
+```
+
+### 독서를 하기 어려운 이유?
+
+```{r, obstacles, echo = FALSE}
+pander(table(reading$group, obstacles.1))
+# pander(table(reading$group, obstacles.2))
+```
+
+### 독서량
+
+```{r, volumes, echo = FALSE}
+pander(summary(reading$Q7.P), caption = "종이책", digits = 2)
+pander(table(reading$group, volumes.p.f), caption = "종이책")
+pander(summary(reading$Q7.E), caption = "전자책", digits = 2)
+pander(table(reading$group, volumes.e.f), caption = "전자책")
+```
+
+### 독서율
+
+```{r, proportion, echo = FALSE}
+pander(table(reading$group, reader.p.f), caption = "종이책")
+pander(prop.table(table(reader.p.f))*100, caption = "종이책(%)", digits = 2)
+pander(table(reading$group, reader.e.f), caption = "전자책")
+pander(prop.table(table(reader.e.f))*100, caption = "종이책(%)", digits = 2)
+```
+
+### 독서량은 충분한가?
+
+```{r, enough, echo = FALSE}
+pander(table(reading$group, enough.f), caption = "독서량 충분?")
+pander(prop.table(table(enough.f))*100, caption = "독서량 충분?(%)", digits = 2)
+```
+
+### 독서 분야?
+
+```{r, area, echo = FALSE}
+pander(table(reading$group, area.p.1.f), caption = "종이책 1순위")
+pander(prop.table(table(area.p.1.f))*100, caption = "종이책 1순위(%)", digits = 2)
+pander(table(reading$group, area.p.2.f), caption = "종이책 2순위")
+pander(prop.table(table(area.p.2.f))*100, caption = "종이책 2순위(%)", digits = 2)
+pander(table(reading$group, area.p.3.f), caption = "종이책 3순위")
+pander(prop.table(table(area.p.3.f))*100, caption = "종이책 3순위(%)", digits = 2)
+pander(table(reading$group, area.p.1.f), caption = "전자책 1순위")
+pander(prop.table(table(area.e.1.f))*100, caption = "전자책 1순위(%)", digits = 2)
+pander(table(reading$group, area.e.2.f), caption = "전자책 2순위")
+pander(prop.table(table(area.e.2.f))*100, caption = "전자책 2순위(%)", digits = 2)
+pander(table(reading$group, area.e.3.f), caption = "전자책 3순위")
+pander(prop.table(table(area.e.3.f))*100, caption = "전자책 3순위(%)", digits = 2)
+```
+
+### 책 선택에 어떤 정보 이용?
+
+```{r, info, echo = FALSE}
+pander(table(reading$group, info.1.f), caption = "활용 정보 1순위")
+pander(prop.table(table(info.1.f))*100, caption = "활용 정보 1순위(%)", digits = 2)
+pander(table(reading$group, info.2.f), caption = "활용정보 2순위")
+pander(prop.table(table(info.2.f))*100, caption = "활용정보 2순위(%)", digits = 2)
+```
+
+### 책은 어떻게 구하는가?
+
+```{r, get, echo = FALSE}
+pander(table(reading$group, get.1.f), caption = "어떻게 1순위")
+pander(prop.table(table(get.1.f))*100, caption = "어떻게 1순위(%)", digits = 2)
+pander(table(reading$group, get.2.f), caption = "어떻게 2순위")
+pander(prop.table(table(get.2.f))*100, caption = "어떻게 2순위(%)", digits = 2)
+```
+
+### 책은 어디서 사는가?
+
+```{r, buy, echo = FALSE}
+pander(table(reading$group, buy.p.1.f), caption = "종이책구입 1순위")
+pander(prop.table(table(buy.p.1.f))*100, caption = "종이책구입 1순위(%)", digits = 2)
+pander(table(reading$group, buy.p.2.f), caption = "종이책구입 2순위")
+pander(prop.table(table(buy.p.2.f))*100, caption = "종이책 2순위(%)", digits = 2)
+pander(table(reading$group, buy.e.1.f), caption = "전자책구입 1순위")
+pander(prop.table(table(buy.e.1.f))*100, caption = "전자책구입 1순위(%)", digits = 2)
+pander(table(reading$group, buy.e.2.f), caption = "전자책구입 2순위")
+pander(prop.table(table(buy.e.2.f))*100, caption = "전자책구입 2순위(%)", digits = 2)
+```
+
+### 책에 관한 이야기를 얼마나 자주?
+
+```{r, talk, echo = FALSE}
+pander(table(reading$group, talk.f), caption = "책 관련 이야기 얼마나 자주?")
+pander(prop.table(table(talk.f))*100, caption = "책 관련 이야기 얼마나 자주?(%)", digits = 2)
+```
+
+### 부모님이나 선생님의 책읽기 권유 정도?
+
+```{r, advice, echo = FALSE}
+pander(table(reading$group, advice.f), caption = "책읽기 권유 정도?")
+pander(prop.table(table(advice.f))*100, caption = "책읽기 권유 정도?(%)", digits = 2)
+```
+
+### 다독자의 독서 분야는?
+
+```{r, areas where most readersread, echo = FALSE}
+most.read <- reading$Q7.P >= 24 
+most.read.ind <- which(most.read)
+area.p.df <- data.frame("제1순위" = area.p.1.f, "제2순위" = area.p.2.f, "제3순위" = area.p.3.f)
+pander(area.p.df[most.read.ind, ], row.names = NULL)
+```
