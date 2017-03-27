@@ -168,7 +168,7 @@ pander(table(reading$group, volumes.e.f), caption = "전자책")
 pander(table(reading$group, reader.p.f), caption = "종이책")
 pander(prop.table(table(reader.p.f))*100, caption = "종이책(%)", digits = 2)
 pander(table(reading$group, reader.e.f), caption = "전자책")
-pander(prop.table(table(reader.e.f))*100, caption = "종이책(%)", digits = 2)
+pander(prop.table(table(reader.e.f))*100, caption = "전자책(%)", digits = 2)
 ```
 
 ### 독서량은 충분한가?
@@ -187,7 +187,7 @@ pander(table(reading$group, area.p.2.f), caption = "종이책 2순위")
 pander(prop.table(table(area.p.2.f))*100, caption = "종이책 2순위(%)", digits = 2)
 pander(table(reading$group, area.p.3.f), caption = "종이책 3순위")
 pander(prop.table(table(area.p.3.f))*100, caption = "종이책 3순위(%)", digits = 2)
-pander(table(reading$group, area.p.1.f), caption = "전자책 1순위")
+pander(table(reading$group, area.e.1.f), caption = "전자책 1순위")
 pander(prop.table(table(area.e.1.f))*100, caption = "전자책 1순위(%)", digits = 2)
 pander(table(reading$group, area.e.2.f), caption = "전자책 2순위")
 pander(prop.table(table(area.e.2.f))*100, caption = "전자책 2순위(%)", digits = 2)
