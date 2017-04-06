@@ -1,0 +1,124 @@
+---
+title: "Quiz 170405"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width=180)
+```
+
+```{r, data, echo = FALSE, results = 'hide'}
+quiz0405 <- read.xlsx("../data/quiz0405.xlsx", 1, startRow = 2, endRow = 162, colIndex = c(3:7, 9:14), colClasses = c(rep("character", 11)), stringsAsFactors=FALSE)
+str(quiz0405)
+names(quiz0405) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
+quiz0405$dept <- factor(quiz0405$dept)
+quiz0405$year <- factor(quiz0405$year)
+quiz0405$group <- factor(quiz0405$group, levels = c("Red", "Black"))
+quiz0405$Q1 <- factor(quiz0405$Q1, levels = c("가", "나", "다", "라"), labels = c("확률적 표본추출", "할당법", "유선전화번호부", "RDD도입"))
+quiz0405$Q2 <- factor(quiz0405$Q2, levels = c("가", "나", "다", "라"), labels = c("2배로", "4배로", "1/2로", "1/4로"))
+quiz0405$Q3 <- factor(quiz0405$Q3, levels = c("가", "나", "다", "라"), labels = c("국민전체", "18세 이상 전체", "등록유권자 전체", "선거 당일 투표 유권자 전체"))
+quiz0405$Q4 <- factor(quiz0405$Q4, levels = c("가", "나", "다", "라", "마"))
+quiz0405$Q4.2 <- quiz0405$Q4
+levels(quiz0405$Q4.2[quiz0405$group == "Black"]) <- c("라", "다", "나", "가", "마")
+levels(quiz0405$Q4.2) <- c("적폐청산", "안보/국가관", "국민통합", "미래비전", "모름/무응답")
+str(quiz0405)
+```
+
+```{r, randomization, echo = FALSE, results = 'hide'}
+pander(summary(quiz0405))
+```
+
+### 퀴즈 응답 비교
+
+#### 1948 미 대선 이후
+
+##### 확률적 표본추출방법 도입
+
+```{r, fairness, echo = FALSE}
+Q1.tbl.am <- addmargins(table(quiz0405$group, quiz0405$Q1, exclude = NULL), margin = 1)
+colnames(Q1.tbl.am)[5] <- "결석"
+rownames(Q1.tbl.am)[4] <- "계"
+pander(Q1.tbl.am[-3, ], caption = "1948 미 대선 이후")
+```
+
+##### 확률적 표본추출방법 도입 ... (%)
+
+```{r, fairness in percentage, echo = FALSE}
+pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
+```
+
+#### 표본오차를 반으로 줄이려면?
+
+##### 4배로 늘려야
+
+```{r, Selection Bias, echo = FALSE}
+Q2.tbl.am <- addmargins(table(quiz0405$group, quiz0405$Q2, exclude = NULL), margin = 1)
+colnames(Q2.tbl.am)[5] <- "결석"
+rownames(Q2.tbl.am)[4] <- "계"
+pander(Q2.tbl.am[-3, ], "표본오차를 반으로")
+```
+
+##### 4배로 눌려야 (%)
+
+```{r, Selection Bias in percentage, echo = FALSE}
+pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1), caption = "표본오차를 반으로 줄이려면?")
+```
+
+#### 대선 여론조사의 목표모집단?
+
+##### 선거당일 투표하는 유권자 전체
+
+```{r, quota sampling, echo = FALSE}
+Q3.tbl.am <- addmargins(table(quiz0405$group, quiz0405$Q3, exclude = NULL), margin = 1)
+colnames(Q3.tbl.am)[5] <- "결석"
+rownames(Q3.tbl.am)[4] <- "계"
+pander(Q3.tbl.am[-3, ], caption = "대선 여론조사의 목표모집단?")
+```
+
+##### 선거당일 투표하는 유권자 전체(%)
+
+```{r, quota sampling in percentage, echo = FALSE}
+pander(round(prop.table(Q3.tbl.am, margin=1)[4,]*100, digits = 1), caption = "대선 여론조사의 목표모집단?")
+```
+
+### 보궐 대선의 시대정신
+
+#### 질문지 답 문항 순서의 영향
+
+##### 문항 순서에 따른 반응 변화
+
+```{r, vote attitude, echo = FALSE}
+poll.tbl.e <- addmargins(table(quiz0405$group, quiz0405$Q4.2, exclude = NULL), margin = 1)
+colnames(poll.tbl.e)[6] <- "결석"
+rownames(poll.tbl.e)[4] <- "계"
+pander(poll.tbl.e[-3, ], caption = "시대정신")
+```
+
+##### % 비교.  
+
+```{r, vote attitude in percentage, echo = FALSE}
+merge.tbl <- table(quiz0405$group, quiz0405$Q4.2)
+merge.tbl.am <- addmargins(table(quiz0405$group, quiz0405$Q4.2), margin = 1)
+pander(round(prop.table(merge.tbl, margin = 1)*100, digits = 1))
+```
+
+#### 합산
+
+```{r, percentage in sum, echo = FALSE}
+pander(round(prop.table(merge.tbl.am[3, ])*100, digits = 1))
+```
+
+```{r, save, echo = FALSE}
+#save.image("../R/quiz0405.rda")
+```
