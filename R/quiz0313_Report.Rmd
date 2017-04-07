@@ -19,11 +19,12 @@ options(width=180)
 ```
 
 ```{r, data, echo = FALSE, results = 'hide'}
-quiz0313 <- read.xlsx("../data/quiz0313.xlsx", 1, startRow = 2, endRow = 163, colIndex = c(3:7, 9:14), colClasses=c(rep("character", 11)), stringsAsFactors=FALSE)
+quiz0313 <- read.xlsx("../data/quiz0313.xlsx", 1, startRow = 2, endRow = 163, colIndex = c(3:7, 9:15), colClasses=c(rep("character", 12)), stringsAsFactors = FALSE)
 str(quiz0313)
-names(quiz0313) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
+names(quiz0313) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group", "group.roll")
 quiz0313$dept <- factor(quiz0313$dept)
 quiz0313$year <- factor(quiz0313$year)
+quiz0313$group[is.na(quiz0313$group)] <- quiz0313$group.roll[is.na(quiz0313$group)]
 quiz0313$group <- factor(quiz0313$group, levels = c("Red", "Black"))
 quiz0313$Q1 <- factor(quiz0313$Q1, levels = c("가", "나", "다", "라", "마"), labels = c("9:1", "8:2", "7:3", "6:4", "5:5"))
 quiz0313$Q2 <- factor(quiz0313$Q2, levels = c("가", "나", "다", "라", "마"), labels = c("10%", "30%", "50%", "70%", "90%"))
@@ -41,7 +42,7 @@ pander(summary(quiz0313))
 
 ### 퀴즈 응답 비교
 
-#### 우리나라 국세와 지방세 배분비율
+#### 우리나라 국세와 지방세 배분비율 
 
 ##### 국세와 지방세
 
