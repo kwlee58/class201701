@@ -60,7 +60,6 @@ colnames(Q1.tbl.am)[5] <- "결석"
 rownames(Q1.tbl.am)[4] <- "계"
 pander(Q1.tbl.am[-3, ])
 pander(chisq.test(tbl.q1[-3, ]))
-
 ```
 
 ##### 대공황. 대번영, 대침체(%)
