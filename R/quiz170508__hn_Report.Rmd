@@ -56,7 +56,8 @@ pander(Q1.tbl.am[-3, ])
 ##### 천사와 악마(%)
 
 ```{r, bystander in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
+tbl.q1.2 <- table(quiz0508$Q1)
+pander(round(prop.table(tbl.q1.2) * 100, digits = 1))
 ```
 
 #### Solomon Asch
@@ -77,7 +78,8 @@ pander(Q2.tbl.am[-3, ])
 ##### 집단 사고 (%)
 
 ```{r, obedience in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
+tbl.q2.2 <- table(quiz0508$Q2)
+pander(round(prop.table(tbl.q2.2) * 100, digits = 1))
 ```
 
 #### Stanley Milgram
@@ -98,7 +100,8 @@ pander(Q3.tbl.am[-3, ])
 ##### 복종 (%)
 
 ```{r, Power of 3 in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
+tbl.q3.2 <- table(quiz0508$Q3)
+pander(round(prop.table(tbl.q3.2) * 100, digits = 1))
 ```
 
 #### Philip Zimbardo
@@ -119,7 +122,8 @@ pander(Q4.tbl.am[-3, ])
 ##### 스탠포드 모의교도소 실험(%).  
 
 ```{r, Framing effects in percentage, echo = FALSE}
-pander(round(prop.table(Q4.tbl.am, margin = 1)[4,]*100, digits = 1))
+tbl.q4.2 <- table(quiz0508$Q4)
+pander(round(prop.table(tbl.q4.2) * 100, digits = 1))
 ```
 
 ```{r, save, echo = FALSE}
