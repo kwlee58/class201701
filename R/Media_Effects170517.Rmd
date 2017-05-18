@@ -1,0 +1,239 @@
+---
+title: "Media Effects 170517"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+#### Data 
+
+<!--#### Excel 자료 읽어들이기 
+
+* excel 파일을 잘 읽어들이는 `xlsx` 패키지를 올려놓고, 자료구조에 맞춰 argument 설정.
+    * Sheet 번호, startRow, colIndex, header 의 용도 파악. 
+-->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width = 180)
+panderOptions('digits', 3)
+```
+
+```{r, read data, echo = FALSE, results = 'hide'}
+media_effects <- read.xlsx("../data/quiz170517.xlsx", 1, startRow = 2, endRow  = 161, colIndex = 10:30, colClasses = c(rep("character", 21)), header = TRUE)
+names(media_effects) <- c(paste("Q", 1:20, sep = ""), "group")
+media_effects$group <- factor(media_effects$group, levels = c("Red", "Black"))
+str(media_effects)
+```
+
+```{r, pander media_effects, echo = FALSE}
+pander(media_effects)
+```
+
+##### 분할표
+
+```{r, mapply for table, echo = FALSE}
+media_effects.f <- media_effects
+# str(media_effects.f[, 1:2])
+media_effects.f[, c(1:2, 9:20)] <- lapply(media_effects.f[, c(1:2, 9:20)], function(x){factor(x, levels = c("가", "나", "다", "라"))})
+media_effects.f[, 3:8] <- lapply(media_effects.f[, 3:8], function(x){factor(x, levels = c("가", "나", "다", "라", "마"))})
+# str(media_effects.f)
+pander(mapply(function(x){table(media_effects$group, x)}, media_effects.f[1:20]))
+```
+
+#### 점수 계산
+
+<!--* 정답 맞춰보기
+    * 정답 읽어들이기. `what = ""`로 설정하여 `char`취급. 
+-->
+
+```{r, read ans, echo = FALSE, results = 'hide'}
+(ans <- scan("../data/media_effects_ans.txt", what = ""))
+```
+
+<!--* 각 학생들의 답안과 맞춰보기 위하여 정답표 작성.
+    * 문항별로 정답과 비교하기 위하여 각 문항을 리스트의 원소로 분리
+    * `split()` 의 기능과 한계에 유의. `factor` 성격으로부터 `1, 10, 11, ..., 2, 20, ..., 3, 4, 5, ... , 9`로 순서를 잡게 되므로 다시 한번 정리할 필요.
+-->
+    
+    
+```{r, ans list and unlist, echo = FALSE, results = 'hide'}
+(ans.l <- split(ans, f = paste("A", 1:20, sep = "")))
+(ans.l.2 <- ans.l[paste("A", 1:20, sep = "")])
+
+# ans.mat <- matrix(rep(ans, each = nrow(media_effects)), nrow = 70)
+# head(ans.mat)
+```
+
+##### 정답과 대조하여 R(Right)/W(Wrong)으로 표시 
+    
+<!--* 채점표라는 의미의 `media_effects.marks` 로 저장-->
+    
+```{r, marks, echo = FALSE}
+pander(media_effects.marks.rw <- mapply(function(x, y) factor(ifelse(x == y, "R", "W")), y = ans.l.2, media_effects[, -21]))
+# media_effects.marks <- media_effects[, -1] == ans.mat
+# str(media_effects.marks.rw)
+```
+
+##### 집계표
+
+```{r, tally R and W, echo = FALSE}
+media_effects.marks.rw.df <- data.frame(media_effects.marks.rw)
+media_effects.marks.rw.f <- lapply(media_effects.marks.rw.df, factor)
+# str(media_effects.marks.rw.f)
+pander(mapply(function(x){table(media_effects$group, x)}, media_effects.marks.rw.f, SIMPLIFY = FALSE))
+```
+
+##### 정답률 비교
+
+```{r, rate of right answers, echo = FALSE}
+options(digits = 2)
+pander(lapply(media_effects.marks.rw.f, function(x){prop.table(table(media_effects$group, x), margin = 1)[, 1]*100}))
+```
+
+##### 학생별 점수 산출
+
+<!--+ 정답을 집계하기 위하여 "R" 갯수를 다시 산출하는 `ifelse()` 적용.
+    + 4점씩 곱하면 100점 만점 기준의 점수가 됨. 
+    + 조사표는 작성해서 제출했지만 빈칸이 있는 경우는 그 문항을 0점 처리, 결석의 경우는 점수가 모두 0으로 나오는 경우를  NA처리 
+-->
+
+```{r, sum of rights answers, echo = FALSE, results = 'hide'}
+media_effects.marks <- ifelse(media_effects.marks.rw == "R", 1, 0)
+media_effects.score <- apply(media_effects.marks, 1, sum, na.rm = TRUE) * 4
+media_effects.score[media_effects.score == 0] <- NA
+```
+
+* 10점 단위 그룹 비교
+
+```{r, pander score, echo = FALSE}
+pander(table(media_effects$group, cut(media_effects.score, breaks = seq(10, 80, by = 10), include.lowest = TRUE, right = FALSE)))
+```
+
+##### 그룹별 통계요약
+
+```{r, pander summary, echo = FALSE}
+pander(tapply(media_effects.score, media_effects$group, summary))
+# stem(media_effects.score, scale = 2)
+```
+
+##### 줄기-잎 그림(전체)
+
+```{r, stem and leaf for all, echo = FALSE}
+stem(media_effects.score, scale = 2)
+```
+
+##### 줄기-잎 그림(Red)
+
+```{r, stem and leaf for Red, echo = FALSE}
+stem(media_effects.score[media_effects$group == "Red"])
+```
+
+##### 줄기-잎 그림(Black)
+
+```{r, stem and leaf for Black, echo = FALSE}
+stem(media_effects.score[media_effects$group == "Black"])
+```
+
+##### t-test
+
+```{r, t-test, echo = FALSE}
+pander(t.test(media_effects.score ~ media_effects$group))
+```
+
+#### Plots
+
+##### Box Plots
+
+```{r, boxplots, echo = FALSE, fig.width = 6, fig.height = 6}
+boxplot(media_effects.score ~ media_effects$group)
+```
+
+##### QQ plot
+
+```{r, qqplots, echo = FALSE, fig.width = 6, fig.height = 6}
+# qqplot(x = media_effects.score[media_effects$group == "Red"], y = media_effects.score[media_effects$group == "Black"], xlab = "Red", ylab = "Black")
+qqplot(x = media_effects.score[media_effects$group == "Red"], y = media_effects.score[media_effects$group == "Black"], xlab = "Red", ylab = "Black", xlim = c(20, 80), ylim = c(20, 80))
+abline(a = 0, b = 1)
+```
+
+##### ECDF plot
+
+```{r, ECDF, echo =FALSE, fig.width= 6, fig.height = 6}
+media_effects.score.red <- media_effects.score[media_effects$group == "Red" & !is.na(media_effects.score)]
+media_effects.score.black <- media_effects.score[media_effects$group == "Black" & !is.na(media_effects.score)]
+plot(ecdf(media_effects.score.red), xlim = range(c(media_effects.score.red, media_effects.score.black)), col = "red", main = "ECDF")
+plot(ecdf(media_effects.score.black), add = TRUE)
+```
+
+
+##### NA의 특성 감안한 채점
+
+<!--* 결석한 경우와 일부 문항에 답을 내지 않은 경우를 구분하는 것이 핵심.
+    + `media_effects.marks`를 그대로 이용하면 쉽게 계산되나, `is.na`학습 목적으로 `media_effects.mark.rw`에서 출발
+    + 모든 문항에 NA로 답한 결석한 학생들의 인덱스를 먼저 찾아내고,
+-->
+
+```{r, NA management, echo = FALSE, results = 'hide'}
+apply(media_effects.marks.rw, 1, function(x) all(is.na(x)))
+na.all <- which(apply(media_effects.marks.rw, 1, function(x) all(is.na(x))))
+```
+
+<!--* 정답률 계산
+    + NA를 모두 오답처리한 후, 결석한 학생들만 다시 NA로 정정.
+    + TRUE의 갯수를 합하여 평균. 
+-->
+
+```{r, computing correct answer rates, echo = FALSE}
+media_effects.marks.2 <- media_effects.marks.rw
+media_effects.marks.2[is.na(media_effects.marks.2)] <- "W"
+media_effects.marks.2[na.all, ] <- NA
+# media_effects.marks.2 <- ifelse(media_effects.marks.2 == "R", 1, 0)
+options(digits = 3)
+# str(media_effects.marks.2)
+media_effects.marks.2.df <- data.frame(media_effects.marks.2)
+media_effects.marks.2.f <- lapply(media_effects.marks.2.df, factor)
+# str(media_effects.marks.2.f)
+pander(mapply(function(x){table(media_effects$group, x)}, media_effects.marks.2.f, SIMPLIFY = FALSE))
+```
+
+##### 정답률 비교
+
+```{r, correct answer rates by group, echo = FALSE}
+options(digits = 2)
+pander(lapply(media_effects.marks.2.f, function(x){prop.table(table(media_effects$group, x), margin = 1)[, 1]*100}))
+```
+
+<!--#### 어려운 문제?
+
+##### 정답률 80% 이하
+
+```{r, hardest question below 80, echo = FALSE, eval = FALSE}
+pander(rate.by.item[which(rate.by.item <= 80), ])
+```
+
+##### 정답률 70% 이하
+
+```{r, hardest question below 70, echo = FALSE, eval = FALSE}
+pander(rate.by.item[which(rate.by.item <= 70), ])
+```
+
+##### 정답률 60% 이하
+
+```{r, hardest question below 60, echo = FALSE, eval = FALSE}
+pander(rate.by.item[which(rate.by.item <= 60), ])
+```
+-->
+
+<!--## Data 정리
+
+```{r}
+save.image("media_effects_201701.RData")
+```
+-->

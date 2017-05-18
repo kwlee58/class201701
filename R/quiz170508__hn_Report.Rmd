@@ -9,7 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 # install.packages("pander", repos = "https://cran.rstudio.com")
 # install.packages("xlsx", repos = "https://cran.rstudio.com")
-library(xlsx)
+# library(xlsx)
+library(openxlsx)
 library(pander)
 library(knitr)
 panderOptions('table.split.table', Inf)
@@ -19,7 +20,8 @@ options(width = 180)
 ```
 
 ```{r, data, echo = FALSE, results = 'hide'}
-quiz0508 <- read.xlsx("../data/quiz0508_hn.xlsx", 1, startRow = 2, endRow = 161, colIndex = c(3:7, 9:14), colClasses = c(rep("character", 11)), stringsAsFactors = FALSE)
+quiz0508 <- read.xlsx("../data/quiz0508_hn.xlsx", startRow = 2, rows = 2:161, cols = c(3:7, 9:14))
+# quiz0508 <- read.xlsx("../data/quiz0508_hn.xlsx", 1, startRow = 2, endRow = 161, colIndex = c(3:7, 9:14), colClasses = c(rep("character", 11)), stringsAsFactors = FALSE)
 str(quiz0508)
 names(quiz0508) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
 quiz0508$dept <- factor(quiz0508$dept)

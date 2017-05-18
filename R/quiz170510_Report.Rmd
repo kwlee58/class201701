@@ -1,5 +1,5 @@
 ---
-title: "Quiz 170510"
+title: "Quiz 170510 v2"
 author: "coop711"
 date: "`r Sys.Date()`"
 output: html_document
@@ -19,7 +19,7 @@ options(width = 180)
 ```
 
 ```{r, data, echo = FALSE, results = 'hide'}
-quiz0510 <- read.xlsx("../data/quiz170510.xlsx", 1, startRow = 2, endRow = 161, colIndex = c(3:7, 9:14), colClasses = c(rep("character", 11)), stringsAsFactors = FALSE)
+quiz0510 <- read.xlsx("../data/quiz170510_v2.xlsx", 1, startRow = 2, endRow = 161, colIndex = c(3:7, 9:14), colClasses = c(rep("character", 11)), stringsAsFactors = FALSE)
 str(quiz0510)
 names(quiz0510) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
 quiz0510$dept <- factor(quiz0510$dept)
@@ -82,6 +82,8 @@ pander(summary(quiz0510))
 
 #### BFI 줄 긋기
 
+![](../pics/Quiz170510_Q1.png)
+
 ##### 몇 개나 맞추나?
 
 ```{r, BFI, echo = FALSE}
@@ -102,6 +104,8 @@ pander(BFI.tbl.a.m, caption = "Big Five Inventory")
 ```
 
 #### 다중 지능
+
+![](../pics/Quiz170510_Q2.png)
 
 ##### 몇 개나 맞추나?
 
@@ -125,12 +129,13 @@ pander(MI.tbl.a.m, caption = "Multiple Intelligence")
 
 ### Wason Selection
 
-
 #### 추상적 표현과 구체적 표현?
 
 같은 내용의 문제를 추상적으로 물어볼 때와 구체적으로 사례를 들어서 물어볼 때의 정답률에 큰 차이가 있음에 유의. Red 집단에게는 추상적 질문을 먼저 던지고, 구체적 사례를 든 질문을 나중에 던졌으며 Black 집단에게는 구체적 사례를 든 질문을 먼저 던지고, 추상적 질문을 나중에 던졌다. 동일한 질문에 대해서 순서에 따른 차이는 거의 없지만 추상적이냐 구체적이냐에 따른 차이는 매우 높게 관찰된다. 추상적인 질문에 쩔쩔매는 게 정상이다.
 
 ##### Red에 추상적 문제 먼저 질문 
+
+![](../pics/Wason_Selection_1.png)
 
 ```{r, Wason Selection 1 in Red, echo = FALSE}
 tbl.q3.a <- addmargins(table(quiz0510$group, quiz0510$Q3.2, useNA = "ifany"), margin = 1)
@@ -149,6 +154,8 @@ kable(percentage.tbl.q3.a)
 ```
 
 ##### Black에 구체적 문제 먼저 질문 
+
+![](../pics/Wason_selection_2.png)
 
 ```{r, Wason Selection 1 in Black, echo = FALSE}
 tbl.q4.a <- addmargins(table(quiz0510$group, quiz0510$Q4.2, useNA = "ifany"), margin = 1)
