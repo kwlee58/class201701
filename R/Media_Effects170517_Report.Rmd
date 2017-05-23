@@ -5,13 +5,13 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
+<!--
 #### Data 
 
-<!--#### Excel 자료 읽어들이기 
+#### Excel 자료 읽어들이기 
 
 * excel 파일을 잘 읽어들이는 `xlsx` 패키지를 올려놓고, 자료구조에 맞춰 argument 설정.
     * Sheet 번호, startRow, colIndex, header 의 용도 파악. 
--->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -35,6 +35,44 @@ str(media_effects)
 ```{r, pander media_effects, echo = FALSE}
 pander(media_effects)
 ```
+-->
+
+##### 문제지
+
+![](../pics/Hanauer_Q1.png)
+![](../pics/Hanauer_Q2.png)
+![](../pics/Hanauer_Q3.png)
+![](../pics/Hanauer_Q4.png)
+![](../pics/Hanauer_Q5.png)
+
+![](../pics/Hanauer_Q6.png)
+
+![](../pics/Hanauer_Q7.png)
+
+![](../pics/Hanauer_Q8.png)
+![](../pics/Hanauer_Q9.png)
+
+![](../pics/Hanauer_Q10.png)
+
+![](../pics/Hanauer_Q11.png)
+
+![](../pics/Hanauer_Q12.png)
+
+![](../pics/Hanauer_Q13.png)
+
+![](../pics/Hanauer_Q14.png)
+
+![](../pics/Hanauer_Q15.png)
+
+![](../pics/Hanauer_Q16.png)
+
+![](../pics/Hanauer_Q17.png)
+
+![](../pics/Hanauer_Q18.png)
+
+![](../pics/Hanauer_Q19.png)
+
+![](../pics/Hanauer_Q20.png)
 
 ##### 분할표
 
@@ -47,11 +85,11 @@ media_effects.f[, 3:8] <- lapply(media_effects.f[, 3:8], function(x){factor(x, l
 pander(mapply(function(x){table(media_effects$group, x)}, media_effects.f[1:20]))
 ```
 
+<!--
 #### 점수 계산
 
-<!--* 정답 맞춰보기
+* 정답 맞춰보기
     * 정답 읽어들이기. `what = ""`로 설정하여 `char`취급. 
--->
 
 ```{r, read ans, echo = FALSE, results = 'hide'}
 (ans <- scan("../data/media_effects_ans.txt", what = ""))
@@ -60,7 +98,6 @@ pander(mapply(function(x){table(media_effects$group, x)}, media_effects.f[1:20])
 <!--* 각 학생들의 답안과 맞춰보기 위하여 정답표 작성.
     * 문항별로 정답과 비교하기 위하여 각 문항을 리스트의 원소로 분리
     * `split()` 의 기능과 한계에 유의. `factor` 성격으로부터 `1, 10, 11, ..., 2, 20, ..., 3, 4, 5, ... , 9`로 순서를 잡게 되므로 다시 한번 정리할 필요.
--->
     
     
 ```{r, ans list and unlist, echo = FALSE, results = 'hide'}
@@ -73,13 +110,14 @@ pander(mapply(function(x){table(media_effects$group, x)}, media_effects.f[1:20])
 
 ##### 정답과 대조하여 R(Right)/W(Wrong)으로 표시 
     
-<!--* 채점표라는 의미의 `media_effects.marks` 로 저장-->
+* 채점표라는 의미의 `media_effects.marks` 로 저장
     
 ```{r, marks, echo = FALSE}
 pander(media_effects.marks.rw <- mapply(function(x, y) factor(ifelse(x == y, "R", "W")), y = ans.l.2, media_effects[, -21]))
 # media_effects.marks <- media_effects[, -1] == ans.mat
 # str(media_effects.marks.rw)
 ```
+-->
 
 ##### 집계표
 
@@ -90,12 +128,14 @@ media_effects.marks.rw.f <- lapply(media_effects.marks.rw.df, factor)
 pander(mapply(function(x){table(media_effects$group, x)}, media_effects.marks.rw.f, SIMPLIFY = FALSE))
 ```
 
-##### 정답률 비교
+##### 정답률 비교(%)
 
 ```{r, rate of right answers, echo = FALSE}
 options(digits = 2)
-pander(lapply(media_effects.marks.rw.f, function(x){prop.table(table(media_effects$group, x), margin = 1)[, 1]*100}))
+pander(lapply(media_effects.marks.rw.f, function(x){prop.table(table(media_effects$group, x), margin = 1)[, 1] * 100}))
 ```
+
+![](../pics/Hanauer_Q17_sol.png)
 
 ##### 학생별 점수 산출
 
@@ -167,7 +207,7 @@ abline(a = 0, b = 1)
 
 ##### ECDF plot
 
-```{r, ECDF, echo =FALSE, fig.width= 6, fig.height = 6}
+```{r, ECDF, echo = FALSE, fig.width= 6, fig.height = 6}
 par(family = "HCR Dotum LVT")
 media_effects.score.red <- media_effects.score[media_effects$group == "영문" & !is.na(media_effects.score)]
 media_effects.score.black <- media_effects.score[media_effects$group == "국문" & !is.na(media_effects.score)]
@@ -175,23 +215,21 @@ plot(ecdf(media_effects.score.red), xlim = range(c(media_effects.score.red, medi
 plot(ecdf(media_effects.score.black), add = TRUE)
 ```
 
-
+<!--
 ##### NA의 특성 감안한 채점
 
-<!--* 결석한 경우와 일부 문항에 답을 내지 않은 경우를 구분하는 것이 핵심.
+* 결석한 경우와 일부 문항에 답을 내지 않은 경우를 구분하는 것이 핵심.
     + `media_effects.marks`를 그대로 이용하면 쉽게 계산되나, `is.na`학습 목적으로 `media_effects.mark.rw`에서 출발
     + 모든 문항에 NA로 답한 결석한 학생들의 인덱스를 먼저 찾아내고,
--->
 
 ```{r, NA management, echo = FALSE, results = 'hide'}
 apply(media_effects.marks.rw, 1, function(x) all(is.na(x)))
 na.all <- which(apply(media_effects.marks.rw, 1, function(x) all(is.na(x))))
 ```
 
-<!--* 정답률 계산
+* 정답률 계산
     + NA를 모두 오답처리한 후, 결석한 학생들만 다시 NA로 정정.
     + TRUE의 갯수를 합하여 평균. 
--->
 
 ```{r, computing correct answer rates, echo = FALSE}
 media_effects.marks.2 <- media_effects.marks.rw
@@ -212,6 +250,7 @@ pander(mapply(function(x){table(media_effects$group, x)}, media_effects.marks.2.
 options(digits = 2)
 pander(lapply(media_effects.marks.2.f, function(x){prop.table(table(media_effects$group, x), margin = 1)[, 1]*100}))
 ```
+-->
 
 <!--#### 어려운 문제?
 

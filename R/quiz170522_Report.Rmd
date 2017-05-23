@@ -1,0 +1,190 @@
+---
+title: "Quiz 170522"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+# library(openxlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width = 180)
+```
+
+```{r, data, echo = FALSE, results = 'hide'}
+quiz0522 <- read.xlsx("../data/quiz170522v2.xlsx", 1, startRow = 2, endRow = 161, colIndex = c(3:7, 9:15), colClasses = rep("character", 12), stringsAsFactors = FALSE)
+# quiz0522 <- read.xlsx("../data/quiz170522v2.xlsx", sheet = 1, startRow = 2, rows = 2:161, cols = c(3:7, 15, 10:14), colNames = FALSE)
+str(quiz0522)
+quiz0522 <- quiz0522[, c(1:6, 12, 8:11)]
+str(quiz0522)
+names(quiz0522) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "group")
+quiz0522$dept <- factor(quiz0522$dept)
+quiz0522$year <- factor(quiz0522$year)
+quiz0522$group <- factor(quiz0522$group, levels = c("Red", "Black"))
+# birth_month.date <- strsplit(quiz0522$Q1, ",")
+birth_month.date <- sapply(quiz0522$Q1, substr, 6, 11)
+birth_month.date <- unname(birth_month.date)
+birth_month.date
+# birth_month <- mapply(function(x) x[1], birth_month.date)
+birth_month <- unname(sapply(birth_month.date, substr, 1, 2))
+birth_month <- as.numeric(birth_month)
+birth_month.f <- factor(birth_month, levels = 1:12, labels = month.name)
+# birth_month <- mapply(function(x) `[`(x, 1), birth_month.date)
+table(quiz0522$group, birth_month.f, useNA = "ifany")
+# birthdate <- ifelse(is.na(birth_month.date), NA, mapply(function(x) paste(x[1], "월", x[2], "일", sep = ""), birth_month.date))
+quiz0522$Q1.2 <- birth_month.date
+birthdate.2 <- birth_month.date[!is.na(birth_month.date)]
+dup.b <- duplicated(birthdate.2)
+birthdate.2[dup.b]
+(b.dup.b <- birthdate.2[birthdate.2 %in% unique(birthdate.2[dup.b])])
+index.dup.b <- which(birth_month.date %in% unique(b.dup.b))
+index.dup.b
+quiz0522[index.dup.b, c("id", "Q1.2")]
+kable(t(as.matrix(table(quiz0522$Q1.2[index.dup.b]))))
+matching <- strsplit(quiz0522$Q2, ",")
+matching
+ans <- strsplit("Cowgirl in the sand,Nancy,Geordie,And yours is piece of mine", split = ",")
+matching.count <- mapply(function(x) ifelse(x == unlist(ans), 1, 0), matching)
+matching.score <- apply(matching.count, 2, sum)
+quiz0522$Q2.2 <- matching.score
+Black <- quiz0522$group == "Black"
+Red <- quiz0522$group == "Red"
+# quiz0522$Q4.2[quiz0522$group == "Black" & quiz0522$Q4 == "가"] <- "400명은 죽는다"
+# quiz0522$Q4.2[quiz0522$group == "Black" & quiz0522$Q4 == "나"] <- "모두 사망 않을 확률 1/3"
+# quiz0522$Q4.2[quiz0522$group == "Red" & quiz0522$Q4 == "가"] <- "200명은 살린다"
+# quiz0522$Q4.2[quiz0522$group == "Red" & quiz0522$Q4 == "나"] <- "모두 살릴 확률 1/3"
+# quiz0522$Q4.2 <- quiz0522$Q4
+quiz0522$Q3.2[Red] <- ifelse(quiz0522$Q3[Red] == "가", "실업률10%(취업률90%), 인플레12%", ifelse(quiz0522$Q3[Red] == "나", "실업률5%(취업률95%), 인플레17%", NA))
+quiz0522$Q3.2[Black] <- ifelse(quiz0522$Q3[Black] == "가", "실업률10%(취업률90%), 인플레12%", ifelse(quiz0522$Q3[Black] == "나", "실업률5%(취업률95%), 인플레17%", NA))
+quiz0522$Q3.2 <- factor(quiz0522$Q3.2, levels = c("실업률10%(취업률90%), 인플레12%", "실업률5%(취업률95%), 인플레17%"))
+quiz0522$Q4.2[Red] <- ifelse(quiz0522$Q4[Red] == "가", "수용가능", ifelse(quiz0522$Q4[Red] == "나", "불공정", NA))
+quiz0522$Q4.2[Black] <- ifelse(quiz0522$Q4[Black] == "가", "수용가능", ifelse(quiz0522$Q4[Black] == "나", "불공정", NA))
+quiz0522$Q4.2 <- factor(quiz0522$Q4.2, levels = c("수용가능", "불공정"))
+# str(quiz0522)
+pander(quiz0522[c("Q3", "Q3.2", "Q4", "Q4.2", "group")])
+```
+
+```{r, randomization, echo = FALSE, results = 'hide'}
+pander(summary(quiz0522))
+```
+
+### 퀴즈 응답
+
+#### Birthday Problem
+
+##### 생일이 같은 사람은 몇 명?
+
+```{r, birthday problem, echo = FALSE}
+dup.b.df <- quiz0522[index.dup.b, c("id", "Q1.2", "group")]
+names(dup.b.df) <- c("학번", "생일", "그룹")
+# pander(dup.b.df)
+tbl.q1.a <- addmargins(table(quiz0522$Q1.2[index.dup.b]))
+names(tbl.q1.a)[26] <- "계"
+# tbl.q1.a
+kable(t(as.matrix(tbl.q1.a)))
+```
+
+##### 이론적으로 기대인원은?
+
+```{r, echo = TRUE}
+159 * (1 - (364 / 365) ^ 158)
+```
+
+##### 태어난 달의 분포는?
+
+```{r, month of the birthdates, echo = FALSE}
+birth_month.tbl <- table(quiz0522$group, "태어난 달" = birth_month.f)
+birth_month.tbl.a <- addmargins(birth_month.tbl)
+rownames(birth_month.tbl.a)[3] <- "계"
+colnames(birth_month.tbl.a)[13] <- "계"
+pander(birth_month.tbl.a)
+```
+
+#### Matching Problem
+
+![](../pics/Quiz170522_Q2.png)
+
+##### 정답갯수의 분포
+
+```{r, matching, echo = FALSE}
+matching.score.tbl <- table(quiz0522$group, "맞춘 갯수" = matching.score)
+matching.score.tbl.a <- addmargins(matching.score.tbl)
+rownames(matching.score.tbl.a)[3] <- "계"
+colnames(matching.score.tbl.a)[5] <- "계"
+pander(matching.score.tbl.a)
+```
+
+##### 카이제곱 적합도 테스트
+
+랜덤하게 골랐다면, 각각의 확률은 9/24, 8/24, 6/24, 1/24임. 응답인원 150명을 각 확률에 곱해보면,
+
+```{r, echo = FALSE}
+prob <- c(9, 8, 6, 1) / 24
+Expected <- 150 * prob
+names(Expected) <- c("0", "1", "2", "4")
+pander(t(as.matrix(round(Expected))))
+```
+
+```{r, chisquare goodness of fit test, echo = FALSE}
+pander(chisq.test(table(matching.score), p = c(9, 8, 6, 1)/24, simulate.p.value = TRUE, B = 2000))
+```
+
+#### Framing Effects
+
+##### 인플레이션과 일자리 정책 패키지
+
+![](../pics/Quiz170522_Q3_Red.png)
+
+![](../pics/Quiz170522_Q3_Black.png)
+
+실업률이 10%인 것과 취업률이 90%인 것이 동등함에도 불구하고, 실업률과 인플레가 나오면 실업률이 낮아지는 정책을 선호하고 취업률과 인플레가 나오면 인플레가 낮아지는 정책을 선호함에 유의.
+
+```{r, Framing Effect, echo = FALSE}
+tbl.q3 <- table(quiz0522$group, quiz0522$Q3.2, exclude = NULL)
+rownames(tbl.q3) <- c("Red(실업률 관점)", "Black(취업률 관점)")
+kable(tbl.q3[1:2, ], caption = "Framing Effect")
+```
+
+##### % 비교.  
+
+```{r, Framing effects in percentage, echo = FALSE}
+tbl.q3.p.a <- addmargins(round(prop.table(tbl.q3[1:2, -3], margin = 1)*100, digits = 1))[1:2, ]
+colnames(tbl.q3.p.a)[3] <- "계"
+kable(tbl.q3.p.a)
+```
+
+#### 화폐 착각
+
+##### 인플레이션과 임금인상
+
+![](../pics/Quiz170522_Q4_Red.png)
+
+![](../pics/Quiz170522_Q4_Black.png)
+
+인플레 없이 7%를 삭감하는 것과 12% 인플레 상황에서 5%임금 인상은 동등한 조건인데도 '임금인상'이라는 말에 '수용가능하다'는 응답 비율이 늘어남에 유의.
+
+```{r, Money illusion, echo = FALSE}
+tbl.q4 <- table(quiz0522$group, quiz0522$Q4.2, exclude = NULL)
+rownames(tbl.q4) <- c("Red(인플레0%, 임금삭감7%)", "Black(인플레12%, 임금인상5%)")
+kable(tbl.q4[1:2, ], caption = "화폐 착각")
+```
+
+##### % 비교.  
+
+```{r, Money illusion in percentage, echo = FALSE}
+tbl.q4.p.a <- addmargins(round(prop.table(tbl.q4[1:2, -3], margin = 1)*100, digits = 1))[1:2, ]
+colnames(tbl.q4.p.a)[3] <- "계"
+kable(tbl.q4.p.a)
+```
+
+```{r, save, echo = FALSE}
+#save.image("../R/quiz0522.rda")
+```
