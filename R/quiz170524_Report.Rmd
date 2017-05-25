@@ -49,6 +49,8 @@ quiz0524$Q5 <- factor(quiz0524$Q5, levels = c("가", "나", "다", "라", "마",
 
 #### 전직 대통령 호감도
 
+![](../pics/Quiz170524_Q1.png)
+
 ##### 빈도
 
 ```{r, democratic and elite, echo = FALSE}
@@ -68,6 +70,8 @@ pander(round(prop.table(Q1.tbl.am, margin = 1)[3, ]*100, digits = 1))
 
 #### 취임 후 5대 조치 선호도
 
+![](../pics/Quiz170524_Q2.png)
+
 ##### 빈도(집계표)
 
 ```{r, chinese and hangeul, echo = FALSE}
@@ -86,11 +90,12 @@ pander(round(prop.table(Q2.tbl.am, margin = 1)[3, ]*100, digits = 1))
 
 #### 업무수행 만족도
 
+![](../pics/Quiz170524_Q3.png)
+
 ##### 빈도(집계표)
 
 ```{r, hard ones, echo = FALSE}
 Q3.tbl.a <- addmargins(table(quiz0524$group, quiz0524$Q3, useNA = "ifany"))
-Q3.tbl.a
 colnames(Q3.tbl.a)[6:7] <- c("결석", "계")
 rownames(Q3.tbl.a)[3] <- "계"
 pander(Q3.tbl.a)
@@ -107,7 +112,19 @@ pander(round(prop.table(Q3.tbl.am, margin = 1)[3, ]*100, digits = 1))
 
 #### 질문지 답 문항 순서의 영향
 
-##### 정당의석수 순(Red)으로 묻거나, 역순(Black)으로 묻는 데 따라 응답이 달라질 것으로 기대하였으나 ...
+##### Red
+
+![](../pics/Quiz170524_Q4_Red.png)
+
+##### Black
+
+![](../pics/Quiz170524_Q4_Black.png)
+
+
+정당의석수 순(Red)으로 묻거나, 역순(Black)으로 묻는 데 따라 응답이 달라질 것으로 기대하였으나 
+
+##### 빈도
+
 
 ```{r, party, echo = FALSE}
 tbl.e <- table(quiz0524$group, quiz0524$Q4.2, exclude = NULL)
@@ -131,9 +148,11 @@ pander(round(prop.table(Q4.tbl.am, margin = 1)[3, ]*100, digits = 1))
 
 #### 19대 대선 투표
 
+![](../pics/Quiz170524_Q5.png)
+
 ##### 빈도(집계표)
 
-```{r, echo = FALSE}
+```{r, presidential elelction, echo = FALSE}
 Q5.tbl.a <- addmargins(table(quiz0524$group, quiz0524$Q5, exclude = NULL))
 colnames(Q5.tbl.a)[7:8] <- c("결석", "계")
 rownames(Q5.tbl.a)[3] <- "계"
@@ -142,7 +161,7 @@ pander(Q5.tbl.a)
 
 ##### 백분율(%)
 
-```{r, echo = FALSE}
+```{r, presidential election percentage, echo = FALSE}
 Q5.tbl.am <- addmargins(table(quiz0524$group, quiz0524$Q5), margin = 1)
 pander(round(prop.table(Q5.tbl.am, margin = 1)[3, ]*100, digits = 2))
 ```
