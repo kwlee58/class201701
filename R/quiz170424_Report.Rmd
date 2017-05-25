@@ -54,18 +54,18 @@ pander(summary(quiz0424))
 ##### 대공황. 대번영, 대침체
 
 ```{r, times, echo = FALSE}
-tbl.q1 <- table(quiz0424$group, quiz0424$Q1, useNA = "always")
+tbl.q1 <- table(quiz0424$group, quiz0424$Q1, exclude = NULL)
 Q1.tbl.am <- addmargins(tbl.q1, margin = 1)
 colnames(Q1.tbl.am)[5] <- "결석"
-rownames(Q1.tbl.am)[4] <- "계"
-pander(Q1.tbl.am[-3, ])
+rownames(Q1.tbl.am)[3] <- "계"
+pander(Q1.tbl.am)
 pander(chisq.test(tbl.q1[-3, ]))
 ```
 
 ##### 대공황. 대번영, 대침체(%)
 
 ```{r,times in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
+pander(round(prop.table(Q1.tbl.am, margin = 1)[3, ]*100, digits = 1))
 ```
 
 #### Wilkinson
@@ -75,14 +75,14 @@ pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
 ```{r, inequality, echo = FALSE}
 Q2.tbl.am <- addmargins(table(quiz0424$group, quiz0424$Q2, exclude = NULL), margin = 1)
 colnames(Q2.tbl.am)[5] <- "결석"
-rownames(Q2.tbl.am)[4] <- "계"
-pander(Q2.tbl.am[-3, ])
+rownames(Q2.tbl.am)[3] <- "계"
+pander(Q2.tbl.am)
 ```
 
 ##### 소득불평등과 건강 및 사회문제 지표 (%)
 
 ```{r, inequality in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
+pander(round(prop.table(Q2.tbl.am, margin = 1)[3, ] * 100, digits = 1))
 ```
 
 #### 1944년 미국의 최고소득세율
@@ -93,15 +93,15 @@ pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
 tbl.q3 <- table(quiz0424$group, quiz0424$Q3, exclude = NULL)
 Q3.tbl.am <- addmargins(tbl.q3, margin = 1)
 colnames(Q3.tbl.am)[6] <- "결석"
-rownames(Q3.tbl.am)[4] <- "계"
-pander(Q3.tbl.am[-3, ])
+rownames(Q3.tbl.am)[3] <- "계"
+pander(Q3.tbl.am)
 pander(chisq.test(tbl.q3[-3, ]))
 ```
 
 ##### 최고소득세율 94% (%)
 
 ```{r, MTRE in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
+pander(round(prop.table(Q3.tbl.am, margin = 1)[3,]*100, digits = 1))
 ```
 
 ### Prospect Theory
@@ -114,9 +114,8 @@ pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
 Q4.tbl.e <- table(quiz0424$group, quiz0424$Q4, exclude = NULL)
 Q4.tbl.am <- addmargins(Q4.tbl.e, margin = 1)
 colnames(Q4.tbl.am)[3] <- "결석"
-rownames(Q4.tbl.am)[4] <- "계"
-pander(Q4.tbl.am[-3, ])
-# kable(table(quiz0424$group, quiz0424$Q4, exclude = NULL), caption = "손실회피심리")
+rownames(Q4.tbl.am)[3] <- "계"
+pander(Q4.tbl.am)
 ```
 
 ##### % 비교.  
@@ -124,8 +123,6 @@ pander(Q4.tbl.am[-3, ])
 ```{r, prospect theory  in percentage, echo = FALSE}
 Q4.tbl <- table(quiz0424$group, quiz0424$Q4)
 pander(round(prop.table(Q4.tbl, margin = 1)*100, digits = 1))
-# merge.tbl <- table(quiz0424$group, quiz0424$Q4)
-# kable(round(prop.table(merge.tbl, margin = 1)*100, digits = 1))
 ```
 
 ```{r, save, echo = FALSE}

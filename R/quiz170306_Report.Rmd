@@ -63,7 +63,7 @@ cbind(quiz0306$group[na.group], quiz0306$group.roll[na.group])
 # pander(addmargins(table(quiz0306$group, quiz0306$Q1, exclude = NULL), margin=1), caption="춘추시대 국가통계관리")
 Q1.tbl.am <- addmargins(table(quiz0306$group, quiz0306$Q1, exclude = NULL), margin = 1)
 colnames(Q1.tbl.am)[6] <- "결석"
-rownames(Q1.tbl.am)[4] <- "계"
+rownames(Q1.tbl.am)[3] <- "계"
 pander(Q1.tbl.am[-3, ])
 # pander(addmargins(table(quiz0306$group, quiz0306$Q1, exclude = NULL), margin=1))
 ```
@@ -71,7 +71,7 @@ pander(Q1.tbl.am[-3, ])
 ##### 관자(%)
 
 ```{r, Kwanzi in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 2))
+pander(round(prop.table(Q1.tbl.am, margin = 1)[3, ]*100, digits = 2))
 # pander(round(prop.table(addmargins(table(quiz0306$group, quiz0306$Q1, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1))
 ```
 
@@ -84,7 +84,7 @@ pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 2))
 # pander(addmargins(table(quiz0306$group, quiz0306$Q2, exclude = NULL), margin=1), caption="통계의 역할")
 Q2.tbl.am <- addmargins(table(quiz0306$group, quiz0306$Q2, exclude = NULL), margin = 1)
 colnames(Q2.tbl.am)[6] <- "결석"
-rownames(Q2.tbl.am)[4] <- "계"
+rownames(Q2.tbl.am)[3] <- "계"
 pander(Q2.tbl.am[-3, ])
 # pander(addmargins(table(quiz0306$group, quiz0306$Q2, exclude = NULL), margin=1))
 ```
@@ -92,7 +92,7 @@ pander(Q2.tbl.am[-3, ])
 ##### 통계의 중요성(%)
 
 ```{r, state arithmetic in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4, ]*100, digits = 2))
+pander(round(prop.table(Q2.tbl.am, margin = 1)[3, ]*100, digits = 2))
 # pander(round(prop.table(addmargins(table(quiz0306$group, quiz0306$Q2, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="통계의 역할")
 ```
 
@@ -103,7 +103,7 @@ pander(round(prop.table(Q2.tbl.am, margin = 1)[4, ]*100, digits = 2))
 ```{r, labour force, echo = FALSE}
 Q3.tbl.am <- addmargins(table(quiz0306$group, quiz0306$Q3, exclude = NULL), margin = 1)
 colnames(Q3.tbl.am)[5] <- "결석"
-rownames(Q3.tbl.am)[4] <- "계"
+rownames(Q3.tbl.am)[3] <- "계"
 pander(Q3.tbl.am[-3, ])
 # pander(table(quiz0306$group, quiz0306$Q3, exclude = NULL), caption="생산가능인구 감소")
 # pander(addmargins(table(quiz0306$group, quiz0306$Q3, exclude = NULL), margin=1), caption="생산가능인구 감소")
@@ -113,7 +113,7 @@ pander(Q3.tbl.am[-3, ])
 ##### 생산가능인구 감소 시기(%)
 
 ```{r, labour force in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin = 1)[4, ]*100, digits = 2))
+pander(round(prop.table(Q3.tbl.am, margin = 1)[3, ]*100, digits = 2))
 # pander(round(prop.table(addmargins(table(quiz0306$group, quiz0306$Q3, exclude = NULL), margin=1), margin=1)[4,]*100, digits=1), caption="생산가능인구 감소")
 ```
 

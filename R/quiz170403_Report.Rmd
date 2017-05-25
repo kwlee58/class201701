@@ -48,14 +48,14 @@ pander(summary(quiz0403))
 ```{r, fairness, echo = FALSE}
 Q1.tbl.am <- addmargins(table(quiz0403$group, quiz0403$Q1, exclude = NULL), margin = 1)
 colnames(Q1.tbl.am)[6] <- "결석"
-rownames(Q1.tbl.am)[4] <- "계"
-pander(Q1.tbl.am[-3, ], caption = "통계학의 기본원리")
+rownames(Q1.tbl.am)[3] <- "계"
+pander(Q1.tbl.am, caption = "통계학의 기본원리")
 ```
 
 ##### 공평하게 추출하면 ... (%)
 
 ```{r, fairness in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
+pander(round(prop.table(Q1.tbl.am, margin = 1)[3, ]*100, digits = 1))
 ```
 
 #### 리터러리 다이제스트의 실패
@@ -65,14 +65,14 @@ pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
 ```{r, Selection Bias, echo = FALSE}
 Q2.tbl.am <- addmargins(table(quiz0403$group, quiz0403$Q2, exclude = NULL), margin = 1)
 colnames(Q2.tbl.am)[6] <- "결석"
-rownames(Q2.tbl.am)[4] <- "계"
-pander(Q2.tbl.am[-3, ])
+rownames(Q2.tbl.am)[3] <- "계"
+pander(Q2.tbl.am)
 ```
 
 ##### Selection Bias (%)
 
 ```{r, Selection Bias in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1), caption = "리터러리 다이제스트의 실패원인?")
+pander(round(prop.table(Q2.tbl.am, margin = 1)[3,]*100, digits=1), caption = "리터러리 다이제스트의 실패원인?")
 ```
 
 #### 1948년, 여론조사가 듀이를 당선시킨 해
@@ -82,14 +82,14 @@ pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1), caption = "�
 ```{r, quota sampling, echo = FALSE}
 Q3.tbl.am <- addmargins(table(quiz0403$group, quiz0403$Q3, exclude = NULL), margin = 1)
 colnames(Q3.tbl.am)[6] <- "결석"
-rownames(Q3.tbl.am)[4] <- "계"
-pander(Q3.tbl.am[-3, ], caption = "여론조사가 듀이를 당선시키다")
+rownames(Q3.tbl.am)[3] <- "계"
+pander(Q3.tbl.am, caption = "여론조사가 듀이를 당선시키다")
 ```
 
 ##### 할당법의 문제점(%)
 
 ```{r, quota sampling in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin=1)[4,]*100, digits = 1), caption = "문해력이 낮으면?")
+pander(round(prop.table(Q3.tbl.am, margin=1)[3, ]*100, digits = 1), caption = "문해력이 낮으면?")
 ```
 
 ### 반문연대  단일화 지지여부 파악
@@ -101,8 +101,8 @@ pander(round(prop.table(Q3.tbl.am, margin=1)[4,]*100, digits = 1), caption = "�
 ```{r, vote attitude, echo = FALSE}
 poll.tbl.e <- addmargins(table(quiz0403$group, quiz0403$Q4.2, exclude = NULL), margin = 1)
 colnames(poll.tbl.e)[4] <- "결석"
-rownames(poll.tbl.e)[4] <- "계"
-pander(poll.tbl.e[-3, ], caption = "단일화지지도")
+rownames(poll.tbl.e)[3] <- "계"
+pander(poll.tbl.e, caption = "단일화지지도")
 ```
 
 ##### % 비교.  

@@ -78,15 +78,15 @@ pander(Q3_4.tbl.am)
 q1.tbl <- table(quiz0426$group, quiz0426$Q1)
 Q1.tbl.am <- addmargins(table(quiz0426$group, quiz0426$Q1, exclude = NULL), margin = 1)
 colnames(Q1.tbl.am)[5] <- "결석"
-rownames(Q1.tbl.am)[4] <- "계"
-pander(Q1.tbl.am[-3, ])
+rownames(Q1.tbl.am)[3] <- "계"
+pander(Q1.tbl.am)
 pander(chisq.test(q1.tbl))
 ```
 
 ##### 황금기와 침체기(%)
 
 ```{r, book of change in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
+pander(round(prop.table(Q1.tbl.am, margin = 1)[3, ]*100, digits = 1))
 ```
 
 #### 생산성과 임금
@@ -99,15 +99,15 @@ pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
 q2.tbl <- table(quiz0426$group, quiz0426$Q2)
 Q2.tbl.am <- addmargins(table(quiz0426$group, quiz0426$Q2, exclude = NULL), margin = 1)
 colnames(Q2.tbl.am)[5] <- "결석"
-rownames(Q2.tbl.am)[4] <- "계"
-pander(Q2.tbl.am[-3, ])
+rownames(Q2.tbl.am)[3] <- "계"
+pander(Q2.tbl.am)
 pander(chisq.test(q2.tbl))
 ```
 
 ##### 황금기와 신자유주의 시기 (%)
 
 ```{r, opposite in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
+pander(round(prop.table(Q2.tbl.am, margin = 1)[3, ] * 100, digits = 1))
 ```
 
 #### 생산성과 평균 및 중위 임금
@@ -120,15 +120,15 @@ pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
 q3.tbl <- table(quiz0426$group, quiz0426$Q3)
 Q3.tbl.am <- addmargins(table(quiz0426$group, quiz0426$Q3, exclude = NULL), margin = 1)
 colnames(Q3.tbl.am)[5] <- "결석"
-rownames(Q3.tbl.am)[4] <- "계"
-pander(Q3.tbl.am[-3, ])
+rownames(Q3.tbl.am)[3] <- "계"
+pander(Q3.tbl.am)
 pander(chisq.test(q3.tbl))
 ```
 
 ##### 소득격차 (%)
 
 ```{r, MTRE in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
+pander(round(prop.table(Q3.tbl.am, margin = 1)[3, ] * 100, digits = 1))
 ```
 
 ### 대선 후보 지지도 질문 순서 효과
@@ -144,8 +144,8 @@ pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
 Q4.tbl.e <- table(quiz0426$group, quiz0426$Q4.2, exclude = NULL)
 Q4.tbl.am <- addmargins(Q4.tbl.e, margin = 1)
 colnames(Q4.tbl.am)[9] <- "결석"
-rownames(Q4.tbl.am)[4] <- "계"
-pander(Q4.tbl.am[-3, ])
+rownames(Q4.tbl.am)[3] <- "계"
+pander(Q4.tbl.am)
 ```
 
 ##### % 비교.  

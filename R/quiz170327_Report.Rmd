@@ -52,14 +52,14 @@ pander(summary(quiz0327))
 ```{r, reader rate, echo = FALSE}
 Q1.tbl.am <- addmargins(table(quiz0327$group, quiz0327$Q1, exclude = NULL), margin = 1)
 colnames(Q1.tbl.am)[6] <- "결석"
-rownames(Q1.tbl.am)[4] <- "계"
-pander(Q1.tbl.am[-3, ], caption = "독서율")
+rownames(Q1.tbl.am)[3] <- "계"
+pander(Q1.tbl.am, caption = "독서율")
 ```
 
 ##### 독서율(%)
 
 ```{r, reader rate in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4,]*100, digits = 1))
+pander(round(prop.table(Q1.tbl.am, margin = 1)[3,]*100, digits = 1))
 ```
 
 #### 20대와 50대 독서율 격차
@@ -69,14 +69,14 @@ pander(round(prop.table(Q1.tbl.am, margin = 1)[4,]*100, digits = 1))
 ```{r, reader rates 20 years olds, echo = FALSE}
 Q2.tbl.am <- addmargins(table(quiz0327$group, quiz0327$Q2, exclude = NULL), margin = 1)
 colnames(Q2.tbl.am)[7] <- "결석"
-rownames(Q2.tbl.am)[4] <- "계"
-pander(Q2.tbl.am[-3, ], caption = "20대의 독서율?")
+rownames(Q2.tbl.am)[3] <- "계"
+pander(Q2.tbl.am, caption = "20대의 독서율?")
 ```
 
 ##### 20대의 독서율(%)
 
 ```{r, reader rates 20 years olds in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits = 1))
+pander(round(prop.table(Q2.tbl.am, margin = 1)[3,]*100, digits = 1))
 ```
 
 ##### 50대의 독서율
@@ -84,14 +84,14 @@ pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits = 1))
 ```{r, reader rates 50 years olds, echo = FALSE}
 Q3.tbl.am <- addmargins(table(quiz0327$group, quiz0327$Q3, exclude = NULL), margin = 1)
 colnames(Q3.tbl.am)[7] <- "결석"
-rownames(Q3.tbl.am)[4] <- "계"
-pander(Q3.tbl.am[-3, ], "50대의 독서율?")
+rownames(Q3.tbl.am)[3] <- "계"
+pander(Q3.tbl.am, "50대의 독서율?")
 ```
 
 ##### 50대의 독서율(%)
 
 ```{r, reader rates 50 years olds in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin=1)[4,]*100, digits = 1))
+pander(round(prop.table(Q3.tbl.am, margin=1)[3,]*100, digits = 1))
 ```
 
 ### 박근혜 전 대통령 구속수사 의견
@@ -103,8 +103,8 @@ pander(round(prop.table(Q3.tbl.am, margin=1)[4,]*100, digits = 1))
 ```{r, vote attitude, echo = FALSE}
 poll.tbl.e <- addmargins(table(quiz0327$group, quiz0327$Q4.2, exclude = NULL), margin = 1)
 colnames(poll.tbl.e)[7] <- "결석"
-rownames(poll.tbl.e)[4] <- "계"
-pander(poll.tbl.e[-3, ], caption = "박근혜 구속수사")
+rownames(poll.tbl.e)[3] <- "계"
+pander(poll.tbl.e, caption = "박근혜 구속수사")
 ```
 
 ##### % 비교.  

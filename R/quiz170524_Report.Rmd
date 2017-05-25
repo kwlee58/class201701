@@ -1,0 +1,153 @@
+---
+title: "Quiz 170524"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# install.packages("pander", repos = "https://cran.rstudio.com")
+# install.packages("xlsx", repos = "https://cran.rstudio.com")
+library(xlsx)
+library(pander)
+library(knitr)
+panderOptions('table.split.table', Inf)
+panderOptions('table.alignment.rownames', 'left')
+panderOptions('table.alignment.default', 'right')
+options(width=180)
+```
+
+```{r, data, echo = FALSE, results = 'hide'}
+quiz0524 <- read.xlsx("../data/quiz170524.xlsx", 1, startRow = 2, endRow = 161, colIndex = c(3:7, 9:15), colClasses=c(rep("character", 12)), stringsAsFactors = FALSE)
+str(quiz0524)
+names(quiz0524) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "Q5", "group")
+quiz0524$dept <- factor(quiz0524$dept)
+quiz0524$year <- factor(quiz0524$year)
+quiz0524$group <- factor(quiz0524$group, levels = c("Red", "Black"))
+quiz0524$Q1 <- factor(quiz0524$Q1, levels = c("가", "나", "다", "라", "마", "바", "사"), labels = c("박정희", "김영삼", "김대중", "노무현", "이명박", "박근혜", "없음/기타"))
+quiz0524$Q2 <- factor(quiz0524$Q2, levels = c("가", "나", "다", "라", "마", "바"), labels = c("일자리위원회", "임을위한행진곡", "화력발전중단", "세월호교사순직", "돈봉투만찬감찰", "모름/기타"))
+quiz0524$Q3 <- factor(quiz0524$Q3, levels = c("가", "나", "다", "라", "마"), labels = c("매우 잘함", "다소 잘함", "다소 못함", "매우 잘못함", "모름/기타"))
+str(quiz0524)
+```
+
+
+```{r, Q4 reassignment, echo = FALSE, results = 'hide'}
+quiz0524$Q4 <- factor(quiz0524$Q4, levels = c("가", "나", "다", "라", "마", "바", "사", "아"))
+quiz0524$Q4.2 <- quiz0524$Q4
+levels(quiz0524$Q4.2[quiz0524$group == "Black"]) <- c("마", "라", "다", "나", "가", "바", "사", "아")
+levels(quiz0524$Q4.2) <- c("더불어민주당", "자유한국당", "국민의당", "바른정당", "정의당", "기타정당", "없음", "모름/기타")
+str(quiz0524)
+```
+
+```{r, Q5, echo = FALSE, results = 'hide'}
+quiz0524$Q5 <- factor(quiz0524$Q5, levels = c("가", "나", "다", "라", "마", "바"), labels = c("문재인", "홍준표", "안철수", "유승민", "심상정", "투표못함/기타"))
+```
+
+
+### 퀴즈 응답 비교
+
+#### 전직 대통령 호감도
+
+##### 빈도
+
+```{r, democratic and elite, echo = FALSE}
+Q1.tbl.a <- addmargins(table(quiz0524$group, quiz0524$Q1, useNA = "ifany"))
+colnames(Q1.tbl.a)[8:9] <- c("결석", "계")
+rownames(Q1.tbl.a)[3] <- "계"
+pander(Q1.tbl.a)
+```
+
+##### 백분율(%)
+
+```{r, democratic and elite in percentage, echo = FALSE}
+Q1.tbl.am <- addmargins(table(quiz0524$group, quiz0524$Q1), margin = 1)
+# sum(prop.table(Q1.tbl.am, margin = 1)[3, ]*100)
+pander(round(prop.table(Q1.tbl.am, margin = 1)[3, ]*100, digits = 1))
+```
+
+#### 취임 후 5대 조치 선호도
+
+##### 빈도(집계표)
+
+```{r, chinese and hangeul, echo = FALSE}
+Q2.tbl.a <- addmargins(table(quiz0524$group, quiz0524$Q2, useNA = "ifany"))
+colnames(Q2.tbl.a)[7:8] <- c("결석", "계")
+rownames(Q2.tbl.a)[3] <- "계"
+pander(Q2.tbl.a)
+```
+
+##### 백분율(%)
+
+```{r, chinese and hangeul in percentage, echo = FALSE}
+Q2.tbl.am <- addmargins(table(quiz0524$group, quiz0524$Q2), margin = 1)
+pander(round(prop.table(Q2.tbl.am, margin = 1)[3, ]*100, digits = 1))
+```
+
+#### 업무수행 만족도
+
+##### 빈도(집계표)
+
+```{r, hard ones, echo = FALSE}
+Q3.tbl.a <- addmargins(table(quiz0524$group, quiz0524$Q3, useNA = "ifany"))
+Q3.tbl.a
+colnames(Q3.tbl.a)[6:7] <- c("결석", "계")
+rownames(Q3.tbl.a)[3] <- "계"
+pander(Q3.tbl.a)
+```
+
+##### 백분율(%)
+
+```{r, hard ones in percentage, echo = FALSE}
+Q3.tbl.am <- addmargins(table(quiz0524$group, quiz0524$Q3), margin = 1)
+pander(round(prop.table(Q3.tbl.am, margin = 1)[3, ]*100, digits = 1))
+```
+
+### 정당지지도
+
+#### 질문지 답 문항 순서의 영향
+
+##### 정당의석수 순(Red)으로 묻거나, 역순(Black)으로 묻는 데 따라 응답이 달라질 것으로 기대하였으나 ...
+
+```{r, party, echo = FALSE}
+tbl.e <- table(quiz0524$group, quiz0524$Q4.2, exclude = NULL)
+colnames(tbl.e)[9] <- "결석"
+pander(tbl.e, caption ="정당 지지도")
+```
+
+##### % 비교.  
+
+```{r, iparty in percentage, echo = FALSE}
+tbl <- table(quiz0524$group, quiz0524$Q4.2)
+pander(round(prop.table(tbl, margin = 1)*100, digits = 1))
+```
+
+##### 합(%)
+
+```{r, echo = FALSE}
+Q4.tbl.am <- addmargins(table(quiz0524$group, quiz0524$Q4.2), margin = 1)
+pander(round(prop.table(Q4.tbl.am, margin = 1)[3, ]*100, digits = 1))
+```
+
+#### 19대 대선 투표
+
+##### 빈도(집계표)
+
+```{r, echo = FALSE}
+Q5.tbl.a <- addmargins(table(quiz0524$group, quiz0524$Q5, exclude = NULL))
+colnames(Q5.tbl.a)[7:8] <- c("결석", "계")
+rownames(Q5.tbl.a)[3] <- "계"
+pander(Q5.tbl.a)
+```
+
+##### 백분율(%)
+
+```{r, echo = FALSE}
+Q5.tbl.am <- addmargins(table(quiz0524$group, quiz0524$Q5), margin = 1)
+pander(round(prop.table(Q5.tbl.am, margin = 1)[3, ]*100, digits = 2))
+```
+
+
+```{r, save, echo = FALSE}
+#save.image("../R/quiz0524.RData")
+```

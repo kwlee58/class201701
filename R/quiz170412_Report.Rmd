@@ -51,11 +51,11 @@ pander(summary(quiz0412))
 ##### 나의 판단
 
 ```{r, income concentration, echo = FALSE}
-tbl.q3 <- table(quiz0412$group, quiz0412$Q1, useNA = "always")
+tbl.q3 <- table(quiz0412$group, quiz0412$Q1, exclude = NULL)
 Q1.tbl.am <- addmargins(tbl.q3, margin = 1)
 colnames(Q1.tbl.am)[6] <- "결석"
-rownames(Q1.tbl.am)[4] <- "계"
-pander(Q1.tbl.am[-3, ])
+rownames(Q1.tbl.am)[3] <- "계"
+pander(Q1.tbl.am)
 pander(chisq.test(tbl.q3[-3, ]))
 
 ```
@@ -63,7 +63,7 @@ pander(chisq.test(tbl.q3[-3, ]))
 ##### 나의 판단 (%)
 
 ```{r, income concentration in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
+pander(round(prop.table(Q1.tbl.am, margin = 1)[3, ]*100, digits = 1))
 ```
 
 #### 소득 상위 10%의 소득점유율
@@ -74,15 +74,15 @@ pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
 tbl.q2 <- table(quiz0412$group, quiz0412$Q2, exclude = NULL)
 Q2.tbl.am <- addmargins(tbl.q2, margin = 1)
 colnames(Q2.tbl.am)[6] <- "결석"
-rownames(Q2.tbl.am)[4] <- "계"
-pander(Q2.tbl.am[-3, ])
+rownames(Q2.tbl.am)[3] <- "계"
+pander(Q2.tbl.am)
 pander(chisq.test(tbl.q2[-3, ]))
 ```
 
 ##### 적정 수준 (%)
 
 ```{r, your judgement in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
+pander(round(prop.table(Q2.tbl.am, margin = 1)[3, ] * 100, digits = 1))
 ```
 
 #### OECD 국가 지니계수 개선도
@@ -93,15 +93,15 @@ pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
 tbl.q3 <- table(quiz0412$group, quiz0412$Q3, exclude = NULL)
 Q3.tbl.am <- addmargins(tbl.q3, margin = 1)
 colnames(Q3.tbl.am)[6] <- "결석"
-rownames(Q3.tbl.am)[4] <- "계"
-pander(Q3.tbl.am[-3, ])
+rownames(Q3.tbl.am)[3] <- "계"
+pander(Q3.tbl.am)
 pander(chisq.test(tbl.q3[-3, ]))
 ```
 
 ##### 가장 낮은 나라 (%)
 
 ```{r, gini coefficient improvement in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
+pander(round(prop.table(Q3.tbl.am, margin = 1)[3, ] * 100, digits = 1))
 ```
 
 ### 내가 살고 싶은 세상
@@ -114,8 +114,8 @@ pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
 Q4.tbl.e <- table(quiz0412$group, quiz0412$Q4.2, exclude = NULL)
 Q4.tbl.am <- addmargins(Q4.tbl.e, margin = 1)
 colnames(Q4.tbl.am)[3] <- "결석"
-rownames(Q4.tbl.am)[4] <- "계"
-pander(Q4.tbl.am[-3, ])
+rownames(Q4.tbl.am)[3] <- "계"
+pander(Q4.tbl.am)
 ```
 
 ##### % 비교.  

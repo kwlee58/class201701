@@ -47,14 +47,14 @@ pander(summary(quiz0503))
 ```{r, productivity vs wage, echo = FALSE}
 Q1.tbl.am <- addmargins(table(quiz0503$group, quiz0503$Q1, exclude = NULL), margin = 1)
 colnames(Q1.tbl.am)[5] <- "결석"
-rownames(Q1.tbl.am)[4] <- "계"
-pander(Q1.tbl.am[-3, ])
+rownames(Q1.tbl.am)[3] <- "계"
+pander(Q1.tbl.am)
 ```
 
 ##### 평균임금과 중위 임금 (%)
 
 ```{r, productivity vs wage in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
+pander(round(prop.table(Q1.tbl.am, margin = 1)[3, ]*100, digits = 1))
 ```
 
 #### LM3
@@ -67,15 +67,15 @@ pander(round(prop.table(Q1.tbl.am, margin = 1)[4, ]*100, digits = 1))
 tbl.q2 <- table(quiz0503$group, quiz0503$Q2, useNA = "always")
 Q2.tbl.am <- addmargins(tbl.q2, margin = 1)
 colnames(Q2.tbl.am)[5] <- "결석"
-rownames(Q2.tbl.am)[4] <- "계"
-pander(Q2.tbl.am[-3, ])
+rownames(Q2.tbl.am)[3] <- "계"
+pander(Q2.tbl.am)
 pander(chisq.test(tbl.q2[-3, ]))
 ```
 
 ##### 
 
 ```{r, LM3 in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
+pander(round(prop.table(Q2.tbl.am, margin = 1)[3, ] * 100, digits = 1))
 ```
 
 #### 식량자급률
@@ -87,14 +87,14 @@ pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1))
 ```{r, MTR, echo = FALSE}
 Q3.tbl.am <- addmargins(table(quiz0503$group, quiz0503$Q3, exclude = NULL), margin = 1)
 colnames(Q3.tbl.am)[5] <- "결석"
-rownames(Q3.tbl.am)[4] <- "계"
-pander(Q3.tbl.am[-3, ])
+rownames(Q3.tbl.am)[3] <- "계"
+pander(Q3.tbl.am)
 ```
 
 ##### 우리나라 식량자급률 수준 (%)
 
 ```{r, MTRE in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
+pander(round(prop.table(Q3.tbl.am, margin = 1)[3, ] * 100, digits = 1))
 ```
 
 #### 국공립대 등록금 국제 비교
@@ -109,8 +109,8 @@ pander(round(prop.table(Q3.tbl.am, margin = 1)[4,]*100, digits = 1))
 ```{r, college tuition, echo = FALSE}
 Q4.tbl.am <- addmargins(table(quiz0503$group, quiz0503$Q4, exclude = NULL), margin = 1)
 colnames(Q4.tbl.am)[6] <- "결석"
-rownames(Q4.tbl.am)[4] <- "계"
-pander(Q4.tbl.am[-3, ])
+rownames(Q4.tbl.am)[3] <- "계"
+pander(Q4.tbl.am)
 ```
 
 ##### 국공립대 등록금의 적정 수준 (%)

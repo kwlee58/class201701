@@ -54,15 +54,16 @@ pander(summary(quiz0315))
 
 ```{r, National and Local tax, echo = FALSE}
 Q1.tbl.am <- addmargins(table(quiz0315$group, quiz0315$Q1, exclude = NULL), margin = 1)
+Q1.tbl.am
 colnames(Q1.tbl.am)[5] <- "결석"
-rownames(Q1.tbl.am)[4] <- "계"
+rownames(Q1.tbl.am)[3] <- "계"
 pander(Q1.tbl.am[-3, ])
 ```
 
 ##### 기본세율(%)
 
 ```{r, National and Local tax in percentage, echo = FALSE}
-pander(round(prop.table(Q1.tbl.am, margin=1)[4,]*100, digits=1))
+pander(round(prop.table(Q1.tbl.am, margin=1)[3,]*100, digits=1))
 ```
 
 #### 1423년 조선시대 호구와 인구
@@ -72,14 +73,14 @@ pander(round(prop.table(Q1.tbl.am, margin=1)[4,]*100, digits=1))
 ```{r, tax law and cabinets, echo = FALSE}
 Q2.tbl.am <- addmargins(table(quiz0315$group, quiz0315$Q2, exclude = NULL), margin = 1)
 colnames(Q2.tbl.am)[5] <- "결석"
-rownames(Q2.tbl.am)[4] <- "계"
+rownames(Q2.tbl.am)[3] <- "계"
 pander(Q2.tbl.am[-3, ])
 ```
 
 ##### 호구와 인구(%)
 
 ```{r, tax law and cabinets in percentage, echo = FALSE}
-pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1), caption="공법도입과 대신들")
+pander(round(prop.table(Q2.tbl.am, margin = 1)[3,]*100, digits=1), caption="공법도입과 대신들")
 ```
 
 #### 지방관료와 품관촌민
@@ -89,14 +90,14 @@ pander(round(prop.table(Q2.tbl.am, margin = 1)[4,]*100, digits=1), caption="공�
 ```{r, tax law and laymen, echo = FALSE}
 Q3.tbl.am <- addmargins(table(quiz0315$group, quiz0315$Q3, exclude = NULL), margin = 1)
 colnames(Q3.tbl.am)[7] <- "결석"
-rownames(Q3.tbl.am)[4] <- "계"
+rownames(Q3.tbl.am)[3] <- "계"
 pander(Q3.tbl.am[-3, ])
 ```
 
 ##### 찬반이 반대인 곳(%)
 
 ```{r, tax law and laymen in percentage, echo = FALSE}
-pander(round(prop.table(Q3.tbl.am, margin=1)[4,]*100, digits=1), caption="품관촌민들의 찬반")
+pander(round(prop.table(Q3.tbl.am, margin=1)[3,]*100, digits=1), caption="품관촌민들의 찬반")
 ```
 
 ### 탄핵 결정과 대선 후보 지지도
