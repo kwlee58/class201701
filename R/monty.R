@@ -1,4 +1,5 @@
-monty.hall <- function() {
+monty.hall <-
+function() {
   key <- sample(1:3, size = 1)
   goat <- setdiff(1:3, key)
   contestant <- sample(1:3, size = 1)
@@ -8,10 +9,8 @@ monty.hall <- function() {
   # result
   c("Key" = key, "Contestant" = contestant, "Monty" = monty, "Switch" = switch, "Result" = result)
 }
-monty.hall()
-replicate(30, monty.hall())
-N <- 50
-monty.plot <- function(N) {
+monty.plot <-
+function(N) {
 monty.result <- replicate(N, monty.hall())
 # monty.result
 # monty.result[5, ]
@@ -33,7 +32,8 @@ plot(x = 1:N,
      cex = 0.7)
 axis(side = 2, 
      at = c(0, 1/3, 2/3, 3/4), 
-     labels = c("0", "1/3", "2/3", "3/4"))
+     labels = c("0", "1/3", "2/3", "3/4"),
+     las = 2)
 points(x = 1:N, 
        y = y_lose / N, 
        pch = "x", 
@@ -48,16 +48,14 @@ legend("topleft",
        col = c("blue", "red")) 
 #       pt.bg = c("blue", "red"))
 # table(unlist(monty.result[5, ]))
-x.text <- N / 4 * 3
+x.text <- N / 3 * 2
 y.text <- 1/6
 text(x = x.text, y = y.text, 
-     labels = paste(sum(monty.result[5, ]), " wins,\n",
-                    N, " trials,\n",
+     labels = paste(N, " trials,\n",
+                    sum(monty.result[5, ]), " wins,\n",
                     format(sum(monty.result[5, ])/N * 100, digits = 3, nsmall = 1),
                     "% winning",
-                    sep = "" ))
+                    sep = "" ),
+     pos = 4)
 title(main = "Monty Hall Simulation")
 }
-monty.plot(30)
-monty.plot(100)
-dump(list = c("monty.hall", "monty.plot"), file = "./monty.R")
