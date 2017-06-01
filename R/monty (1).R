@@ -1,4 +1,5 @@
-monty.hall <- function() {
+monty.hall <-
+function() {
   key <- sample(1:3, size = 1)
   goat <- setdiff(1:3, key)
   contestant <- sample(1:3, size = 1)
@@ -8,11 +9,8 @@ monty.hall <- function() {
   # result
   c("Key" = key, "Contestant" = contestant, "Monty" = monty, "Switch" = switch, "Result" = result)
 }
-monty.hall()
-replicate(30, monty.hall())
-N <- 50
-# RdYlBu <- brewer.pal(3, "RdYlBu")
-monty.plot <- function(N) {
+monty.plot <-
+function(N) {
 monty.result <- replicate(N, monty.hall())
 # monty.result
 # monty.result[5, ]
@@ -25,7 +23,6 @@ y_lose
 plot(x = 1:N, 
      y = y_win / N, 
      pch = "o", 
-#     col = RdYlBu[3],
      col = "blue", 
 #     bg = "blue", 
      ylim = c(0, 4/5),
@@ -39,7 +36,6 @@ axis(side = 2,
 points(x = 1:N, 
        y = y_lose / N, 
        pch = "x", 
-#       col = RdYlBu[1],
        col = "red", 
 #       bg = "red", 
        cex = 0.7)
@@ -61,6 +57,3 @@ text(x = x.text, y = y.text,
                     sep = "" ))
 title(main = "Monty Hall Simulation")
 }
-monty.plot(30)
-monty.plot(100)
-dump(list = c("monty.hall", "monty.plot"), file = "./monty.R")

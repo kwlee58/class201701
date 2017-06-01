@@ -20,6 +20,7 @@ options(width=180)
 
 ```{r, data, echo = FALSE, results = 'hide'}
 quiz0524 <- read.xlsx("../data/quiz170524.xlsx", 1, startRow = 2, endRow = 161, colIndex = c(3:7, 9:15), colClasses=c(rep("character", 12)), stringsAsFactors = FALSE)
+# quiz0524 <- read.xlsx("../data/quiz170524.xlsx", sheet = 1, startRow = 2, rows = 2:161, cols = c(3:7, 9:15), colNames = FALSE)
 str(quiz0524)
 names(quiz0524) <- c("dept", "id", "name", "year", "e.mail", "cell.no", "Q1", "Q2", "Q3", "Q4", "Q5", "group")
 quiz0524$dept <- factor(quiz0524$dept)

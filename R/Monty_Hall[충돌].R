@@ -11,7 +11,6 @@ monty.hall <- function() {
 monty.hall()
 replicate(30, monty.hall())
 N <- 50
-# RdYlBu <- brewer.pal(3, "RdYlBu")
 monty.plot <- function(N) {
 monty.result <- replicate(N, monty.hall())
 # monty.result
@@ -25,7 +24,6 @@ y_lose
 plot(x = 1:N, 
      y = y_win / N, 
      pch = "o", 
-#     col = RdYlBu[3],
      col = "blue", 
 #     bg = "blue", 
      ylim = c(0, 4/5),
@@ -39,7 +37,6 @@ axis(side = 2,
 points(x = 1:N, 
        y = y_lose / N, 
        pch = "x", 
-#       col = RdYlBu[1],
        col = "red", 
 #       bg = "red", 
        cex = 0.7)
