@@ -1,0 +1,78 @@
+---
+title: "기초프로그래밍 R 최종"
+author: "금융정보통계학과 이기원교수"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(width=180)
+rm(list=ls())
+```
+
+```{r, presets, , message = FALSE, echo = FALSE}
+options(digits=3)
+library(knitr)
+library(pander)
+panderOptions("table.split.table", Inf)
+```
+
+
+<!--### Total Scores-->
+
+```{r, Total Scores, message = FALSE, echo = FALSE}
+load("./R_records_01.RData")
+total_01 <- total
+rm(list = setdiff(ls(), "total_01"))
+load("./R_records_02.RData")
+total_02 <- total
+rm(list = setdiff(ls(), c("total_01", "total_02")))
+total <- rbind(total_01, total_02)
+total.old <- total
+total <- total[, -(8:9)]
+total$Class <- factor(c(rep("class_01", nrow(total_01)), rep("class_02", nrow(total_02))),
+                      labels = c("01", "02"))
+N <- nrow(total)
+total$Ranks <- N + 1 - rank(total$Total)
+total$Grades <- ifelse(total$Ranks <= floor(N * 0.4), "A+", ifelse(total$Ranks <=  floor(N * 0.7), "B+", "C+"))
+B.idx <- which(total$Name %in% c("임일화", "최남혁"))
+D.idx <- which(total$Name %in% c("정수빈"))
+total$Grades[B.idx] <- "B+"
+total$Grades[D.idx] <- "D0"
+o.names <- order(total$Name)
+v.names.kr <- c("학번", "이름", "교실출석(20)", "중간고사(20)", "과제(40)", "팀 프로젝트(20)", "총점(100)", "분반", "순위(61명중)", "학점")
+total.kr <- total
+names(total.kr) <- v.names.kr
+total.old.kr <- total.old 
+names(total.old.kr) <- c(v.names.kr[1:7], "순위(분반)", "학점(분반)")
+kable(total.kr[o.names, ], row.names = FALSE)
+```
+
+<P style = "page-break-before:always">
+
+```{r, classes, message = FALSE, echo = FALSE}
+# kable(cbind(total.kr[o.names, c(1:2, 7:10)], total.old.kr[o.names, 8:9]), row.names = FALSE)
+```
+
+<!--
+<P style = "page-break-before:always">
+
+```{r, individual scores, echo = FALSE}
+my.grade <- function(name){
+  kable(total.kr[total$Name %in% name, -1], row.names = FALSE)
+}
+# my.grade(c("강민영", "홍효동"))
+# my.grade("서강현")
+# my.grade("조재경")
+```
+-->
+
+<!--### Save Data
+
+```{r Save Data, echo = FALSE}
+save.image(file = "../R/R_records.RData")
+```
+
+-->
+               

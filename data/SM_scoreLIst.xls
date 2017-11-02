@@ -1,0 +1,1296 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
+
+<script language=javascript>
+
+	var commonResultMessage = "null";
+	if(commonResultMessage=="" || commonResultMessage=="null") {
+		commonResultMessage = "null";
+	}
+	var localeKey = "ko";
+</script>
+ 
+
+<head>
+<title> Score_List_Save_file</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+
+<table width="99%" border="1"><tr> 
+	<td valign="top" style="padding:25 5 25 5;">
+    
+<!-- Body 시작 -->
+<form name="scoreForm" method="post" action="/Score.do">
+	<table border="0" cellspacing="0" cellpadding="0"><tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>
+			과목명&nbsp;:&nbsp;
+			통계적방법론및실습	
+		</td>
+	</tr></table><br/>
+  
+	<table border="1" cellspacing="0" cellpadding="0" >
+	<tr>
+		<td> 	NO </td>
+		<td>	이름	</td>
+		<td style="mso-number-format:'\@'">	학번	</td>		
+		
+			<td>	총점	</td>
+		
+		
+			
+				
+				
+				
+					<td>		중간고사		</td>
+				
+
+			
+				
+				
+				
+					<td>		과제		</td>
+				
+
+			
+				
+				
+				
+					<td>		프로젝트		</td>
+				
+
+			
+				
+				
+				
+					<td>		출석(오프라인)		</td>
+				
+
+			
+		
+	</tr>
+	
+				
+					
+		
+			<tr>
+				<td>		1									</td>
+				<td>		송호준		</td>
+				<td>		20093338			</td>
+				
+					
+					<td>		60.0			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		0.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		0.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		2									</td>
+				<td>		정수빈		</td>
+				<td>		20093365			</td>
+				
+					
+					<td>		10.0			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		0.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		0.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		0.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		10.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		3									</td>
+				<td>		권희민		</td>
+				<td>		20113403			</td>
+				
+					
+					<td>		88.3			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		17.6		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.7		</td>
+						
+						
+					
+						
+						
+						
+							<td>		14.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		4									</td>
+				<td>		유현재		</td>
+				<td>		20122224			</td>
+				
+					
+					<td>		94.4			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		18.2		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.2		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		5									</td>
+				<td>		금도영		</td>
+				<td>		20122807			</td>
+				
+					
+					<td>		90.8			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		14.6		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.2		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		6									</td>
+				<td>		정희원		</td>
+				<td>		20122928			</td>
+				
+					
+					<td>		89.0			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		12.8		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.2		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		7									</td>
+				<td>		윤홍찬		</td>
+				<td>		20123146			</td>
+				
+					
+					<td>		92.7			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		15.8		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.9		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		8									</td>
+				<td>		김남윤		</td>
+				<td>		20123405			</td>
+				
+					
+					<td>		94.2			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		17.6		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.6		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		9									</td>
+				<td>		김혁준		</td>
+				<td>		20123411			</td>
+				
+					
+					<td>		94.2			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		18.2		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		10									</td>
+				<td>		김종인		</td>
+				<td>		20133303			</td>
+				
+					
+					<td>		81.7			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		11.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.7		</td>
+						
+						
+					
+						
+						
+						
+							<td>		14.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		11									</td>
+				<td>		김승철		</td>
+				<td>		20133409			</td>
+				
+					
+					<td>		87.7			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		14.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.7		</td>
+						
+						
+					
+						
+						
+						
+							<td>		17.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		12									</td>
+				<td>		김영후		</td>
+				<td>		20133410			</td>
+				
+					
+					<td>		92.7			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		17.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		15.7		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		13									</td>
+				<td>		김현직		</td>
+				<td>		20133413			</td>
+				
+					
+					<td>		86.8			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		15.2		</td>
+						
+						
+					
+						
+						
+						
+							<td>		36.7		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.9		</td>
+						
+						
+					
+						
+						
+						
+							<td>		18.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		14									</td>
+				<td>		서지원		</td>
+				<td>		20133419			</td>
+				
+					
+					<td>		90.0			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		16.4		</td>
+						
+						
+					
+						
+						
+						
+							<td>		36.7		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.9		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		15									</td>
+				<td>		전강수		</td>
+				<td>		20133432			</td>
+				
+					
+					<td>		94.9			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		18.2		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.7		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		16									</td>
+				<td>		최승민		</td>
+				<td>		20133437			</td>
+				
+					
+					<td>		85.1			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		12.4		</td>
+						
+						
+					
+						
+						
+						
+							<td>		36.7		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		17									</td>
+				<td>		홍성범		</td>
+				<td>		20133439			</td>
+				
+					
+					<td>		78.7			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		13.4		</td>
+						
+						
+					
+						
+						
+						
+							<td>		33.3		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		18									</td>
+				<td>		장진규		</td>
+				<td>		20133927			</td>
+				
+					
+					<td>		88.8			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		12.8		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		19									</td>
+				<td>		김혜란		</td>
+				<td>		20143407			</td>
+				
+					
+					<td>		93.6			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		17.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.6		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		20									</td>
+				<td>		변아름		</td>
+				<td>		20147301			</td>
+				
+					
+					<td>		89.7			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		14.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		15.7		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		21									</td>
+				<td>		유희정		</td>
+				<td>		20147302			</td>
+				
+					
+					<td>		89.0			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		12.8		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.2		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		22									</td>
+				<td>		최남혁		</td>
+				<td>		20147303			</td>
+				
+					
+					<td>		85.9			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		17.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.9		</td>
+						
+						
+					
+						
+						
+						
+							<td>		12.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		23									</td>
+				<td>		홍효동		</td>
+				<td>		20147304			</td>
+				
+					
+					<td>		85.3			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		11.6		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		15.7		</td>
+						
+						
+					
+						
+						
+						
+							<td>		18.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		24									</td>
+				<td>		김선영		</td>
+				<td>		20153405			</td>
+				
+					
+					<td>		94.5			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		18.8		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		15.7		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		25									</td>
+				<td>		김지연		</td>
+				<td>		20153410			</td>
+				
+					
+					<td>		94.9			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		18.2		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.7		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		26									</td>
+				<td>		박인영		</td>
+				<td>		20153416			</td>
+				
+					
+					<td>		93.9			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		17.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.9		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		27									</td>
+				<td>		안지영		</td>
+				<td>		20153421			</td>
+				
+					
+					<td>		91.8			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		15.2		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.6		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		28									</td>
+				<td>		윤혜주		</td>
+				<td>		20153425			</td>
+				
+					
+					<td>		91.4			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		15.2		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.2		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		29									</td>
+				<td>		장혜영		</td>
+				<td>		20153428			</td>
+				
+					
+					<td>		90.6			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		14.6		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+			<tr>
+				<td>		30									</td>
+				<td>		양세림		</td>
+				<td>		20155140			</td>
+				
+					
+					<td>		94.2			</td>		
+							
+				
+						
+					
+						
+						
+						
+							<td>		17.6		</td>
+						
+						
+					
+						
+						
+						
+							<td>		40.0		</td>
+						
+						
+					
+						
+						
+						
+							<td>		16.6		</td>
+						
+						
+					
+						
+						
+						
+							<td>		20.0		</td>
+						
+			
+			</tr>
+		
+	
+	</table>
+
+	
+
+</form>	
+</body>
+</html>

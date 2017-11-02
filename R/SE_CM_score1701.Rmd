@@ -1,0 +1,35 @@
+---
+title: "사회적경제와 협동조합 체인지메이커 스코어"
+author: "금융정보통계학과 이기원교수"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(width=180)
+rm(list=ls())
+```
+
+```{r, presets, , message = FALSE, echo = FALSE}
+options(digits=3)
+library(xlsx)
+library(knitr)
+library(pander)
+panderOptions("table.split.table", Inf)
+```
+
+
+<!--### CM Scores-->
+
+```{r, Total Scores, message = FALSE, echo = FALSE}
+CM <- read.xlsx(file = "../data/SE1702_CM.xlsx", sheetIndex = 1, rowIndex = 1:10, colIndex = 1:12, colClasses = c("character", rep("numeric", 11)), header = TRUE)
+str(CM)
+v.names <- c("Team", "teacher1", "teacher2", paste("Team", 1:9, sep = ""))
+names(CM) <- v.names
+str(CM)
+CM_score <- rowMeans(CM[, 2:3]) + rowMeans(CM[, 4:12], na.rm = TRUE)
+CM_score <- CM_score * 100 / 80
+CM_score.df <- data.frame(Team = CM[, 1, drop = FALSE], Score = CM_score, stringsAsFactors = FALSE)
+kable(CM_score.df)
+```

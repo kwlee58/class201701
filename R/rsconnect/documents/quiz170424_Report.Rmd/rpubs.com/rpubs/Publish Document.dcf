@@ -1,8 +1,10 @@
 name: Publish Document
 title:
+username:
 account: rpubs
 server: rpubs.com
-appId: https://api.rpubs.com/api/v1/document/270717/7fdd343b41e549b29a7035e89a5d7a36
-bundleId: https://api.rpubs.com/api/v1/document/270717/7fdd343b41e549b29a7035e89a5d7a36
-url: http://rpubs.com/kwlee58/270717
-when: 1493131345.16209
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/325761/c8672b2067464c02bc2d0791c33e57e1
+bundleId: https://api.rpubs.com/api/v1/document/325761/c8672b2067464c02bc2d0791c33e57e1
+url: http://rpubs.com/publish/claim/325761/bbaf48dc4fd646aca805027dd544a584
+when: 1509635507.90924

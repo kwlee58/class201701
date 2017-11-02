@@ -117,6 +117,7 @@ Q4.tbl.am <- addmargins(Q4.tbl.e, margin = 1)
 colnames(Q4.tbl.am)[3] <- "결석"
 rownames(Q4.tbl.am)[3] <- "계"
 pander(Q4.tbl.am, caption = "대선 투표의사")
+pander(chisq.test(Q4.tbl.am[-3, -3], simulate.p.value = TRUE))
 ```
 
 ##### % 비교.  
