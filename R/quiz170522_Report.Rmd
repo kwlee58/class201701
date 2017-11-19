@@ -49,6 +49,7 @@ index.dup.b <- which(birth_month.date %in% unique(b.dup.b))
 index.dup.b
 quiz0522[index.dup.b, c("id", "Q1.2")]
 kable(t(as.matrix(table(quiz0522$Q1.2[index.dup.b]))))
+#> matching
 matching <- strsplit(quiz0522$Q2, ",")
 matching
 ans <- strsplit("Cowgirl in the sand,Nancy,Geordie,And yours is piece of mine", split = ",")
@@ -92,20 +93,15 @@ names(tbl.q1.a)[26] <- "계"
 kable(t(as.matrix(tbl.q1.a)))
 ```
 
-##### 이론적으로 기대인원은?
+##### 생일이 같은 사람은 몇 명 정도 기대되는가?
 
 $N$을 전체 인원이라 할 때, 기대 인원은 $N\times\{1- (\frac{364}{365})^{N-1}\}$로 계산된다.
+무응답이거나 결석한 학생을 제외한 응답 인원 149명에 대하여 몇 명 정도 생일이 같은 나올 것으로 기대되는지 계산하면
 
-```{r, echo = TRUE}
+```{r, echo = FALSE}
 options(digits = 3)
-159 * (1 - (364 / 365) ^ 158)
-```
-
-결석생 10명을 제외하고 계산하면
-
-
-```{r, echo = TRUE}
-149 * (1 - (364 / 365) ^ 148)
+E_N <- function(N){N * (1 - (364 / 365) ^ (N - 1))}
+E_N(149)
 ```
 
 ##### 태어난 달의 분포는?
@@ -160,7 +156,9 @@ pander(chisq.test(table(matching.score), p = c(9, 8, 6, 1)/24, simulate.p.value 
 ```{r, Framing Effect, echo = FALSE}
 tbl.q3 <- table(quiz0522$group, quiz0522$Q3.2, exclude = NULL)
 rownames(tbl.q3) <- c("Red(실업률 관점)", "Black(취업률 관점)")
+colnames(tbl.q3)[3] <- "결석"
 kable(tbl.q3[1:2, ], caption = "Framing Effect")
+pander(chisq.test(tbl.q3[, 1:2], simulate.p.value = TRUE))
 ```
 
 ##### % 비교.  
@@ -185,6 +183,7 @@ kable(tbl.q3.p.a)
 tbl.q4 <- table(quiz0522$group, quiz0522$Q4.2, exclude = NULL)
 rownames(tbl.q4) <- c("Red(인플레0%, 임금삭감7%)", "Black(인플레12%, 임금인상5%)")
 kable(tbl.q4[1:2, ], caption = "화폐 착각")
+pander(chisq.test(tbl.q4[, 1:2], simulate.p.value = TRUE))
 ```
 
 ##### % 비교.  
