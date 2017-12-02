@@ -128,7 +128,7 @@ A <- matrix(numeric(0), nrow = nrow(MI), ncol = 8)
 for(j in 1:8) {
   A[, j] <- MI[, j + 1]
     for(i in 1:6) {
-      A[, j] <- A[, j] + MI[, j + i*8]
+      A[, j] <- A[, j] + MI[, j + 1 + i*8]
     }
 }
 MI.score.kr <- A

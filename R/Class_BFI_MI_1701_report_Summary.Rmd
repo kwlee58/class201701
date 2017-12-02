@@ -122,11 +122,13 @@ detach(BFI)
 다중지능 점수를 합산하기 위하여 `for` loop를 활용.
 
 ```{r}
-A<-matrix(numeric(0), nrow=nrow(MI), ncol=8)
-for(j in 1:8) {A[,j]<-MI[,j+1]
+A <- matrix(numeric(0), nrow = nrow(MI), ncol = 8)
+for(j in 1:8) {
+A[, j] <- MI[ , j + 1]
 for(i in 1:6) {
-A[,j]<-A[,j]+MI[, j+i*8]
-}}
+A[, j] <- A[ , j] + MI[ , (j + 1) + i * 8]
+}
+}
 MI.score.kr<-A
 MI.names.kr<-c("음악", "신체운동", "논리수학", "공간", "언어", "인간친화", "자기성찰", "자연친화")
 dimnames(MI.score.kr)<-list(MI$ID, MI.names.kr)
