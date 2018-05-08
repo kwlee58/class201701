@@ -29,10 +29,9 @@ quiz0515$score <- quiz0515$Q1 + quiz0515$Q2 + 5*quiz0515$Q3 + 3*quiz0515$Q4
 quiz0515$grade <- cut(quiz0515$score, breaks = seq(0, 100, by = 10), include.lowest = TRUE, right = FALSE)
 Black <- quiz0515$group == "Black"
 Red <- quiz0515$group == "Red"
-quiz0515$Q5.2[Red] <- ifelse(quiz0515$Q5[Red] == "가", "티켓 분실", ifelse(quiz0515$Q5[Red] == "나", "티켓 분실", NA))
-quiz0515$Q5.2[Black] <- ifelse(quiz0515$Q5[Black] == "가", "현금 분실", ifelse(quiz0515$Q5[Black] == "나", "현금 분실", NA))
-quiz0515$Q5.3[Red] <- ifelse(quiz0515$Q5[Red] == "가", "산다", ifelse(quiz0515$Q5[Red] == "나", "안 산다", NA))
-quiz0515$Q5.3[Black] <- ifelse(quiz0515$Q5[Black] == "가", "산다", ifelse(quiz0515$Q5[Black] == "나", "안 산다", NA))
+quiz0515$Q5 <- factor(quiz0515$Q5,
+                      levels = c("가", "나"),
+                      labels = c("산다", "안 산다"))
 # str(quiz0515)
 ```
 
@@ -110,18 +109,17 @@ pander(summary(quiz0515$score))
 10만원 짜리 입장권을 잃어버리는 것과 티켓 살 돈 10만원을 잃어버리는 것이 동일한 금액임에도 돈을 잃어버리고 카드로 구매할 경우에는 사겠다는 비율이 높아지는 점에 유의.
 
 ```{r, Mental Account, echo = FALSE}
-tbl.q5 <- table(quiz0515$Q5.2, quiz0515$Q5.3)
-rownames(tbl.q5) <- c("티켓분실", "현금분실")
+tbl.q5 <- table(quiz0515$group, quiz0515$Q5, useNA = "ifany")
 tbl.q5.a <- addmargins(tbl.q5)
-rownames(tbl.q5.a)[3] <- "계"
-colnames(tbl.q5.a)[3] <- "계"
-kable(tbl.q5.a, caption = "심적 회계")
+rownames(tbl.q5.a) <- c("티켓 분실", "현금 분실", "계")
+colnames(tbl.q5.a) <- c("산다", "안 산다", "결석", "계")
+kable(tbl.q5.a)
 ```
 
 ##### % 비교.  
 
 ```{r, Mental account  in percentage, echo = FALSE}
-tbl.q5.p.a <- addmargins(round(prop.table(tbl.q5[1:2, ], margin = 1)*100, digits = 1))[1:2, ]
+tbl.q5.p.a <- addmargins(round(prop.table(tbl.q5.a[1:2, 1:2], margin = 1)*100, digits = 1))[1:2, ]
 colnames(tbl.q5.p.a)[3] <- "계"
 kable(tbl.q5.p.a)
 ```

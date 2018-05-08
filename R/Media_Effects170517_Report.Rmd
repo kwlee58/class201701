@@ -1,7 +1,7 @@
 ---
 title: "Media Effects 170517"
 author: "coop711"
-date: "`r Sys.Date()`"
+date: "2017-05-22"
 output: html_document
 ---
 
@@ -250,7 +250,6 @@ pander(mapply(function(x){table(media_effects$group, x)}, media_effects.marks.2.
 options(digits = 2)
 pander(lapply(media_effects.marks.2.f, function(x){prop.table(table(media_effects$group, x), margin = 1)[, 1]*100}))
 ```
--->
 
 <!--#### 어려운 문제?
 
