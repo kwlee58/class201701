@@ -1,7 +1,7 @@
 ---
 title: "Quiz 170306"
 author: "coop711"
-date: "`r Sys.Date()`"
+date: "2017-03-12"
 output: html_document
 ---
 
@@ -126,7 +126,8 @@ pander(round(prop.table(Q3.tbl.am, margin = 1)[3, ]*100, digits = 2))
 ```{r, anti-terror law, echo = FALSE}
 thaad.tbl.e <- table(quiz0306$group, quiz0306$Q4, exclude = NULL)
 colnames(thaad.tbl.e)[5] <- "결석"
-pander(thaad.tbl.e[-3, ], caption ="테러방지법")
+pander(thaad.tbl.e, caption ="테러방지법")
+pander(chisq.test(thaad.tbl.e[, -(4:5)]))
 # pander(table(quiz0306$group, quiz0306$Q4, exclude = NULL), caption="테러방지법")
 # pander(table(quiz0306$group, quiz0306$Q4.2, exclude = NULL), caption="테러방지법")
 ```

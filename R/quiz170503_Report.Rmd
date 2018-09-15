@@ -1,7 +1,7 @@
 ---
 title: "Quiz 170503"
 author: "coop711"
-date: "`r Sys.Date()`"
+date: "2017-11-08"
 output: html_document
 ---
 
@@ -69,12 +69,12 @@ pander(round(prop.table(Q1.tbl.am, margin = 1)[3, ]*100, digits = 1))
 ##### LM3의 의미
 
 ```{r, LM3, echo = FALSE}
-tbl.q2 <- table(quiz0503$group, quiz0503$Q2, useNA = "always")
+tbl.q2 <- table(quiz0503$group, quiz0503$Q2, useNA = "ifany")
 Q2.tbl.am <- addmargins(tbl.q2, margin = 1)
 colnames(Q2.tbl.am)[5] <- "결석"
 rownames(Q2.tbl.am)[3] <- "계"
 pander(Q2.tbl.am)
-pander(chisq.test(tbl.q2[-3, ]))
+pander(chisq.test(tbl.q2[-3, ], simulate.p.value = TRUE))
 ```
 
 ##### 
