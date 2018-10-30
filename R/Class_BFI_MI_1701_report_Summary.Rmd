@@ -86,6 +86,8 @@ pander(BFI.level.kr.2)
 각 성질의 분포를 `table`로 요약
 -->
 
+### 성격유형 분포
+
 ```{r, echo = FALSE}
 BFI.level.table <- sapply(BFI.level.kr, table)
 # pander(BFI.level.table)
@@ -174,15 +176,25 @@ BFI.MI.full<-data.frame(BFI.full.kr, MI.sort.full.kr[, 3:5])
 pander(BFI.MI.full[, -2])
 ```
 
-이름을 빼고 학번만 표시
 -->
+
+### 3대 강점지능 요약
+
+```{r, echo = FALSE}
+levels(BFI.MI.full$제1순위) <- levels(BFI.MI.full$제2순위)
+kable(t(sapply(BFI.MI.full[c("제1순위", "제2순위", "제3순위")], table)))
+```
+
+<!--
+이름을 빼고 학번만 표시
+
 
 ```{r, ids only to show, echo = FALSE}
 BFI.MI.full.ID<-BFI.MI.full[,-2]
 pander(BFI.MI.full.ID)
 ```
 
-<!--결석생 확인
+결석생 확인
 -----------
 
 BFI결석생
