@@ -124,6 +124,14 @@ pander(Q4.tbl.am)
 pander(round(prop.table(Q4.tbl.am[, -6], margin = 1)[-(3:4), ]*100, digits = 1))
 ```
 
+##### 국공립대 등록금의 적정 수준 (%) 무상, 100만원 => 100만원 이하, 200만원, 500만원, 1,000만원 => 200만원 이상
+
+```{r, college tuition in percentage 2, echo = FALSE}
+levels(quiz0503$Q4) <- list("100만원 이하" = c("무상", "100만원"), "200만원 이상" = c("200만원", "500만원", "1,000만원"))
+Q4.tbl.am <- addmargins(table(quiz0503$group, quiz0503$Q4, exclude = NULL), margin = 1)
+pander(round(prop.table(Q4.tbl.am[, -3], margin = 1)[-(3:4), ]*100, digits = 1))
+```
+
 ```{r, save, echo = FALSE}
 # save.image("../R/quiz0503.rda")
 ```
