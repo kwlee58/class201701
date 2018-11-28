@@ -1,7 +1,7 @@
 ---
 title: "Quiz 170522"
 author: "coop711"
-date: "`r Sys.Date()`"
+date: "2017-05-22"
 output: html_document
 ---
 
@@ -77,11 +77,11 @@ pander(quiz0522[c("Q3", "Q3.2", "Q4", "Q4.2", "group")])
 pander(summary(quiz0522))
 ```
 
-### 퀴즈 응답
+## 퀴즈 응답
 
-#### Birthday Problem
+### Birthday Problem
 
-##### 생일이 같은 사람은 몇 명?
+#### 생일이 같은 사람은 몇 명?
 
 ```{r, birthday problem, echo = FALSE}
 dup.b.df <- quiz0522[index.dup.b, c("id", "Q1.2", "group")]
@@ -93,7 +93,7 @@ names(tbl.q1.a)[26] <- "계"
 kable(t(as.matrix(tbl.q1.a)))
 ```
 
-##### 생일이 같은 사람은 몇 명 정도 기대되는가?
+#### 생일이 같은 사람은 몇 명 정도 기대되는가?
 
 $N$을 전체 인원이라 할 때, 기대 인원은 $N\times\{1- (\frac{364}{365})^{N-1}\}$로 계산된다.
 무응답이거나 결석한 학생을 제외한 응답 인원 149명에 대하여 몇 명 정도 생일이 같은 나올 것으로 기대되는지 계산하면
@@ -104,7 +104,17 @@ E_N <- function(N){N * (1 - (364 / 365) ^ (N - 1))}
 E_N(149)
 ```
 
-##### 태어난 달의 분포는?
+이고, 오차는 
+
+```{r, echo = FALSE}
+options(digits = 2)
+V_N <- function(N){N * (1 - (364 / 365) ^ (N - 1)) + N * (N - 1) * (1 - (363 / 365)) ^ (N - 2)}
+sqrt(V_N(149))
+```
+
+이다.
+
+#### 태어난 달의 분포는?
 
 ```{r, month of the birthdates, echo = FALSE}
 birth_month.tbl <- table(quiz0522$group, "태어난 달" = birth_month.f)
@@ -114,11 +124,11 @@ colnames(birth_month.tbl.a)[13] <- "계"
 pander(birth_month.tbl.a)
 ```
 
-#### Matching Problem
+### Matching Problem
 
 ![](../pics/Quiz170522_Q2.png)
 
-##### 정답갯수의 분포
+#### 정답갯수의 분포
 
 ```{r, matching, echo = FALSE}
 matching.score.tbl <- table(quiz0522$group, "맞춘 갯수" = matching.score)
@@ -128,7 +138,7 @@ colnames(matching.score.tbl.a)[5] <- "계"
 pander(matching.score.tbl.a)
 ```
 
-##### 카이제곱 적합도 테스트
+#### 카이제곱 적합도 테스트
 
 랜덤하게 골랐다면, 각각의 확률은 9/24, 8/24, 6/24, 1/24임. 응답인원 150명을 각 확률에 곱해보면,
 
@@ -143,9 +153,9 @@ pander(t(as.matrix(round(Expected))))
 pander(chisq.test(table(matching.score), p = c(9, 8, 6, 1)/24, simulate.p.value = TRUE, B = 2000))
 ```
 
-#### Framing Effects
+### Framing Effects
 
-##### 인플레이션과 일자리 정책 패키지
+#### 인플레이션과 일자리 정책 패키지
 
 ![](../pics/Quiz170522_Q3_Red.png)
 
@@ -161,7 +171,7 @@ kable(tbl.q3[1:2, ], caption = "Framing Effect")
 pander(chisq.test(tbl.q3[, 1:2], simulate.p.value = TRUE))
 ```
 
-##### % 비교.  
+#### % 비교.  
 
 ```{r, Framing effects in percentage, echo = FALSE}
 tbl.q3.p.a <- addmargins(round(prop.table(tbl.q3[1:2, -3], margin = 1)*100, digits = 1))[1:2, ]
@@ -169,9 +179,9 @@ colnames(tbl.q3.p.a)[3] <- "계"
 kable(tbl.q3.p.a)
 ```
 
-#### 화폐 착각
+### 화폐 착각
 
-##### 인플레이션과 임금인상
+#### 인플레이션과 임금인상
 
 ![](../pics/Quiz170522_Q4_Red.png)
 
@@ -186,7 +196,7 @@ kable(tbl.q4[1:2, ], caption = "화폐 착각")
 pander(chisq.test(tbl.q4[, 1:2], simulate.p.value = TRUE))
 ```
 
-##### % 비교.  
+#### % 비교.  
 
 ```{r, Money illusion in percentage, echo = FALSE}
 tbl.q4.p.a <- addmargins(round(prop.table(tbl.q4[1:2, -3], margin = 1)*100, digits = 1))[1:2, ]
