@@ -306,6 +306,6 @@ pander(t(rate.by.item[which(rate.by.item <= 60), , drop = FALSE]))
 <!--## Data 정리
 
 ```{r}
-save.image("literacy_201602.rda")
+save.image("literacy_201701.rda")
 ```
 -->

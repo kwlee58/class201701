@@ -121,6 +121,7 @@ tbl <- table(quiz0508$group, quiz0508$Q4.2, exclude = NULL)
 rownames(tbl) <- c("생존 프레임", "사망 프레임")
 colnames(tbl)[3] <- "결석"
 kable(tbl[1:2, ], caption = "Framing Effect")
+pander(chisq.test(tbl[1:2, 1:2], simulate.p.value = TRUE))
 ```
 
 ##### % 비교.  
