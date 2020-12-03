@@ -1,7 +1,7 @@
 ---
 title: "Invisible Gorilla 201701"
 author: "coop711"
-date: "`r Sys.Date()`"
+date: "2017-05-29"
 output: html_document
 ---
 
@@ -179,6 +179,7 @@ pander(t(matrix(paste(format(prop.table(tbl.prejudice)*100, digits = 2, nsmall =
 ```{r, chocolate, echo = FALSE}
 # pander(summary(chocolate), caption = "몇 개나 줄 거예요?")
 pander(table(chocolate), caption = "몇 개나 줄 거예요?")
+pander(summary(gorilla$Q10), caption = "기초통계")
 ```
 
 <!--

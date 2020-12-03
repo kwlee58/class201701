@@ -93,6 +93,12 @@ names(tbl.q1.a)[26] <- "계"
 kable(t(as.matrix(tbl.q1.a)))
 ```
 
+#### 생일이 같은 날은 모두 며칠인가?
+
+```{r, echo = FALSE}
+ncol(t(as.matrix(tbl.q1.a)))
+```
+
 #### 생일이 같은 사람은 몇 명 정도 기대되는가?
 
 $N$을 전체 인원이라 할 때, 기대 인원은 $N\times\{1- (\frac{364}{365})^{N-1}\}$로 계산된다.
